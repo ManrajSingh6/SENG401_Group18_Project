@@ -1,0 +1,23 @@
+{
+  "name": "seng401_group18_project",
+  "version": "1.0.0",
+  "description": "SENG 401 Gorup 18 Final Project - Reddit Clone",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ManrajSingh6/SENG401_Group18_Project.git"
+  },
+  "author": "Manraj, Sajan, Jacob, Aarushi, Eric, Shantelle, Farica",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ManrajSingh6/SENG401_Group18_Project/issues"
+  },
+  "homepage": "https://github.com/ManrajSingh6/SENG401_Group18_Project#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "mongoose": "^6.9.1"
+  }
+}

@@ -1,5 +1,5 @@
 # SENG401_Group18_Project
-SENG401 Group 18 Final Project - Reddit Clone
+SENG401 Group 18 Final Project - The Loop.
 
 Current work in progress.
 

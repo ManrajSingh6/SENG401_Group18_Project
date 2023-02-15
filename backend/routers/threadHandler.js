@@ -1,18 +1,20 @@
 const express = require("express");
 const router = express.Router();
+
+const thread = require('../models/thread.js');
 const bodyParser = require('body-parser');
 
 
 
-router.post('/threads',(req,res)=> {
+router.post('/threads', async (req,res)=> {
     const {thread_name, thread_description} = req.body;
     //insert thread into database
     
 });
 
-router.post('/threads/:thread_name',(req,res)=> {
+router.get('/threads/:thread_name',async (req,res)=> {
     const {thread_name} = req.params;
-    //insert thread into database
+    //find thread from database
     
 });
 

@@ -1,5 +1,5 @@
 
-import mongoose from "mongoose";
+const mongoose = require('mongoose');
 
 const schema = new mongoose.Schema({
   username: {type:String,required:true},
@@ -7,6 +7,6 @@ const schema = new mongoose.Schema({
   postId: {type:mongoose.ObjectId,required:false},
   direction: {type:Number,required:true}
 });
-const Vote = mongoose.model('Vote', schema);
 
-export default Vote;
+module.exports = mongoose.model('Vote', schema);
+

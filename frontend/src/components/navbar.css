@@ -1,0 +1,123 @@
+.logo-container img{
+    object-fit: contain;
+    height: 40px;
+}
+
+.nav {
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 8vh;
+    box-shadow: none;
+    margin-top: 5px;
+}
+li{
+    list-style: none;
+    text-decoration: none;
+    transition: all 0.5s ease;
+}
+.nav__menu {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 3rem;
+}
+.nav__link{
+    text-decoration: none;
+    color: #120460;
+    font-size: 1rem;
+}
+
+.nav__toggler {
+    display: none;
+    border-radius: 20px;
+    padding: 3px;
+}
+.nav__toggler div {
+    width: 1.5rem;
+    height: 0.2rem;
+    margin: 0.4rem;
+    background: #120460;
+    transition: 0.3s ease-in;
+}
+
+.nav__item{
+    display: inline-block;
+    padding-bottom: 0.3rem;
+    position: relative;
+    font-weight: 400;
+}
+
+.mui-icon{
+    position: relative;
+    top: 5px;
+    margin-right: 3px;
+    color: #004696;
+}
+
+@media screen and (max-width: 768px) {
+    .nav__toggler {
+        display: block;
+        cursor: pointer;
+    }
+    .nav__menu {
+        position: fixed;
+        top: 8vh;
+        right: 0;
+        height: 93vh;
+        width: 50vw;
+        background: #004696;
+        flex-direction: column;
+        transform: translateX(100%);
+        transition: 0.5s ease-in;
+    }
+    .logo-container{
+        display:block;
+    }
+    .nav__item{
+        font-weight: 400;
+        text-align: center;
+    }
+    .mui-icon{
+        color: #00ccff;
+    }
+    .nav__link{
+        color: #fff;
+    }
+    .nav__link:hover{
+        color: #00ccff;
+        transition: all 0.5s ease;
+    }
+}
+/* Active Class */
+.nav__active {
+    transform: translateX(0%);
+    /* box-shadow: -10px 0px 30px 0px rgba(0, 0, 0, 0.329); */
+}
+
+/* Toggle Icon Animation */
+.toggle .line1 {
+    transform: rotate(-45deg) translate(-8px, 6px);
+}
+.toggle .line2 {
+    opacity: 0;
+}
+.toggle .line3 {
+    transform: rotate(45deg) translate(-8px, -5px);
+}
+
+/* Hover Animation for Nav Items */
+.nav__item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 0;
+    height: 2px;
+    background-color: #004696;
+    transition: width 0.25s ease-in-out;
+}
+.nav__item:hover::before {
+    width: 100%;
+}

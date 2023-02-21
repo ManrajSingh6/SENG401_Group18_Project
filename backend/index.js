@@ -1,4 +1,5 @@
 // Index JS File for backend
+const mongoose = require('mongoose');
 const express = require('express');
 const threadHandler = require('./routers/threadHandler.js');
 const userHandler = require('./routers/userHandler.js');
@@ -17,14 +18,13 @@ app.use(cookieParser());
 app.use(express.json());
 
 
-
+app.use(express.json());
+app.use(cors({credentials:true,origin:'http://localhost:3000'}));
 app.use('/threads',threadHandler);
 app.use('/users',userHandler);
 app.use('/posts',postHandler);
 app.use('/comments',commentHandler);
 app.use('/votes',commentHandler);
-app.use(express.json());
-app.use(cors());
 
 const PORT = 5000;
 app.listen(PORT,()=>{

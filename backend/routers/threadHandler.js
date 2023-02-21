@@ -6,13 +6,13 @@ const bodyParser = require('body-parser');
 
 
 
-router.post('/threads', async (req,res)=> {
+router.post('/', async (req,res)=> {
     const {thread_name, thread_description} = req.body;
     //insert thread into database
     
 });
 
-router.get('/threads/:thread_name',async (req,res)=> {
+router.get('/:thread_name',async (req,res)=> {
     const {thread_name} = req.params;
     //find thread from database
     

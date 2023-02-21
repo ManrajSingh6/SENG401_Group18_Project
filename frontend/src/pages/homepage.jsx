@@ -62,7 +62,7 @@ function Homepage(){
                     <div className="form-field">
                         <input 
                             type="text" 
-                            placeholder="Search for a thread by name or user..." 
+                            placeholder="Search by name or user" 
                             className="thread-searchbar"
                             value={searchQuery}
                             onChange={ev => setSearchQuery(ev.target.value)} />
@@ -115,8 +115,7 @@ function Homepage(){
                         // Sorting popular users by likes before mapping as elements
                         popularUsers.sort((a,b) => (a.likes - b.likes)).reverse().map((user, index) => {
                             return (
-                                <li><SmallUserProfile
-                                    key={index} 
+                                <li key={index}><SmallUserProfile
                                     imgSrc={user.img} 
                                     name={user.username}
                                     likes={user.likes}/>

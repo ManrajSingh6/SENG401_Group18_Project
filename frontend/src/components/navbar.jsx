@@ -10,7 +10,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 function Navbar(){
     const userName = "demoUserName";
-    const isLoggedIn = true;
+    const isLoggedIn = false;
 
     // Responsiveness
     const [active, setActive] = useState("nav__menu");
@@ -56,7 +56,7 @@ function Navbar(){
                 </>)}
                 {!isLoggedIn && (<>
                     <li className="nav__item">
-                        <Link to="/login-register" className="nav__link">
+                        <Link to="/login" className="nav__link">
                         <LoginIcon className="mui-icon"/>
                             Login/Register
                         </Link>

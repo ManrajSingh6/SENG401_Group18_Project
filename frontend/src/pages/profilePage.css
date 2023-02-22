@@ -1,0 +1,133 @@
+.main-profile-container{
+    width: 90%;
+    /* border: 1px solid red; */
+    margin: 50px auto 0 auto;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.user-profile-container{
+    /* border: 1px solid; */
+    display: flex;
+    flex-direction: row;
+    height: 300px;
+    gap: 10px;
+}
+.user-info{
+    /* border: 1px solid blue; */
+    border-radius: 10px;
+    width: 35%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    background-color: #FFFF;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.user-info h2{
+    color: #120460;
+    font-size: 1.3rem;
+}
+
+.profile-pic-container{
+    border: 2px solid #004696;
+    padding: 2px;
+    height: 6em;
+    width: 6em;
+    border-radius: 3em;
+    display: flex;
+}
+
+.profile-pic-container:hover{
+    transform: scale(1.05);
+    border-color: #1E8EAB;
+    transition: all 0.3s ease-in-out;
+}
+
+.profile-pic-container img{
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+}
+
+.user-desc-container{
+    padding: 3px;
+    width: 100%;
+    word-wrap: break-word;
+}
+
+.edit-profile{
+    background-color: #FFFF;
+    width: 65%;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+
+.edit-profile h1{
+    font-size: 1.7rem;
+    color: #120460;
+}
+ 
+.edit-profile textarea{
+    padding: 10px;
+    border: 1px solid #c2c2c2;
+    border-radius: 10px;
+    width: 90%;
+    height: 50%;
+    resize: none;
+    font-size: 1rem;
+    font-family: 'Roboto', sans-serif;
+    align-self: center;
+    line-height: 25px;
+}
+
+.edit-profile textarea:focus{
+    outline: none;
+    border-color: #1E8EAB;
+    transition: all 0.3s ease-in;
+    transform: scale(1.01);
+}
+
+.edit-profile input{
+    font-family: 'Roboto', sans-serif;
+}
+
+.confirm-button{
+    background-color: #120460;
+    border-radius: 5px;
+    padding: 10px;
+    color: #FFFF;
+    cursor: pointer;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.confirm-button:hover{
+    color: aqua;
+    background-color: #004696;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.25);
+    transition: all 0.2s ease-in-out;
+}
+
+@media screen and (max-width: 768px) {
+    .user-profile-container{
+        flex-direction: column;
+    }
+
+    .user-info, .edit-profile{
+        width: 100%;
+    }
+
+}

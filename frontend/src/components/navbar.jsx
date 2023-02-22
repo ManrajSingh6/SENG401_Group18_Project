@@ -10,7 +10,12 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 function Navbar(){
     const userName = "demoUserName";
-    const isLoggedIn = false;
+    const [isLoggedIn, setLoginStatus] = useState(true);
+
+    function handleLogout(){
+        // setLoginStatus(false);
+        // console.log(isLoggedIn);
+    }
 
     // Responsiveness
     const [active, setActive] = useState("nav__menu");
@@ -47,7 +52,7 @@ function Navbar(){
                             Profile
                         </Link>
                     </li>
-                    <li className="nav__item">
+                    <li className="nav__item" onClick={handleLogout}>
                         <Link to="/" className="nav__link">
                         <LogoutIcon className="mui-icon"/>
                             Logout ({userName})

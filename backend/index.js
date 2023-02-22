@@ -11,7 +11,8 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
 const app = express();
-
+//database connection
+//mongoose.connect(***REMOVED***);
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -24,7 +25,7 @@ app.use('/threads',threadHandler);
 app.use('/users',userHandler);
 app.use('/posts',postHandler);
 app.use('/comments',commentHandler);
-app.use('/votes',commentHandler);
+app.use('/votes',voteHandler);
 
 const PORT = 5000;
 app.listen(PORT,()=>{

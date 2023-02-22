@@ -1,11 +1,10 @@
-
 const mongoose = require('mongoose');
+const {Schema,model} = mongoose;
 
 const schema = new mongoose.Schema({
-  username: {type:String,required:true},
+  username: {type:Schema.Types.ObjectId,ref:'User'},
   commentId: {type:mongoose.ObjectId,required:false},
-  postId: {type:mongoose.ObjectId,required:false},
-  direction: {type:Number,required:true}
+  postId: {type:mongoose.ObjectId,required:false}
 });
 
 module.exports = mongoose.model('Vote', schema);

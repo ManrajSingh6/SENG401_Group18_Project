@@ -17,11 +17,17 @@ router.post('/register', async (req,res)=>{
  
 });
 
-router.get('/:username', async (req,res)=> {
-    const {username} = req.params;
+router.get('/find', async (req,res)=> {
+    const {username} = req.query;
     //get user from database
-    const User = await user.findOne({username: username});
-    res.json(User);
+    
+    const User = await user.findOne({username:username});
+    if(User){
+        res.send(User);
+    }
+    else{
+        res.status(400).send('User not found');
+    }
     
 });
 
@@ -49,8 +55,9 @@ router.post('/logout',async (req,res)=>{
    
 });
 
-router.post('/delete',async (req,res)=>{
+router.post('/remove',async (req,res)=>{
     const{username} = req.body;
+
      //delete user from database
     const status = await user.deleteOne({username: username});
     if(status.deletedCount == 1){

@@ -1,8 +1,7 @@
 const mongoose = require('mongoose');
-
+const {Schema,model} = mongoose;
 const commentSchema = new mongoose.Schema({
-    
-    username: {type:String,required:true},
+    author: {type:Schema.Types.ObjectId,ref:'User'},
 
     body: {type:String,required:true},
 
@@ -11,12 +10,9 @@ const commentSchema = new mongoose.Schema({
         default: Date.now()
     },
   
-    votes: {
-        type: Number,
-        default: 0
-    },
+    votes: [{type:Schema.Types.ObjectId,ref:'Vote'}],
 
-    postId: {type:mongoose.ObjectId,required:false},
+    postId: {type:mongoose.ObjectId,required:true},
 });
 
 module.exports = mongoose.model('Comment', commentSchema);

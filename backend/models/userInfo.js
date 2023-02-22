@@ -1,6 +1,6 @@
 // MongoDB Model for user information
 const mongoose = require('mongoose');
-
+const {Schema,model} = mongoose;
 const userSchema = new mongoose.Schema({
     username: {
         type: String,
@@ -16,11 +16,13 @@ const userSchema = new mongoose.Schema({
         unique: true,
         required: true
     },
-    created: Date,
-    savedPosts: Array,
-    savedComments: Array,
-    subscribed: Array,
-    owned: Array
+    posts: [{type:Schema.Types.ObjectId,ref:'Post'}],
+    comments: [{type:Schema.Types.ObjectId,ref:'Comment'}],
+    dateCreated: {
+        type: Date,
+        default: Date.now()
+    },
+    subscribed: [{type:Schema.Types.ObjectId,ref:'Thread'}],
 });
 
 module.exports = mongoose.model('User', userSchema);

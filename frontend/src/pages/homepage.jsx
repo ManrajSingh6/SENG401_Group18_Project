@@ -47,11 +47,15 @@ const allThreads = [
 function Homepage(){
 
     const [searchQuery, setSearchQuery] = useState('');
+    const [tempQuery, setTempQuery] = useState('');
     
-    // Implement Search Click Functionality - Search bar works independently right now
+    // Search functionality, add Dropdown functionality
     function handleSearch(event){
         event.preventDefault();
         console.log(searchQuery);
+    
+        setSearchQuery(tempQuery);
+        setTempQuery('');    
     }
 
     return(
@@ -64,10 +68,10 @@ function Homepage(){
                             type="text" 
                             placeholder="Search by name or user" 
                             className="thread-searchbar"
-                            value={searchQuery}
-                            onChange={ev => setSearchQuery(ev.target.value)} />
-                        <div className="search-container">
-                            <a onClick={handleSearch}><SearchIcon style={{color: "#FFFF"}}/></a>
+                            value={tempQuery}
+                            onChange={ev => setTempQuery(ev.target.value)} />
+                        <div className="search-container" onClick={handleSearch}>
+                            <a><SearchIcon style={{color: "#FFFF"}}/></a>
                         </div>
                     </div>
                     <Dropdown className="dropdown" />

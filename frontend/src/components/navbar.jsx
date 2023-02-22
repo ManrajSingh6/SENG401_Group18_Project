@@ -10,7 +10,16 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 function Navbar(){
     const userName = "demoUserName";
-    const isLoggedIn = false;
+    const [isLoggedIn, setLoginStatus] = useState(true);
+
+    // This needs to go into the login/registration progress - not correct currently
+    function handleLogin(){
+        setLoginStatus(true);
+    }
+
+    function handleLogout(){
+        setLoginStatus(false);
+    }
 
     // Responsiveness
     const [active, setActive] = useState("nav__menu");
@@ -35,32 +44,32 @@ function Navbar(){
             </div>
             <ul className={active}>
                 {isLoggedIn && (<>
-                    <li className="nav__item">
-                        <Link to="/create-post" className="nav__link">
-                        <AddCircleIcon className="mui-icon"/>
-                            Create Post
-                        </Link>
-                    </li>
-                    <li className="nav__item">
-                        <Link to="/user-profile" className="nav__link">
-                        <AccountCircleIcon className="mui-icon"/>
-                            Profile
-                        </Link>
-                    </li>
-                    <li className="nav__item">
-                        <Link to="/" className="nav__link">
-                        <LogoutIcon className="mui-icon"/>
-                            Logout ({userName})
-                        </Link>
-                    </li>
+                    <Link to="/create-post" className="nav__link">
+                        <li className="nav__item">
+                            <AddCircleIcon className="mui-icon"/>
+                                Create Post
+                        </li>
+                    </Link>
+                    <Link to="/user-profile" className="nav__link">
+                        <li className="nav__item">
+                            <AccountCircleIcon className="mui-icon"/>
+                                Profile
+                        </li>
+                    </Link>
+                    <Link to="/" className="nav__link">
+                        <li className="nav__item" onClick={handleLogout}>
+                            <LogoutIcon className="mui-icon"/>
+                                Logout ({userName})
+                        </li>
+                    </Link>
                 </>)}
                 {!isLoggedIn && (<>
-                    <li className="nav__item">
-                        <Link to="/login" className="nav__link">
+                    <Link to="/login" className="nav__link">
+                    <li className="nav__item" onClick={handleLogin}>
                         <LoginIcon className="mui-icon"/>
                             Login/Register
-                        </Link>
                     </li>
+                    </Link>
                 </>)}
             </ul>
             <div onClick={navToggle} className={icon}>

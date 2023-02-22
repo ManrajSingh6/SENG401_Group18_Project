@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const user = require('../models/userInfo.js');
 const bcrypt = require('bcrypt');
-
+const jwt = require('jsonwebtoken')
 
 router.post('/register', async (req,res)=>{
     const{username,password,email} = req.body;
@@ -10,19 +10,18 @@ router.post('/register', async (req,res)=>{
         res.status(400).json('username is taken');
     }
     else{  //add user to database
-        hashedPass = bcrypt.hash(password,10);
-        const User = await user.create(username,hashedPass,email);
+        const User = await user.create({username,password:bcrypt.hashSync(password,10),email});
         res.json(User);
     }
     
  
 });
 
-router.get('/users/:username', async (req,res)=> {
+router.get('/:username', async (req,res)=> {
     const {username} = req.params;
     //get user from database
     const User = await user.findOne({username: username});
-    res.send(User);
+    res.json(User);
     
 });
 
@@ -30,11 +29,13 @@ router.post('/login',async (req,res)=>{
 
     const{username,password} = req.body;
      //check for user in database
-    const User = await user.findOne({username:username});
-    if(bcrypt.compare(password,User.password)){
-        jwt.sign({username},process.env.JWT_SECRET,{},(error,auth)=>{
-            res.cookie('auth',auth);
-        });
+    const User = await user.findOne({username});
+    if(User){
+        if(bcrypt.compareSync(password,User.password)){
+            jwt.sign({username},process.env.JWT_SECRET,{},(error,auth)=>{
+                res.cookie('auth',auth).json({username});
+            });
+        }
     }
     else{
         res.status(400).json('username or password is incorrect');

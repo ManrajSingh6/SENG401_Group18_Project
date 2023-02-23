@@ -16,13 +16,12 @@ function Dropdown(){
     }
     return(
     <Box sx={{ maxWidth: 150, width: "50%"}}>
-        <FormControl sx={{width: "100%"}}>
+        <FormControl sx={{width: "100%"}} size="small">
             <InputLabel id="demo-simple-select-label">Sort</InputLabel>
                 <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
                 value={filterChoice}
-                label="Age"
                 onChange={handleChange}
                 >
                     <MenuItem value={"Likes"}>Most Likes</MenuItem>

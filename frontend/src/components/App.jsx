@@ -5,13 +5,14 @@ import Homepage from "../pages/homepage";
 import LoginPage from "../pages/loginPage";
 import RegisterPage from "../pages/registerPage";
 import ProfilePage from "../pages/profilePage";
+import CreatePostPage from "../pages/createPost";
 
 function App(){
     return (
         <Routes>
             <Route path="/" element={<Layout />}>
                 <Route index element={<Homepage />} />
-                <Route path={'/create-post'} element={<div>Create Post Page</div>} />
+                <Route path={'/create-post'} element={<CreatePostPage />} />
                 <Route path={'/login'} element={<LoginPage />} />
                 <Route path={'/register'} element={<RegisterPage />} />
                 <Route path={'/user-profile'} element={<ProfilePage />}/>

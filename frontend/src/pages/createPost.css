@@ -1,0 +1,114 @@
+.main-form-container{
+    /* border: 1px solid; */
+    width: 90%;
+    padding: 25px;
+    margin: 50px auto 50px auto;
+    background-color: #FFFF;
+    border-radius: 10px;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.post-form{
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.post-form input{
+    padding: 10px;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    border-radius: 10px;
+    border: 1px solid #777777;
+}
+.post-form textarea:focus,
+.post-form input:focus{
+    outline: none;
+    border-color: #1E8EAB;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.post-form textarea{
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+    resize: none;
+    font-size: 0.9rem;
+    font-family: 'Roboto', sans-serif;
+    border-radius: 10px;
+    border: 1px solid #777777;
+}
+
+.ql-editor{
+    min-height: 100px;
+}
+
+.post-form p{
+    margin-top: 20px;
+    color: #120460;
+}
+
+.content-container{
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    flex: 1;
+}
+
+.thread-choice-container{
+    /* border: 1px solid red; */
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.thread-choice-container h4{
+    width: 100%;
+    text-align: center;
+    border-bottom: 1px solid #000;
+    line-height: 0.1em;
+    margin: 30px 0 20px;
+}
+
+.thread-choice-container h4 span{
+    background: #FFF;
+    padding: 0 10px;
+}
+
+.create-new-thread{
+    display: flex;
+    flex-direction: column;
+}
+
+.create-new-thread input{
+    width: 50%;
+}
+
+.submit-btn{
+    margin-top: 30px;
+    padding: 10px;
+    width: 30%;
+    align-self: center;
+    background-color: #120460;
+    border-radius: 10px;
+    color: #FFFF;
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.3);
+}
+
+.submit-btn:hover{
+    background-color: #004696;
+    transition: all ease 0.2s;
+}
+
+
+@media screen and (max-width: 768px){
+    .create-new-thread input{
+        width: 100%;
+    }
+}

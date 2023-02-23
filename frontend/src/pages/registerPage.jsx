@@ -27,7 +27,7 @@ function RegisterPage(){
             <div className="sub-container1">
                 <h1>Register</h1>
                 <div className="input-container">
-                    <input type="text" 
+                    <input type="email" 
                            placeholder="Email" 
                            value={email}
                            onChange={(ev) => setEmail(ev.target.value)}

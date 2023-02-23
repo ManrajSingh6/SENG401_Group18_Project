@@ -34,7 +34,7 @@ router.get('/find', async (req,res)=> {
 router.post('/login',async (req,res)=>{
 
     const{username,password} = req.body;
-     //check for user in database
+    //check for user in database
     const User = await user.findOne({username});
     if(User){
         if(bcrypt.compareSync(password,User.password)){

@@ -10,7 +10,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 function Navbar(){
     const userName = "demoUserName";
-    const [isLoggedIn, setLoginStatus] = useState(true);
+    const [isLoggedIn, setLoginStatus] = useState(false);
 
     // This needs to go into the login/registration progress - not correct currently
     function handleLogin(){

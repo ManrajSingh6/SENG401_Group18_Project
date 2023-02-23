@@ -25,7 +25,7 @@ const popularUsers = [
     {username: "User5", img: ironManImgTemp, likes: 96},
 ]
 
-const allThreads = [
+export let allThreads = [
     {   threadName: "Cars and Automobiles", 
         userCreated: "carEnthus12", 
         dateCreated: "2023-02-17", timeCreated: "10:59",
@@ -41,8 +41,8 @@ const allThreads = [
         likes: 36,
         comments: 21,
         imgSrc: require("../images/iphones.png")
-    },
-]
+    }
+];
 
 function Homepage(){
 

@@ -74,6 +74,7 @@ function Homepage(){
                             <a><SearchIcon style={{color: "#FFFF"}}/></a>
                         </div>
                     </div>
+                    {/* STILL NEED TO IMPLEMENT DROPDOWN FUNCTIONALITY */}
                     <Dropdown className="dropdown" />
                 </div>
                 

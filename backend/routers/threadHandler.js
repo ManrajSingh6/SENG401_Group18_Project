@@ -13,20 +13,24 @@ const bodyParser = require('body-parser');
 router.post('/create', async (req,res)=> {
     const {thread_name, thread_description,username} = req.body;
     const User = await user.findOne({username:username});
-    //insert thread into database
-    if(await thread.findOne({threadname:thread_name}).exec()){
-        res.status(400).json("Thread name is already taken");
-     }
+    if(!User){
+        res.status(400).send('User not found to create thread');
+    }
     else{
-        const Thread = await thread.create({threadname:thread_name,description:thread_description,userCreated:User._id });
-        if(Thread){
-            res.json(Thread);
+        //insert thread into database
+        if(await thread.findOne({threadname:thread_name}).exec()){
+            res.status(400).json("Thread name is already taken");
         }
         else{
-            res.status(400).json("Thread creation failed");
+            const Thread = await thread.create({threadname:thread_name,description:thread_description,userCreated:User._id });
+            if(Thread){
+                res.json(Thread);
+            }
+            else{
+                res.status(400).json("Thread creation failed");
+            }
         }
     }
-    
 });
 
 router.get('/find',async (req,res)=> {
@@ -50,7 +54,7 @@ router.post('/subscribe', async (req,res)=>{
         res.status(400).send('Thread not found');
     }
     else{
-        const User = await thread.findOne({username:username});
+        const User = await user.findOne({username:username});
         if(!User){
             res.status(400).send('User not found');
         }

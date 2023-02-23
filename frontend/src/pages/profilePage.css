@@ -1,7 +1,7 @@
 .main-profile-container{
     width: 90%;
     /* border: 1px solid red; */
-    margin: 50px auto 0 auto;
+    margin: 50px auto 50px auto;
     display: flex;
     flex-direction: column;
     padding: 10px;

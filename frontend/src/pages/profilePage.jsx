@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import CheckIcon from '@mui/icons-material/Check';
 import "./profilePage.css";
 
-import profilePic from "../images/GTRtemp.jpg";
 import defaultProPic from "../images/defaultUserProPic.png";
+import SubbedThreads from "../components/subbedThreads";
+import UserPosts from "../components/userPosts";
 
 // Dummy data for now
 const username = "CarEnthusiast1";
@@ -47,7 +48,7 @@ function ProfilePage(){
                     <h1>Welcome {username}</h1>
                     <textarea 
                         placeholder="Write a bit about yourself..." 
-                        maxLength={150}
+                        maxLength={120}
                         value={tempDesc}
                         onChange={(ev) => setTempDesc(ev.target.value)}/>
                     <div style={{display: "flex", gap: "20px"}}>
@@ -58,8 +59,8 @@ function ProfilePage(){
                 </div>
             </div>
 
-            
-        
+            <SubbedThreads />
+            <UserPosts />
         </div>
     
     );

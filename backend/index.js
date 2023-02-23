@@ -12,7 +12,7 @@ const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
 const app = express();
 //database connection
-//mongoose.connect(***REMOVED***);
+mongoose.connect(***REMOVED***);
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cookieParser());

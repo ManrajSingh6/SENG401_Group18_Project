@@ -1,0 +1,47 @@
+.post-preview-container{
+    background-color: #FFFF;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
+}
+
+.post-preview-container h2{
+    font-weight: 500;
+}
+
+.icons-divs{
+    display: flex;
+    flex-direction: row;  
+    gap: 40px;
+    justify-content: center;
+}
+
+.icons-divs div{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #004096;
+    margin-top: 10px;
+}
+
+.icons-divs div:hover{
+    color: #1E8EAB;
+    transition: all 0.3s ease;
+}
+
+.post-title-link{
+    text-decoration: none;
+}
+
+.post-title-link:visited{
+    color: inherit;
+}
+
+.post-preview-container:hover{
+    border: 2px solid #004096;
+    transform: scale(1.02);
+    transition: transform 0.5s ease;
+}

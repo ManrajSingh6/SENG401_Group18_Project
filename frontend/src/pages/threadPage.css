@@ -1,0 +1,13 @@
+.thread-post-container{
+    /* border: 1px solid; */
+    width: 95%;
+    margin: 50px auto 50px auto;
+    padding: 5px;
+}
+
+.thread-post-container h1{
+    font-size: 1.6rem;
+    text-align: center;
+    color: #120460;
+    font-weight: 500;
+}

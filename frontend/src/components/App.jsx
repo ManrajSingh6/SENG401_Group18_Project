@@ -7,6 +7,7 @@ import RegisterPage from "../pages/registerPage";
 import ProfilePage from "../pages/profilePage";
 import CreatePostPage from "../pages/createPost";
 import PostView from "../pages/postView";
+import ThreadPage from "../pages/threadPage";
 
 function App(){
     return (
@@ -17,8 +18,8 @@ function App(){
                 <Route path={'/login'} element={<LoginPage />} />
                 <Route path={'/register'} element={<RegisterPage />} />
                 <Route path={'/user-profile'} element={<ProfilePage />}/>
-                <Route path={"/:threadName/"} element={<div>ThreadPage</div>} />
-                <Route path={"/post"} element={<PostView />} />
+                <Route path={"/:threadName/"} element={<ThreadPage />} />
+                <Route path={"/:threadName/post/:postID"} element={<PostView />} />
             </Route>
         </Routes>
     );

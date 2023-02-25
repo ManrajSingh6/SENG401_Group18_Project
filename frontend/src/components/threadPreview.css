@@ -66,6 +66,15 @@
     margin-top: 10px;
 }
 
+.thread-link{
+    text-decoration: none;
+}
+
+.thread-link:visited{
+    color: inherit;
+
+}
+
 .thread-desc{
     text-overflow: ellipsis;
 }

@@ -1,0 +1,43 @@
+.editor-container{
+    /* border: 1px solid; */
+    /* margin-bottom: 20px; */
+    display: flex;
+    flex-direction: row;
+    padding: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.editor-container textarea{
+    /* margin-left: 60px; */
+    resize:vertical;
+    min-height: 80px;
+    padding: 10px;
+    border: 1px solid #7777778a;
+    width: 70%;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+}
+
+.editor-container textarea:focus{
+    outline: none;
+    border-color: #1E8EAB;
+}
+
+.add-comment-btn{
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-left: 20px;
+    background-color: #120460;
+    color: #FFFF;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
+}
+
+.add-comment-btn:hover{
+    background-color: #004096;
+    transition: all 0.3s ease;
+}

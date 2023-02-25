@@ -7,6 +7,7 @@ import SmallUserProfile from "../components/SmallUserProfile";
 
 import ironManImgTemp from "../images/ironmanTemp.png";
 import ThreadPreview from "../components/threadPreview";
+import { Link } from "react-router-dom";
 
 // Temporary Data
 const popularThreads = [

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 import "../pages/loginRegister.css";
 
@@ -8,48 +8,76 @@ function RegisterPage(){
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [dupePass, setDupePass] = useState('');
+    const [redirect, setRedirect] = useState(false);
 
-    // Can do further autehnti
-    function handleSubmit(ev){
+    const [isError, setError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+
+    // Can do further authentication
+    async function handleRegister(ev){
         ev.preventDefault();
+
+        // If passwords match, continue with registration
         if (password === dupePass){
             console.log("match");
+            
+            const response = await fetch("http://localhost:5000/users/register", {
+                method: 'POST',
+                body: JSON.stringify({email, username, password}),
+                headers: {'Content-Type':'application/json'}
+            });
 
-            // Handle authentication with backend here
+            // If Valid response, redirect and display no error messages else display appropriate error message
+            if (response.ok){
+                setError(false);
+                setErrorMessage(null);
+                setRedirect(true);
+            } else {
+                setError(true);
+                setErrorMessage("Username is taken!")
+            }
         } else {
-            // If passwords don't match, don't authenticate
-            console.log("No Match")
+            setError(true);
+            setErrorMessage("Passwords don't match!")
         }
+    }
+
+    if (redirect){
+        return <Navigate to={'/login'} />
     }
 
     return(
         <div className="main-signup-container">
             <div className="sub-container1">
-                <h1>Register</h1>
-                <div className="input-container">
-                    <input type="email" 
-                           placeholder="Email" 
-                           value={email}
-                           onChange={(ev) => setEmail(ev.target.value)}
-                           required/>
-                    <input type="text" 
-                           placeholder="Username" 
-                           value={username}
-                           onChange={(ev) => setUsername(ev.target.value)}
-                           required/>
-                    <input type="password" 
-                           placeholder="Password" 
-                           value={password}
-                           onChange={(ev) => setPassword(ev.target.value)}
-                           required/>
-                    <input type="password" 
-                           placeholder="Re-enter password" 
-                           value={dupePass}
-                           onChange={(ev) => setDupePass(ev.target.value)}
-                           required/>
-                </div>
-                <div className="login-btn" onClick={handleSubmit}>Sign up</div>
-                <p>Already have an account?<Link to="/login">Login here</Link></p>
+            <form onSubmit={handleRegister}>
+                    <h1>Register</h1>
+                    <div className="input-container">
+                        <input type="email" 
+                            placeholder="Email" 
+                            value={email}
+                            onChange={(ev) => setEmail(ev.target.value)}
+                            required/>
+                        <input type="text" 
+                            placeholder="Username" 
+                            value={username}
+                            onChange={(ev) => setUsername(ev.target.value)}
+                            required/>
+                        <input type="password" 
+                            placeholder="Password" 
+                            value={password}
+                            onChange={(ev) => setPassword(ev.target.value)}
+                            required/>
+                        <input type="password" 
+                            placeholder="Re-enter password" 
+                            value={dupePass}
+                            onChange={(ev) => setDupePass(ev.target.value)}
+                            required/>
+                    </div>
+                    <button className="login-btn">Sign up</button>
+                    <p>Already have an account?<Link to="/login">Login here</Link></p>
+                    {isError ? (<p>{errorMessage}</p>) : null}
+            </form>  
             </div>
         </div>
     );

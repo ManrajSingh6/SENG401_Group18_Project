@@ -6,6 +6,10 @@ const jwt = require('jsonwebtoken')
 
 router.post('/register', async (req,res)=>{
     const{username,password,email} = req.body;
+
+    console.log("RU: " + username);
+    console.log("RP: " + password);
+
     if( await user.findOne({username:username}).exec()){
         res.status(400).json('username is taken');
     }
@@ -20,6 +24,8 @@ router.post('/register', async (req,res)=>{
 router.get('/find', async (req,res)=> {
     const {username} = req.query;
     //get user from database
+
+    console.log("Finding: " + username);
     
     const User = await user.findOne({username:username});
     if(User){
@@ -35,11 +41,12 @@ router.post('/login',async (req,res)=>{
 
     const{username,password} = req.body;
     //check for user in database
-    const User = await user.findOne({username});
-    if(User){
+    const userDoc = await user.findOne({username});
+    if(userDoc){
         if(bcrypt.compareSync(password,User.password)){
-            jwt.sign({username},process.env.JWT_SECRET,{},(error,auth)=>{
-                res.cookie('auth',auth).json({username});
+            jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
+                if (error) throw error;
+                res.cookie('auth',auth).json({username, id: userDoc._id});
             });
         }
     }
@@ -57,7 +64,6 @@ router.post('/logout',async (req,res)=>{
 
 router.post('/remove',async (req,res)=>{
     const{username} = req.body;
-
      //delete user from database
     const status = await user.deleteOne({username: username});
     if(status.deletedCount == 1){
@@ -67,6 +73,14 @@ router.post('/remove',async (req,res)=>{
         res.status(400).json("User could not be deleted");
     }
     
+});
+
+router.get('/verifyprofile', (req, res) => {
+    const {auth} = req.cookies;
+    jwt.verify(auth, process.env.JWT_SECRET, {}, (err, info) => {
+        if (err) throw err;
+        res.json(info);
+    });
 });
 
 module.exports = router;

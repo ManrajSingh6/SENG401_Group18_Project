@@ -1,6 +1,7 @@
-import React, {useState} from "react";
+import React, {useContext, useState, useEffect} from "react";
 import { Link } from "react-router-dom";
 import "./navbar.css"
+import { UserContext } from "../context/userContext";
 
 import theLoopLogo from "../images/theloopLogo.png";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
@@ -9,17 +10,28 @@ import LoginIcon from '@mui/icons-material/Login';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 function Navbar(){
-    const userName = "demoUserName";
-    const [isLoggedIn, setLoginStatus] = useState(false);
 
-    // This needs to go into the login/registration progress - not correct currently
-    function handleLogin(){
-        setLoginStatus(true);
-    }
+    const {userInfo, setUserInfo} = useContext(UserContext);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/users/verifyprofile', {
+            credentials: 'include',
+        }).then(response => {
+            response.json().then(tempUserInfo => {
+                setUserInfo(tempUserInfo);
+            });
+        });
+    }, []);
 
     function handleLogout(){
-        setLoginStatus(false);
+        fetch("http://localhost:5000/users/logout", {
+            credentials: 'include',
+            method: 'POST',
+        });
+        setUserInfo(null);
     }
+
+    const username = userInfo?.username;
 
     // Responsiveness
     const [active, setActive] = useState("nav__menu");
@@ -43,7 +55,7 @@ function Navbar(){
                 </Link>
             </div>
             <ul className={active}>
-                {isLoggedIn && (<>
+                {username && (<>
                     <Link to="/create-post" className="nav__link">
                         <li className="nav__item">
                             <AddCircleIcon className="mui-icon"/>
@@ -59,13 +71,13 @@ function Navbar(){
                     <Link to="/" className="nav__link">
                         <li className="nav__item" onClick={handleLogout}>
                             <LogoutIcon className="mui-icon"/>
-                                Logout ({userName})
+                                Logout ({username})
                         </li>
                     </Link>
                 </>)}
-                {!isLoggedIn && (<>
+                {!username && (<>
                     <Link to="/login" className="nav__link">
-                    <li className="nav__item" onClick={handleLogin}>
+                    <li className="nav__item">
                         <LoginIcon className="mui-icon"/>
                             Login/Register
                     </li>

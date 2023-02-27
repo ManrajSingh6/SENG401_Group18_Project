@@ -45,7 +45,6 @@ router.post('/login',async (req,res)=>{
     if(userDoc){
         if(bcrypt.compareSync(password, userDoc.password)){
             jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
-                if (error) throw error;
                 res.cookie('auth',auth).json({username, id: userDoc._id});
             });
         }

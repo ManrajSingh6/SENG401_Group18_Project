@@ -43,7 +43,7 @@ router.post('/login',async (req,res)=>{
     //check for user in database
     const userDoc = await user.findOne({username});
     if(userDoc){
-        if(bcrypt.compareSync(password,User.password)){
+        if(bcrypt.compareSync(password, userDoc.password)){
             jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
                 if (error) throw error;
                 res.cookie('auth',auth).json({username, id: userDoc._id});

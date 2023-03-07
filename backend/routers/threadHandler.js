@@ -8,12 +8,28 @@ const comment = require('../models/comment.js');
 const post = require('../models/post.js');
 const bodyParser = require('body-parser');
 
+const multer = require('multer');
+const uploadMiddleware = multer({dest: 'uploads/'});
+const filesystem = require('fs');
 
+router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> {
+    const {thread_name, thread_description, username} = req.body;
+    
+    const {originalname, path} = req.file;
+    const parts = originalname.split('.');
+    const extension = parts[parts.length - 1];
+    const newPath = path + '.' + extension;
+    filesystem.renameSync(path, newPath);
+    
+    console.log("Threadname: " + thread_name);
+    console.log("Threaddesc: " + thread_description);
+    console.log("Thread Creator: " + username);
+    console.log("orginalname: " + originalname);
+    console.log("path: " + path);
+    console.log("newPath: " + newPath);
 
-router.post('/create', async (req,res)=> {
-    const {thread_name, thread_description,username} = req.body;
-    const User = await user.findOne({username:username});
-    if(!User){
+    const userDoc = await user.findOne({username:username});
+    if(!userDoc){
         res.status(400).send('User not found to create thread');
     }
     else{
@@ -22,7 +38,7 @@ router.post('/create', async (req,res)=> {
             res.status(400).json("Thread name is already taken");
         }
         else{
-            const Thread = await thread.create({threadname:thread_name,description:thread_description,userCreated:User._id });
+            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: newPath});
             if(Thread){
                 res.json(Thread);
             }
@@ -101,4 +117,19 @@ router.post('/remove',async (req,res)=>{
         }
     }
 });
+
+router.get("/allthreadnames", async (req, res) => {
+    res.json(
+        await thread.find({}, {threadname:1})
+    )
+});
+
+router.get("/getallthreads", async (req, res) => {
+    res.json(
+        await thread.find({}, {})
+    )
+});
+
+
+
 module.exports = router;

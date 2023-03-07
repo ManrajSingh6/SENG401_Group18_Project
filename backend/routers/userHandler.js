@@ -21,11 +21,25 @@ router.post('/register', async (req,res)=>{
  
 });
 
+router.get('/find/:id', async (req,res)=> {
+    const {id} = req.params;
+    //get user from database
+
+    console.log("Finding: " + id);
+    
+    const User = await user.findOne({_id: id});
+    if(User){
+        res.send(User);
+    }
+    else{
+        res.status(400).send('User not found');
+    }
+    
+});
+
 router.get('/find', async (req,res)=> {
     const {username} = req.query;
     //get user from database
-
-    console.log("Finding: " + username);
     
     const User = await user.findOne({username:username});
     if(User){
@@ -36,6 +50,7 @@ router.get('/find', async (req,res)=> {
     }
     
 });
+
 
 router.post('/login',async (req,res)=>{
 

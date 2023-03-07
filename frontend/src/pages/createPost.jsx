@@ -1,10 +1,15 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { Navigate } from "react-router-dom";
 import "./createPost.css";
 
 import ThreadDropdown from "../components/threadDropdown";
 import QuillEditor from "../components/quillEditor";
 
+import { UserContext } from "../context/userContext";
+
 function CreatePostPage(){
+
+    const {userInfo} = useContext(UserContext);
     
     // State mangement for form fields
     const [postTitle, setPostTitle] = useState('');
@@ -17,23 +22,91 @@ function CreatePostPage(){
     const [newThreadSummary, setNewThreadSummary] = useState('');
     const [newThreadImg, setNewThreadImg] = useState('');
 
+    const [isError, setIsError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
+    const [redirect, setRedirect] = useState(false);
+
+    function handleOptionChange(event){
+        console.log(event.target.value)
+        setThreadChoice(event.target.value === "" ? "" : event.target.value);
+    }
+
     // Function to handle new post (and possibly thread) creation
-    function createNewPost(event){
+    async function createNewPost(event){
         event.preventDefault();
         console.log("Submitted form");
 
-        const data = new FormData();
-        data.set('postTitle', postTitle);
-        data.set('postSummary', postSummary);
-        data.set('postContent', postContent);
-        data.set('postImg', postImg[0]);
+        let threadCreated = true;
 
-        data.set('newThreadName', newThreadName);
-        data.set('newThreadSummary', newThreadSummary);
-        data.set('newThreadImg', newThreadImg[0]);
+        if (newThreadName !== '' && newThreadSummary !== '' && newThreadImg !== ''){
 
-        // Make FETCH backend call here
+            // Thread Data
+            const threadData = new FormData();
+            threadData.set('thread_name', newThreadName);
+            threadData.set('thread_description', newThreadSummary);
+            threadData.set('threadFile', newThreadImg[0]);
+            threadData.set('username', userInfo.username);
+            
+            // Create thread with backend
+            const threadResponse = await fetch('http://localhost:5000/threads/create', {
+                method: 'POST',
+                body: threadData,
+                credentials: 'include'
+            });
 
+            // Error handling
+            if (threadResponse.ok){
+                console.log("Successfully created new thread");
+                setIsError(false);
+                setErrorMsg('');
+                threadCreated = true;
+            } else {
+                setErrorMsg("Thread name already exists!");
+                setIsError(true);
+                threadCreated = false;
+            }
+        }
+
+        // If the thread was --> Successfully created OR no new thread was created
+        if (threadCreated){
+            // Post Data
+            const postData = new FormData();
+            postData.set('title', postTitle);
+            postData.set('summary', postSummary);
+            postData.set('body', postContent);
+            if (threadChoice === ''){
+                postData.set('parentThread', newThreadName);
+            } else {
+                postData.set('parentThread', threadChoice);
+            }
+            postData.set('username', userInfo.username);
+            postData.set('postFile', postImg[0]);
+            
+            const postResponse = await fetch('http://localhost:5000/posts/create', {
+                method: 'POST',
+                body: postData,
+                credentials: 'include'
+            });
+            
+            // Error Handling
+            if (postResponse.ok){
+                console.log("Successfully created new post");
+                setErrorMsg('');
+                setIsError(false);
+            } else {
+                setErrorMsg('Post Creation Failed');
+                setIsError(true);
+            }
+        }
+
+        // If post/thread creation is successful, redirect user to homepage
+        if (!isError){
+            setRedirect(true);
+        }
+    }
+
+    if (redirect){
+        return <Navigate to={'/'} />;
     }
 
     return(
@@ -65,9 +138,7 @@ function CreatePostPage(){
                 <div className="thread-choice-container">
                     <div>
                         <h3 style={{color: "#120460", fontWeight: "400"}}>Choose a thread to upload post into: </h3>
-                        
-                        {/* THIS NEEDS TO BE FIXED STILL */}
-                        <ThreadDropdown value={threadChoice} onChange={setThreadChoice}/>
+                        <ThreadDropdown selectedOption={threadChoice} onSelectedOptionChange={handleOptionChange}/>
                     </div>
                     <h4><span>OR</span></h4>
                     <h3 style={{color: "#120460", fontWeight: "400"}}>Create a new thread: </h3>
@@ -77,11 +148,11 @@ function CreatePostPage(){
                             placeholder="Thread name (40 characters max)" 
                             maxLength={40}
                             onChange={(ev) => {setNewThreadName(ev.target.value)}}></input>
-                        <input type="text" 
+                        <textarea type="text" 
                             value={newThreadSummary} 
                             placeholder="Thread summary (100 characters max)" 
                             maxLength={100}
-                            onChange={(ev) => {setNewThreadSummary(ev.target.value)}}></input>
+                            onChange={(ev) => {setNewThreadSummary(ev.target.value)}}></textarea>
                         <p>Choose thread image: </p>
                         <input type="file" 
                             accept="image/*"
@@ -90,7 +161,7 @@ function CreatePostPage(){
                 </div>
                 <button className="submit-btn">Create Post</button>
             </form>
-
+            {isError ? (<p style={{alignSelf: "center"}}>{errorMsg}</p>) : null}
         </div>
     );
 }

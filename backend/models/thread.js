@@ -9,5 +9,7 @@ const threadSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    threadImgUrl: String,
+    votes: [{type:Schema.Types.ObjectId,ref:'Vote'}],
 });
 module.exports = mongoose.model('Thread', threadSchema);

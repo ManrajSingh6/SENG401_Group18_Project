@@ -6,6 +6,8 @@ const postSchema = new mongoose.Schema({
 
     title: {type:String,required:true},
 
+    summary: {type: String, required: true},
+
     body: {type:String,required:true},
     thread:{type:Schema.Types.ObjectId,ref:'Thread'},
 
@@ -15,9 +17,9 @@ const postSchema = new mongoose.Schema({
     },
     type: String,
     link: String,
-
     votes: [{type:Schema.Types.ObjectId,ref:'Vote'}],
-    comments: [{type:Schema.Types.ObjectId,ref:'Comments'}]
+    comments: [{type:Schema.Types.ObjectId,ref:'Comments'}],
+    postImgUrl: String
 });
 
 module.exports = mongoose.model('Post', postSchema);

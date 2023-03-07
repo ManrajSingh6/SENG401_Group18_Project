@@ -23,6 +23,8 @@ const userSchema = new mongoose.Schema({
         default: Date.now()
     },
     subscribed: [{type:Schema.Types.ObjectId,ref:'Thread'}],
+    description: {type: String, default: "You have yet to add a description."},
+    profilePicture: {type: String, default: "defaultUserProPic.png"}
 });
 
 module.exports = mongoose.model('User', userSchema);

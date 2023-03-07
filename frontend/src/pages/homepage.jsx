@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./homepage.css";
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -49,14 +49,29 @@ function Homepage(){
 
     const [searchQuery, setSearchQuery] = useState('');
     const [tempQuery, setTempQuery] = useState('');
-    
+    const [filterChoice, setFilterChoice] = useState('');
+
+    const [allThreads, setAllThreads] = useState([]);
+
+    useEffect(() => {
+        fetch('http://localhost:5000/threads/getallthreads').then(res => {
+            res.json().then(threadData => {
+                console.log(threadData);
+                setAllThreads(threadData);
+            });
+        });
+    }, []);
     // Search functionality, add Dropdown functionality
     function handleSearch(event){
         event.preventDefault();
         console.log(searchQuery);
-    
         setSearchQuery(tempQuery);
         setTempQuery('');    
+    }
+
+    function handleOptionChange(event){
+        console.log(event.target.value)
+        setFilterChoice(event.target.value === "" ? "" : event.target.value);
     }
 
     return(
@@ -75,28 +90,26 @@ function Homepage(){
                             <a><SearchIcon style={{color: "#FFFF"}}/></a>
                         </div>
                     </div>
-                    {/* STILL NEED TO IMPLEMENT DROPDOWN FUNCTIONALITY */}
-                    <Dropdown className="dropdown" />
+                    <Dropdown selectedOption={filterChoice} onOptionChange={handleOptionChange} className="dropdown" />
                 </div>
                 
                 {/* Map all Available Threads from the database, and handle search functionality (filter) */}
                 {allThreads.filter((val) => {
                     if (searchQuery === ""){ return val;} 
-                    else if (val.threadName.toLowerCase().includes(searchQuery.toLowerCase()) || val.userCreated.toLowerCase().includes(searchQuery.toLowerCase()) ){
+                    else if (val.threadname.toLowerCase().includes(searchQuery.toLowerCase()) || val.userCreated.toLowerCase().includes(searchQuery.toLowerCase()) ){
                         return val;
                     }
-                }).map((threadItem, index) => {
+                }).map((threadItem) => {
                     return (
                         <ThreadPreview
-                            key={index}
-                            threadTitle={threadItem.threadName}
+                            key={threadItem._id}
+                            threadTitle={threadItem.threadname}
                             userCreated={threadItem.userCreated}
-                            dateCreated={threadItem.dateCreated}
-                            timeCreated={threadItem.timeCreated}
-                            threadDesc={threadItem.desc}
-                            likes={threadItem.likes}
-                            comments={threadItem.comments}
-                            img={threadItem.imgSrc}
+                            dateTimeCreated={threadItem.dateCreated}
+                            threadDesc={threadItem.description}
+                            likes={threadItem.votes.length}
+                            postAmount={threadItem.posts.length}
+                            img={threadItem.threadImgUrl}
                         />
                     )
                 })}

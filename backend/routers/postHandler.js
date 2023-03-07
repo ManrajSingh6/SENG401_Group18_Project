@@ -1,4 +1,3 @@
-
 const express = require("express");
 const mongoose = require("mongoose");
 const post = require('../models/post.js');
@@ -8,25 +7,40 @@ const vote = require('../models/vote.js');
 const comment = require('../models/comment.js');
 const router = express.Router();
 
-router.post('/create',async (req,res)=> {
-    const {username, title,body,thread_name} = req.body;
+const multer = require('multer');
+const uploadMiddleware = multer({dest: 'uploads/'});
+const filesystem = require('fs');
+
+router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
+    const {username, title, summary, body, parentThread} = req.body;
+
+    const {originalname, path} = req.file;
+    const parts = originalname.split('.');
+    const extension = parts[parts.length - 1];
+    const newPath = path + '.' + extension;
+    filesystem.renameSync(path, newPath);
+
+    console.log("postname: " + title);
+    console.log("postdesc: " + body);
+    console.log("post Creator: " + username);
+    console.log("post parent thread: " + parentThread);
     
-    const User = await user.findOne({username:username});
-    if(!User){
+    const userDoc = await user.findOne({username:username});
+    if(!userDoc){
         res.status(400).json("Could not find user");
     }
     else{
-        const Thread = await thread.findOne({threadname:thread_name});
-        if(!Thread){
+        const threadDoc = await thread.findOne({threadname: parentThread});
+        if(!threadDoc){
             res.status(400).json("Could not find thread");
         }
         else{
             //insert post to database
-            const Post= await post.create({author:User._id,title:title,body:body,thread: Thread._id});
-            if(Post){
-                await thread.updateOne({"_id": Thread._id},{$push:{"posts": Post._id}});
-                await user.updateOne({"_id": User._id},{$push:{"posts": Post._id}})
-                res.json(Post);
+            const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, postImgUrl: newPath});
+            if(postDoc){
+                await thread.updateOne({"_id": threadDoc._id},{$push:{"posts": postDoc._id}});
+                await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})
+                res.json(postDoc);
             }
             else{
                 res.status(400).json("Post creation failed");

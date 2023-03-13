@@ -55,12 +55,33 @@ router.get('/find',async (req,res)=> {
     
     const Thread = await thread.findOne({threadname:thread_name});
     if(Thread){
-        res.send(Thread._id.toString());
+        res.send(Thread);
     }
     else{
         res.status(400).send('Thread not found');
     }
     
+});
+
+router.get("/allpostsbythread", async (req, res) => {
+    const {thread_name} = req.query;
+    const Thread = await thread.findOne({threadname: thread_name});
+    
+    if (Thread){
+        const threadPosts = Thread.posts;
+        var postData = [];
+        const parentThreadInfo = {parentThreadName: Thread.threadname, dateCreated: Thread.dateCreated, userCreated: Thread.userCreated, description: Thread.description};
+        postData.push(parentThreadInfo);
+        for (let i = 0; i < threadPosts.length; i++){
+            const postDoc = await post.findById(threadPosts[i]);
+            if (postDoc){
+                postData.push(postDoc);
+            }
+        }
+        res.send(postData);
+    } else {
+        res.status(400).send("Could not find thread with threadname: " + thread_name);
+    }
 });
 
 router.post('/subscribe', async (req,res)=>{
@@ -128,6 +149,10 @@ router.get("/getallthreads", async (req, res) => {
     res.json(
         await thread.find({}, {})
     )
+});
+
+router.get("/getpostids", async (req, res) => {
+
 });
 
 

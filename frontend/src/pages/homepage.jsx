@@ -56,7 +56,6 @@ function Homepage(){
     useEffect(() => {
         fetch('http://localhost:5000/threads/getallthreads').then(res => {
             res.json().then(threadData => {
-                console.log(threadData);
                 setAllThreads(threadData);
             });
         });

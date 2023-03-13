@@ -7,18 +7,15 @@ import SubbedThreads from "../components/subbedThreads";
 import UserPosts from "../components/userPosts";
 import {UserContext} from "../context/userContext";
 
-// Dummy data for now
-const username = "CarEnthusiast1";
-const userEmail = "example@mail.com"
-// const userDesc =  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cume socis natoque penatibus et magnis dis p";
 
 function ProfilePage(){
 
     const {userInfo} = useContext(UserContext);
     const [userInfoState, setUserInfo] = useState('');
 
-    const [profilePic, setProfilePic] = useState(defaultProPic);
-    const [tempProPic, setTempProPic] = useState(null);
+    const [isError, setIsError] = useState(false);
+
+    const [files, setFiles] = useState('');
 
     const [userDesc, setUserDesc] = useState('');
     const [tempDesc, setTempDesc] = useState('');
@@ -28,30 +25,36 @@ function ProfilePage(){
             credentials: 'include'
         }).then(response => {
             response.json().then(userInfoRes => {
-                console.log(userInfoRes);
+                setUserDesc(userInfoRes.description); 
                 setUserInfo(userInfoRes);
-
-                if (userInfoRes.profilePic === "defaultUserProPic.png"){
-                    setProfilePic(defaultProPic);
-                } else {
-                    let imgPath = require(`../../../backend/uploads/${userInfoRes.profilePicture}`);
-                    setProfilePic(imgPath);
-                }
-
-                setUserDesc(userInfoRes.description);
             })
         })
     }, []);
 
-    function handleChange(){
-        // Update user information with backend here
-        if (tempDesc !== ''){
-            setUserDesc(tempDesc);
+    async function handleChange(){
+        // Update user information with backend and display updated information to frontend
+        const data = new FormData();
+        data.set('newDesc', tempDesc);
+        data.set('username', userInfo.username);
+        if (files?.[0]){
+            data.set('file', files?.[0]);
         }
 
-        if (tempProPic !== null){
-            setProfilePic(tempProPic);
-            console.log(tempProPic);
+        const response = await fetch ('http://localhost:5000/users/updateprofile', {
+            method: 'PUT',
+            body: data,
+            credentials: 'include'
+        });
+
+        if (response.ok){
+            response.json().then(data => {
+                setUserDesc(data.description); 
+                setUserInfo(data);
+            });
+            setIsError(false);
+            setTempDesc('');
+        } else {
+            setIsError(true);
         }
     }
 
@@ -59,9 +62,8 @@ function ProfilePage(){
         <div className="main-profile-container">
             <div className="user-profile-container">
                 <div className="user-info">
-                {/* Fetch profile picture from  */}
                     <div className="profile-pic-container">
-                        <img src={profilePic} alt="user-profile-pic"/>
+                        <img src={userInfoState.profilePicture === 'defaultUserProPic.png' ? (defaultProPic): 'http://localhost:5000/' + userInfoState.profilePicture} alt="user-profile-pic"/>
                     </div>
                     <h2>{userInfo.username}</h2>
                     <p style={{color: "grey", fontSize: "medium", marginTop: "-10px"}}>{userInfoState.email}</p>
@@ -74,14 +76,15 @@ function ProfilePage(){
                     <h1>Welcome {userInfoState.username}</h1>
                     <textarea 
                         placeholder="Write a bit about yourself..." 
-                        maxLength={120}
+                        maxLength={200}
                         value={tempDesc}
                         onChange={(ev) => setTempDesc(ev.target.value)}/>
                     <div style={{display: "flex", gap: "20px"}}>
                         <label>Change profile picture: </label>
-                        <input type="file" accept="image/*" onChange={(ev) => setTempProPic(ev.target.files)}/>
+                        <input type="file" accept="image/*" onChange={(ev) => setFiles(ev.target.files)}/>
                     </div>
                     <div onClick={handleChange} className="confirm-button">Confirm <CheckIcon fontSize="small" sx={{marginLeft: "5px"}}/></div>
+                    {isError ? (<p>Error updating user information.</p>) : null}
                 </div>
             </div>
 

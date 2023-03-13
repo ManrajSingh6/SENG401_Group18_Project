@@ -4,6 +4,11 @@ const user = require('../models/userInfo.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
+const multer = require('multer');
+const uploadMiddleware = multer({dest: 'uploads/'});
+const filesystem = require('fs');
+const { resolve } = require("path");
+
 router.post('/register', async (req,res)=>{
     const{username,password,email} = req.body;
 
@@ -95,6 +100,34 @@ router.get('/verifyprofile', (req, res) => {
         if (err) throw err;
         res.json(info);
     });
+    
+});
+
+router.put('/updateprofile', uploadMiddleware.single('file'), async (req, res) => {
+    let newPath = null;
+    if (req.file){
+        const {originalname, path} = req.file;
+        const parts = originalname.split('.');
+        const extension = parts[parts.length - 1];
+        newPath = path + '.' + extension;
+        filesystem.renameSync(path, newPath);
+    }
+    const {newDesc, username} = req.body;
+
+    const userDoc = await user.findOne({username: username});
+    
+    const updatedDoc = await user.findOneAndUpdate(
+        {username: username},
+        {description: newDesc === '' ? userDoc.description : newDesc, profilePicture: newPath ? newPath : userDoc.profilePicture},
+        {returnOriginal: false}
+    );
+
+    if (updatedDoc){
+        res.json(updatedDoc);
+    } else {
+        res.status(400).send("Error updating fields");
+    }   
+    
 });
 
 module.exports = router;

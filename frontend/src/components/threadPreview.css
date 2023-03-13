@@ -62,6 +62,9 @@
     color: #777777;
 }
 
+.thread-info-container{
+    align-self: center;
+}
 .thread-info-container p {
     margin-top: 10px;
 }

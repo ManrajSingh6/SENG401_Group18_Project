@@ -1,29 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./postView.css";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import Comment from "../components/comment";
 
-import gtrIMG from "../images/ironmanTemp.png";
-
-import { dummyText } from "./dummytext";
 import CommentEditor from "../components/commentEditor";
+import { UserContext } from "../context/userContext";
+import { Link } from "react-router-dom";
 
-function PostView(){    
+function PostView(){
+
+    const {userInfo} = useContext(UserContext);
+
+    const [postData, setPostData] = useState([]);
+    const splitPath = (window.location.pathname).split("/");
+    const postID = splitPath[splitPath.length -1];
+
+    useEffect(() => {
+        fetch(`http://localhost:5000/posts/find?post_id=${postID}`).then(res => {
+            res.json().then(resPostData => {
+                setPostData(resPostData);
+            });
+        });
+    }, []);
 
     return(
         <div className="main-post-container">
             <div className="post-content-container">
                 <div className="post-info">
-                    <p className="stats-text">User1 | 2023-07-15 | 10:59</p>
-                    <h1>Why Ironman is the GOAT</h1>
-                    <p className="stats-text">23 Likes | 10 comments</p>
-                    <p>{dummyText}</p>
+                    <p className="stats-text">{postData.author} | {postData.author} | {postData.author}</p>
+                    <h1 className="post-info-title">{postData.title}</h1>
+                    <p className="stats-text">{postData.votes ? (Object.keys(postData.votes).length) : 0} Likes | {postData.comments ? (Object.keys(postData.comments).length) : 0} comments</p>
+                    {postData.author === userInfo.id ? (
+                        <Link className="edit-post-link">
+                            <div className="edit-post-btn">Edit Post</div>
+                        </Link>
+                    ) : null}
+                    <p className="post-info content " dangerouslySetInnerHTML={{__html: postData.body}}></p>
                     <div className="like-btn">
                         <ThumbUpIcon fontSize="small"/>Like
                     </div>
                 </div>
                 <div className="post-img-container">
-                    <img src={gtrIMG} alt="post-img"></img>
+                    <img src={'http://localhost:5000/' + postData.postImgUrl} alt="post-img"></img>
                 </div>
             </div>
 

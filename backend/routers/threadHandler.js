@@ -27,7 +27,7 @@ router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> 
     console.log("orginalname: " + originalname);
     console.log("path: " + path);
     console.log("newPath: " + newPath);
-
+    
     const userDoc = await user.findOne({username:username});
     if(!userDoc){
         res.status(400).send('User not found to create thread');
@@ -90,21 +90,21 @@ router.post('/remove',async (req,res)=>{
     else{
         postcount = Thread.posts.length;
         postsdeleted = 0;
-        for(const i of Thread.posts){
+        for(i of Thread.posts){
             Post = await post.findOne({"_id": i});
             for(const j of Post.votes){
-                await vote.deleteOne({_id:j});
+                await vote.deleteOne({"_id":j});
             }
-            for(const j of Post.comments){
-                Comment = await comment.findOne({"_id": j});
-                for(const n of Comment.votes){
-                    await vote.deleteOne({_id:n});
+            for(k of Post.comments){
+                Comment = await comment.findOne({"_id": k});
+                for(n of Comment.votes){
+                    await vote.deleteOne({"_id":n});
                 }
-                await user.updateOne({"_id":Comment.author},{$pull:{"comments": Comment}});
-                await comment.deleteOne({_id:j});
+                await user.updateOne({"_id":Comment.author},{$pull:{"comments": k}});
+                await comment.deleteOne({"_id":k});
             }   
-            await user.updateOne({"_id":Post.author},{$pull:{"posts": Post}});
-            poststatus = await post.deleteOne({_id:i});
+            await user.updateOne({"_id":Post.author},{$pull:{"posts": i}});
+            poststatus = await post.deleteOne({"_id":i});
             postsdeleted += poststatus.deletedCount;
         }
 

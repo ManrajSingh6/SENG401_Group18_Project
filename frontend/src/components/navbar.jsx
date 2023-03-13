@@ -62,7 +62,7 @@ function Navbar(){
                                 Create Post
                         </li>
                     </Link>
-                    <Link to="/user-profile" className="nav__link">
+                    <Link to={`/user-profile/${username}`} className="nav__link">
                         <li className="nav__item">
                             <AccountCircleIcon className="mui-icon"/>
                                 Profile

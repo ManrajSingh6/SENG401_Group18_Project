@@ -19,7 +19,7 @@ function App(){
                     <Route path={'/create-post'} element={<CreatePostPage />} />
                     <Route path={'/login'} element={<LoginPage />} />
                     <Route path={'/register'} element={<RegisterPage />} />
-                    <Route path={'/user-profile'} element={<ProfilePage />}/>
+                    <Route path={'/user-profile/:username'} element={<ProfilePage />}/>
                     <Route path={"/:threadName/"} element={<ThreadPage />} />
                     <Route path={"/:threadName/post/:postID"} element={<PostView />} />
                 </Route>

@@ -26,10 +26,35 @@
     gap: 10px;
     word-wrap: break-word;
     padding: 10px;
-    align-items: center ;
+    /* align-items: center ; */
 }
 
-.post-info h1{
+.edit-post-link{
+    text-decoration: none;
+}
+.edit-post-btn{
+    width: 80px;
+    color: #004096;
+    border-radius: 5px;
+    margin-top: 10px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+}
+
+.edit-post-btn:hover{
+    text-decoration: underline;
+}
+
+.post-info-title {
+    font-weight:600;
+    text-align: center;
+}
+
+.post-info .content{
+    margin-top: 30px;
+}
+
+.post-info .content h1{
     font-weight: 400;
 }
 
@@ -60,6 +85,8 @@
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
+    width: 80px;
+    align-self: center;
 }
 .like-btn:hover{
     background-color: #004096;
@@ -69,6 +96,7 @@
 .stats-text{
     font-size: 0.9rem;
     color: #777777;
+    text-align: center;
 }
 
 

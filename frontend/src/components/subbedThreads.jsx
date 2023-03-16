@@ -18,22 +18,22 @@ const breakpoints = [
     {width: 1200, itemsToShow: 4},
 ]
 
-function SubbedThreads(){
+function SubbedThreads(props){
     return(
         <div className="subscribed-threads">
-            <h3>Subscribed Threads</h3>
+            <h3 style={{marginBottom: "40px"}}>Subscribed Threads</h3>
             <Carousel breakPoints={breakpoints} itemPadding={[30, 5]}>
                 {
-                    allThreads.map((thread, index) => {
+                    props.subbedThreads.map((thread) => {
                         return (
                         <SubbedThreadCard 
-                            key={index} 
-                            name={thread.userCreated} 
-                            threadName={thread.threadName}
+                            key={thread._id} 
+                            name={thread.userCreated.username} 
+                            threadName={thread.threadname}
                             date={thread.dateCreated}
-                            time={thread.timeCreated}
-                            likes={thread.likes}
-                            comments={thread.comments}/>
+                            time={thread.dateCreated}
+                            likes={thread.votes.length}
+                            comments={thread.posts.length}/>
                     )})
                 }
             </Carousel>

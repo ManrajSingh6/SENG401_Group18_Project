@@ -21,13 +21,6 @@ router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> 
     const newPath = path + '.' + extension;
     filesystem.renameSync(path, newPath);
     
-    console.log("Threadname: " + thread_name);
-    console.log("Threaddesc: " + thread_description);
-    console.log("Thread Creator: " + username);
-    console.log("orginalname: " + originalname);
-    console.log("path: " + path);
-    console.log("newPath: " + newPath);
-    
     const userDoc = await user.findOne({username:username});
     if(!userDoc){
         res.status(400).send('User not found to create thread');
@@ -65,12 +58,12 @@ router.get('/find',async (req,res)=> {
 
 router.get("/allpostsbythread", async (req, res) => {
     const {thread_name} = req.query;
-    const Thread = await thread.findOne({threadname: thread_name});
+    const Thread = await thread.findOne({threadname: thread_name}).populate('userCreated', 'username');
     
     if (Thread){
         const threadPosts = Thread.posts;
         var postData = [];
-        const parentThreadInfo = {parentThreadName: Thread.threadname, dateCreated: Thread.dateCreated, userCreated: Thread.userCreated, description: Thread.description};
+        const parentThreadInfo = {parentThreadName: Thread.threadname, dateCreated: Thread.dateCreated, userCreated: Thread.userCreated.username, description: Thread.description};
         postData.push(parentThreadInfo);
         for (let i = 0; i < threadPosts.length; i++){
             const postDoc = await post.findById(threadPosts[i]);
@@ -86,7 +79,9 @@ router.get("/allpostsbythread", async (req, res) => {
 
 router.post('/subscribe', async (req,res)=>{
     const{thread_name,username} = req.body;
+    console.log(thread_name, username);
     const Thread = await thread.findOne({threadname:thread_name});
+
     if(!Thread){
         res.status(400).send('Thread not found');
     }
@@ -139,6 +134,54 @@ router.post('/remove',async (req,res)=>{
     }
 });
 
+router.put('/likethread', async (req, res) => {
+    const {threadID, userID} = req.body;
+    
+    const voteDoc = await vote.findOne({username: userID, threadId: threadID});
+    if (voteDoc){
+        res.status(400).send("Already liked this post");
+    } else {
+        const newVote = await vote.create({username: userID, threadId: threadID});
+        const updatedThreadDoc = await thread.findOneAndUpdate(
+            {_id: threadID},
+            {$push: {votes: newVote}},
+            {returnOriginal: false}
+        );
+        if (updatedThreadDoc){
+            res.json(updatedThreadDoc.votes);
+        }
+    }
+});
+
+router.put('/dislikethread', async (req, res) => {
+    const {threadID, userID} = req.body;
+    
+    // Find vote to be deleted (from vote collection)
+    const voteDoc = await vote.findOne({username: userID, threadId: threadID});
+
+    // const updatedThreadDoc = await thread.updateOne({_id: threadID}, {$pull: {'votes': {'_id': voteDoc._id}}});
+
+
+    // await vote.deleteOne({_id: voteDoc._id});
+    if (voteDoc){
+        console.log("Found doc");
+        // Remove vote from thread
+        const updatedThreadDoc = await thread.findOneAndUpdate(
+            {_id: threadID},
+            {$pull: {votes: voteDoc}},
+            {returnOriginal: false}
+        );
+
+        if (updatedThreadDoc){
+            res.json(updatedThreadDoc.votes);
+        }
+        
+    } else {
+        res.status(400).send("Already disliked this post");
+    }
+    // Delete vote from collection
+});
+
 router.get("/allthreadnames", async (req, res) => {
     res.json(
         await thread.find({}, {threadname:1})
@@ -147,12 +190,8 @@ router.get("/allthreadnames", async (req, res) => {
 
 router.get("/getallthreads", async (req, res) => {
     res.json(
-        await thread.find({}, {})
+        {threads: await thread.find({}, {}).populate('userCreated', 'username'), users: await user.find({}, {posts:1, username:1, profilePicture:1}).limit(10)}
     )
-});
-
-router.get("/getpostids", async (req, res) => {
-
 });
 
 

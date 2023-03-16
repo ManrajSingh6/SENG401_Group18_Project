@@ -21,6 +21,7 @@
     border-radius: 10px;
     padding: 15px;
     width: 100%;
+    height: fit-content;
     background-color: #FFFF;
     margin: 5px;
     display: flex;
@@ -84,11 +85,16 @@
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.585);
 }
 
+.view-link{
+    text-decoration: none;
+    width: fit-content;
+    align-self: center;
+}
+
 .view-post-btn:hover{
     background-color: #004696;
     transition: all 0.3s ease;
 }
-
 
 @media screen and (max-width: 768px){
     .sub-thread-card{

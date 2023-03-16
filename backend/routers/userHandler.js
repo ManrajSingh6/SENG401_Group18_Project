@@ -3,6 +3,7 @@ const router = express.Router();
 const user = require('../models/userInfo.js');
 const thread = require('../models/thread.js');
 const vote = require('../models/vote.js');
+const post = require('../models/post.js');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -15,9 +16,6 @@ const { resolve } = require("path");
 
 router.post('/register', async (req,res)=>{
     const{username,password,email} = req.body;
-
-    console.log("RU: " + username);
-    console.log("RP: " + password);
 
     if( await user.findOne({username:username}).exec() ){
         res.status(400).json('username is taken');
@@ -55,7 +53,13 @@ router.get('/find', async (req,res)=> {
     
     const User = await user.findOne({username:username});
     if(User){
-        res.send(User);
+        const allPosts = await post.find({author: User._id}).populate('thread', 'threadname');
+        let subbedThreads = [];
+        for (let i = 0; i < User.subscribed.length; i++){
+            const sThread = await thread.findOne({_id: User.subscribed[i]}).populate('userCreated', 'username');
+            subbedThreads.push(sThread);
+        }
+        res.send({User, userPosts: allPosts, subscribedThreads: subbedThreads});
     }
     else{
         res.status(400).send('User not found');

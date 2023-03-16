@@ -27,10 +27,10 @@ function PostView(){
         <div className="main-post-container">
             <div className="post-content-container">
                 <div className="post-info">
-                    <p className="stats-text">{postData.author} | {postData.author} | {postData.author}</p>
+                    <p className="stats-text">Posted by {postData.author?.username} on {postData.time?.substring(0, 10)} at {postData.time?.substring(11, 19)}</p>
                     <h1 className="post-info-title">{postData.title}</h1>
                     <p className="stats-text">{postData.votes ? (Object.keys(postData.votes).length) : 0} Likes | {postData.comments ? (Object.keys(postData.comments).length) : 0} comments</p>
-                    {postData.author === userInfo.id ? (
+                    {postData.author?._id === userInfo.id ? (
                         <Link className="edit-post-link">
                             <div className="edit-post-btn">Edit Post</div>
                         </Link>

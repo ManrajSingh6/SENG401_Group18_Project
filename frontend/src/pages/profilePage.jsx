@@ -12,6 +12,8 @@ function ProfilePage(){
 
     const {userInfo} = useContext(UserContext);
     const [userInfoState, setUserInfo] = useState('');
+    const [userPosts, setUserPosts] = useState([]);
+    const [subbedThreads, setSubbedThreads] = useState([]);
 
     const [isError, setIsError] = useState(false);
 
@@ -25,9 +27,11 @@ function ProfilePage(){
             credentials: 'include'
         }).then(response => {
             response.json().then(userInfoRes => {
-                setUserDesc(userInfoRes.description); 
-                setUserInfo(userInfoRes);
-            })
+                setUserDesc(userInfoRes.User.description); 
+                setUserInfo(userInfoRes.User);
+                setSubbedThreads(userInfoRes.subscribedThreads);
+                setUserPosts(userInfoRes.userPosts)
+            });
         })
     }, []);
 
@@ -88,8 +92,8 @@ function ProfilePage(){
                 </div>
             </div>
 
-            <SubbedThreads />
-            <UserPosts />
+            <SubbedThreads subbedThreads={subbedThreads}/>
+            <UserPosts userPosts={userPosts}/>
         </div>
     
     );

@@ -19,11 +19,6 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
     const extension = parts[parts.length - 1];
     const newPath = path + '.' + extension;
     filesystem.renameSync(path, newPath);
-
-    console.log("postname: " + title);
-    console.log("postdesc: " + body);
-    console.log("post Creator: " + username);
-    console.log("post parent thread: " + parentThread);
     
     const userDoc = await user.findOne({username:username});
     if(!userDoc){
@@ -53,7 +48,7 @@ router.get('/find', async (req,res)=> {
     const {post_id} = req.query;
     //find post in database
     var post_objectId = mongoose.Types.ObjectId(post_id);
-    const Post = await post.findById(post_objectId);
+    const Post = await post.findById(post_objectId).populate('author', 'username');
     if(Post){
         res.json(Post);
     }

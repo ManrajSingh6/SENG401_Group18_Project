@@ -18,6 +18,7 @@ function ThreadPage({parentThread}){
             res.json().then(response => {
                 setParentThreadInfo(response[0]);
                 setNestedPosts(response.slice(1));
+                console.log(parentThreadInfo);
             });
         });
     }, []);
@@ -26,7 +27,7 @@ function ThreadPage({parentThread}){
         <div className="thread-post-container">
             <h1>{parentThreadInfo.parentThreadName}</h1>
             <p style={{textAlign: "center", marginTop: "10px", fontWeight: "500"}}>{parentThreadInfo.description}</p>
-            <p style={{marginTop: "10px", textAlign: "center", color: "#777777", marginBottom: "10px"}}>Created by {parentThreadInfo.userCreated} | {parentThreadInfo.dateCreated} | {parentThreadInfo.dateCreated}</p>
+            <p style={{marginTop: "10px", textAlign: "center", color: "#777777", marginBottom: "10px"}}>Created by {parentThreadInfo.userCreated} | {parentThreadInfo.dateCreated?.substring(0, 10)} | {parentThreadInfo.dateCreated?.substring(11, 19)}</p>
             <Grid container spacing={2} style={{marginTop: 30}}>
                 {
                     nestedPosts.map((post) => {
@@ -37,7 +38,7 @@ function ThreadPage({parentThread}){
                                     postID={post._id} 
                                     postTitle={post.title}
                                     postDate={post.time.substring(0, 10)}
-                                    postTime={post.time.substring(0, 10)}
+                                    postTime={post.time.substring(11, 19)}
                                     postUser={post.author}
                                     parentThread={parentThreadInfo.parentThreadName}
                                     postSumm={post.summary}

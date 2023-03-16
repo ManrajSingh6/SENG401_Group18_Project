@@ -19,7 +19,7 @@ function Dropdown({selectedOption, onOptionChange}){
                     >   
                         <MenuItem value="">None</MenuItem>
                         <MenuItem value={"Likes"}>Most Likes</MenuItem>
-                        <MenuItem value={"Comments"}>Most Comments</MenuItem>
+                        <MenuItem value={"Posts"}>Most Posts</MenuItem>
                         <MenuItem value={"Recent"}>Most Recent</MenuItem>
                     </Select>
             </FormControl>

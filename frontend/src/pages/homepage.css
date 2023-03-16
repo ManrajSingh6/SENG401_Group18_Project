@@ -17,6 +17,7 @@
     background-color: #FFFF;
     border-radius: 10px;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+    
 }
 
 .form-container{
@@ -81,6 +82,15 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+}
+.pop-thread-link,
+.pop-thread-link:visited{
+    text-decoration: none;
+    color: inherit;
+}
+
+.pop-thread-link:hover{
+    text-decoration: underline;
 }
 
 .popular-threads-container h3{

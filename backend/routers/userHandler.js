@@ -75,7 +75,7 @@ router.post('/login',async (req,res)=>{
     const userDoc = await user.findOne({username});
     if(userDoc){
         if(bcrypt.compareSync(password, userDoc.password)){
-            jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
+            await jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
                 res.cookie('auth',auth).json({username, id: userDoc._id});
             });
         }
@@ -171,7 +171,7 @@ router.post('/remove',async (req,res)=>{
                 
                 const status = await user.deleteOne({username: username});
                  if(status.deletedCount == 1){
-                    res.status(200).json("User succesfully deleted");
+                    res.status(200).json("User successfully deleted");
                 }
                 else{
                     res.status(400).json("User could not be deleted");
@@ -191,7 +191,7 @@ router.post('/remove',async (req,res)=>{
 
 router.get('/verifyprofile', async (req, res) => {
     const {auth} = req.cookies;
-    jwt.verify(auth, process.env.JWT_SECRET, {}, (err, info) => {
+    await jwt.verify(auth, process.env.JWT_SECRET, {}, (err, info) => {
         if (err) throw err;
         res.json(info);
     });

@@ -7,6 +7,7 @@ const vote = require('../models/vote.js');
 const comment = require('../models/comment.js');
 const post = require('../models/post.js');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 
 const multer = require('multer');
 const uploadMiddleware = multer({dest: 'uploads/'});
@@ -20,7 +21,7 @@ router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> 
     const extension = parts[parts.length - 1];
     const newPath = path + '.' + extension;
     filesystem.renameSync(path, newPath);
-    
+
     const userDoc = await user.findOne({username:username});
     if(!userDoc){
         res.status(400).send('User not found to create thread');
@@ -104,6 +105,9 @@ router.post('/remove',async (req,res)=>{
         res.status(400).json("could not find thread to delete");
     }
     else{
+        for(k of Thread.votes){
+            await vote.deleteOne({"_id":k});
+        }
         postcount = Thread.posts.length;
         postsdeleted = 0;
         for(i of Thread.posts){
@@ -126,7 +130,7 @@ router.post('/remove',async (req,res)=>{
 
         const status = await thread.deleteOne({"_id": Thread._id});
         if(status.deletedCount ==1 && postsdeleted == postcount ){
-            res.status(200).json("Thread succesfully deleted");
+            res.status(200).json("Thread successfully deleted");
         }
         else{
             res.status(400).json("Thread deletion failed");
@@ -136,14 +140,15 @@ router.post('/remove',async (req,res)=>{
 
 router.put('/likethread', async (req, res) => {
     const {threadID, userID} = req.body;
-    
-    const voteDoc = await vote.findOne({username: userID, threadId: threadID});
+    var tid = mongoose.Types.ObjectId(threadID);
+    var uid = mongoose.Types.ObjectId(userID);
+    const voteDoc = await vote.findOne({username: uid, threadId: tid});
     if (voteDoc){
         res.status(400).send("Already liked this post");
     } else {
-        const newVote = await vote.create({username: userID, threadId: threadID});
+        const newVote = await vote.create({username: uid, threadId: tid});
         const updatedThreadDoc = await thread.findOneAndUpdate(
-            {_id: threadID},
+            {_id: tid},
             {$push: {votes: newVote}},
             {returnOriginal: false}
         );
@@ -155,9 +160,10 @@ router.put('/likethread', async (req, res) => {
 
 router.put('/dislikethread', async (req, res) => {
     const {threadID, userID} = req.body;
-    
+    var tid = mongoose.Types.ObjectId(threadID);
+    var uid = mongoose.Types.ObjectId(userID);
     // Find vote to be deleted (from vote collection)
-    const voteDoc = await vote.findOne({username: userID, threadId: threadID});
+    const voteDoc = await vote.findOne({username: uid, threadId: tid});
 
     // const updatedThreadDoc = await thread.updateOne({_id: threadID}, {$pull: {'votes': {'_id': voteDoc._id}}});
 
@@ -167,11 +173,11 @@ router.put('/dislikethread', async (req, res) => {
         console.log("Found doc");
         // Remove vote from thread
         const updatedThreadDoc = await thread.findOneAndUpdate(
-            {_id: threadID},
-            {$pull: {votes: voteDoc}},
+            {_id: tid},
+            {$pull: {votes: voteDoc._id}},
             {returnOriginal: false}
         );
-
+        await vote.deleteOne({_id: voteDoc._id});
         if (updatedThreadDoc){
             res.json(updatedThreadDoc.votes);
         }

@@ -67,6 +67,14 @@ router.post('/remove',async (req,res)=> {
         res.status(400).json("Could not find post to delete");
     }
     else{
+       if(Post.postImgUrl){
+        filesystem.unlink(Post.postImgUrl,(err)=>{
+            if(err){
+                console.log(err);
+            }
+        });
+        }
+     
         const User = await user.findOne({_id:Post.author});
         const Thread = await thread.findOne({_id:Post.thread});
         if(!Thread){

@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
 const app = express();
+
 //database connection
 mongoose.connect("mongodb+srv://theloop:q2qXUJsMiWfGA6rF@theloopcluster.mfexsh3.mongodb.net/?retryWrites=true&w=majority");
 app.use(bodyParser.urlencoded({extended:false}));

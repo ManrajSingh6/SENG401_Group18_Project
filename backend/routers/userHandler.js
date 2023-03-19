@@ -7,12 +7,12 @@ const post = require('../models/post.js');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
 
 const multer = require('multer');
 const uploadMiddleware = multer({dest: 'uploads/'});
 const filesystem = require('fs');
-const { resolve } = require("path");
 
 router.post('/register', async (req,res)=>{
     const{username,password,email} = req.body;
@@ -75,8 +75,9 @@ router.post('/login',async (req,res)=>{
     const userDoc = await user.findOne({username});
     if(userDoc){
         if(bcrypt.compareSync(password, userDoc.password)){
-            await jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
-                res.cookie('auth',auth).json({username, id: userDoc._id});
+            jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
+                if (error) throw error;
+                res.cookie('auth',auth, {maxAge: 60*60*1000,httpOnly:true,sameSite:'lax',secure:true}).json({username, id: userDoc._id});
             });
         }
     }
@@ -189,12 +190,20 @@ router.post('/remove',async (req,res)=>{
     
 });
 
-router.get('/verifyprofile', async (req, res) => {
+router.get('/verifyprofile', async (req, res, next) => {
     const {auth} = req.cookies;
-    await jwt.verify(auth, process.env.JWT_SECRET, {}, (err, info) => {
-        if (err) throw err;
-        res.json(info);
-    });
+    if (!auth) { return next(); }
+
+    try {
+        jwt.verify(auth, process.env.JWT_SECRET, {}, (err, info) => {
+            if (err) throw err;
+            res.json(info);
+        });
+        next();
+    } catch (error) {
+        res.status(401).json("Invalid token");
+    }
+
     
 });
 

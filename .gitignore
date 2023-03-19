@@ -10,6 +10,7 @@ uploads/
 /build
 
 # misc
+/configs
 .DS_Store
 .env.local
 .env.development.local

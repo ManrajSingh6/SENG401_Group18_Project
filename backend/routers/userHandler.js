@@ -75,7 +75,7 @@ router.post('/login',async (req,res)=>{
     const userDoc = await user.findOne({username});
     if(userDoc){
         if(bcrypt.compareSync(password, userDoc.password)){
-            await jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
+            jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{
                 res.cookie('auth',auth).json({username, id: userDoc._id});
             });
         }
@@ -94,11 +94,19 @@ router.post('/logout',async (req,res)=>{
 router.post('/remove',async (req,res)=>{
     const{username} = req.body;
      //delete user from database
+     
      const User = await user.findOne({username:username});
     if(!User){
         res.status(400).json("could not find user to delete");
     }
     else{
+        if(User.profilePicture && User.profilePicture!=="uploads\\defaultUserProPic.png"){
+            filesystem.unlink(User.profilePicture,(err)=>{
+                if(err){
+                    console.log(err);
+                }
+            });
+        }
         commentStatus = true;
         postStatus = true;
         for(comment_id of User.comments){
@@ -189,9 +197,9 @@ router.post('/remove',async (req,res)=>{
     
 });
 
-router.get('/verifyprofile', async (req, res) => {
+router.get('/verifyprofile', (req, res) => {
     const {auth} = req.cookies;
-    await jwt.verify(auth, process.env.JWT_SECRET, {}, (err, info) => {
+    jwt.verify(auth, process.env.JWT_SECRET, {}, (err, info) => {
         if (err) throw err;
         res.json(info);
     });
@@ -210,7 +218,13 @@ router.put('/updateprofile', uploadMiddleware.single('file'), async (req, res) =
     const {newDesc, username} = req.body;
 
     const userDoc = await user.findOne({username: username});
-    
+    if(userDoc.profilePicture && userDoc.profilePicture!=="uploads\\defaultUserProPic.png"){
+        filesystem.unlink(userDoc.profilePicture,(err)=>{
+            if(err){
+                console.log(err);
+            }
+        });
+    }
     const updatedDoc = await user.findOneAndUpdate(
         {username: username},
         {description: newDesc === '' ? userDoc.description : newDesc, profilePicture: newPath ? newPath : userDoc.profilePicture},

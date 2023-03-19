@@ -9,7 +9,6 @@ const router = express.Router();
 
 router.post('/create',async (req,res)=> {
     const {username,body,post_id} = req.body;
-    
     const User = await user.findOne({username:username});
     var post_objectId = mongoose.Types.ObjectId(post_id);
     const Post = await post.findById(post_objectId);
@@ -21,15 +20,15 @@ router.post('/create',async (req,res)=> {
     }
     else{
     //insert comment to database
-    const Comment= await comment.create({author:User._id,body:body,postId: Post._id});
-        if(Comment){
-            await post.updateOne({"_id": Post._id},{$push:{"comments": Comment._id}});
-            await user.updateOne({"_id": User._id},{$push: {"comments": Comment._id}});
-            res.json(Comment);
-        }
-        else{
-            res.status(400).json("Comment creation failed");
-        }
+        const Comment= await comment.create({author:User._id,body:body,postId: Post._id});
+            if(Comment){
+                await post.updateOne({"_id": Post._id},{$push:{"comments": Comment._id}});
+                await user.updateOne({"_id": User._id},{$push: {"comments": Comment._id}});
+                res.json(Comment);
+            }
+            else{
+                res.status(400).json("Comment creation failed");
+            }
     }
     
 });

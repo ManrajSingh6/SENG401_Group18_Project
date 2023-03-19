@@ -164,13 +164,9 @@ router.put('/dislikethread', async (req, res) => {
     var uid = mongoose.Types.ObjectId(userID);
     // Find vote to be deleted (from vote collection)
     const voteDoc = await vote.findOne({username: uid, threadId: tid});
-
     // const updatedThreadDoc = await thread.updateOne({_id: threadID}, {$pull: {'votes': {'_id': voteDoc._id}}});
-
-
     // await vote.deleteOne({_id: voteDoc._id});
     if (voteDoc){
-        console.log("Found doc");
         // Remove vote from thread
         const updatedThreadDoc = await thread.findOneAndUpdate(
             {_id: tid},

@@ -38,7 +38,7 @@ function ThreadPreview(props){
 
     async function handleLike(event){
         let userID = null;
-        if (userInfo){
+        if (Object.entries(userInfo).length !== 0){
             userID = userInfo.id;
         } else {
             alert("You must login!");
@@ -48,7 +48,7 @@ function ThreadPreview(props){
         const choice = event.currentTarget.id;
 
         let response = null;
-        if (choice === "like-btn"){
+        if (choice === "like-btn" && userID !== null){
             console.log(choice);
             response = await fetch('http://localhost:5000/threads/likethread', {
                 method: 'PUT',
@@ -58,7 +58,7 @@ function ThreadPreview(props){
             });
         }
 
-        if (choice === "dislike-btn"){
+        if (choice === "dislike-btn" && userID !== null){
             response = await fetch('http://localhost:5000/threads/dislikethread', {
                 method: 'PUT',
                 body: JSON.stringify({threadID, userID}),
@@ -80,7 +80,7 @@ function ThreadPreview(props){
         <div className="thread-prev-container">
             <Link to={`/${props.threadTitle}`} state={{from: props.threadTitle, user: props.userCreated, date: props.dateCreated, time: props.timeCreated }}>
                 <div className="thread-img-container">
-                    <img src={"http://localhost:5000/" + props.img} alt="thread-image"></img>
+                    <img src={"http://localhost:5000/" + props.img} alt="thread-preview"></img>
                 </div>
             </Link>
 
@@ -94,9 +94,9 @@ function ThreadPreview(props){
                 </Link>
 
                 <div className="buttons-container">
-                    <div className="button" onClick={subscribeThread}>Subscribe</div>
-                    <div className="button" onClick={handleLike} id="like-btn"><ThumbUpIcon fontSize="small"/></div>
-                    <div className="button" onClick={handleLike} id="dislike-btn"><ThumbDownIcon fontSize="small"/></div>
+                    <div role="button" className="button" onClick={subscribeThread}>Subscribe</div>
+                    <div role="button" className="button" onClick={handleLike} id="like-btn"><ThumbUpIcon fontSize="small"/></div>
+                    <div role="button" className="button" onClick={handleLike} id="dislike-btn"><ThumbDownIcon fontSize="small"/></div>
                     <p>{threadLikes} likes | {props.postAmount} posts</p>
                 </div>
             </div>

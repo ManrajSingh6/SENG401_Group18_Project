@@ -95,11 +95,19 @@ router.post('/logout',async (req,res)=>{
 router.post('/remove',async (req,res)=>{
     const{username} = req.body;
      //delete user from database
+     
      const User = await user.findOne({username:username});
     if(!User){
         res.status(400).json("could not find user to delete");
     }
     else{
+        if(User.profilePicture && User.profilePicture!=="uploads\\defaultUserProPic.png"){
+            filesystem.unlink(User.profilePicture,(err)=>{
+                if(err){
+                    console.log(err);
+                }
+            });
+        }
         commentStatus = true;
         postStatus = true;
         for(comment_id of User.comments){
@@ -219,7 +227,13 @@ router.put('/updateprofile', uploadMiddleware.single('file'), async (req, res) =
     const {newDesc, username} = req.body;
 
     const userDoc = await user.findOne({username: username});
-    
+    if(userDoc.profilePicture && userDoc.profilePicture!=="uploads\\defaultUserProPic.png"){
+        filesystem.unlink(userDoc.profilePicture,(err)=>{
+            if(err){
+                console.log(err);
+            }
+        });
+    }
     const updatedDoc = await user.findOneAndUpdate(
         {username: username},
         {description: newDesc === '' ? userDoc.description : newDesc, profilePicture: newPath ? newPath : userDoc.profilePicture},

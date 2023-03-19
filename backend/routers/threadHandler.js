@@ -105,6 +105,13 @@ router.post('/remove',async (req,res)=>{
         res.status(400).json("could not find thread to delete");
     }
     else{
+        if(Thread.threadImgUrl){
+            filesystem.unlink(Thread.threadImgUrl,(err)=>{
+                if(err){
+                    console.log(err);
+                }
+            });
+        }
         for(k of Thread.votes){
             await vote.deleteOne({"_id":k});
         }

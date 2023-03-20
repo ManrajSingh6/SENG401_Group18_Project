@@ -118,15 +118,15 @@ function CreatePostPage(){
                 <input required 
                     value={postTitle} 
                     type="title" 
-                    placeholder="Post Title (40 characters max)" 
-                    maxLength={40}
+                    placeholder="Post Title (80 characters max)" 
+                    maxLength={80}
                     onChange={(ev) => {setPostTitle(ev.target.value)}}></input>
                 
                 <textarea required 
                     value={postSummary} 
                     type="title" 
-                    placeholder="Post Summary (100 characters max)" 
-                    maxLength={100}
+                    placeholder="Post Summary (250 characters max)" 
+                    maxLength={250}
                     onChange={(ev) => {setPostSumary(ev.target.value)}}></textarea>
 
                 <p>Choose an image for your post: </p>
@@ -150,8 +150,8 @@ function CreatePostPage(){
                             onChange={(ev) => {setNewThreadName(ev.target.value)}}></input>
                         <textarea type="text" 
                             value={newThreadSummary} 
-                            placeholder="Thread summary (100 characters max)" 
-                            maxLength={100}
+                            placeholder="Thread summary (200 characters max)" 
+                            maxLength={200}
                             onChange={(ev) => {setNewThreadSummary(ev.target.value)}}></textarea>
                         <p>Choose thread image: </p>
                         <input type="file" 

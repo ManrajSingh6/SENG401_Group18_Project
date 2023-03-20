@@ -8,6 +8,7 @@ import ProfilePage from "../pages/profilePage";
 import CreatePostPage from "../pages/createPost";
 import PostView from "../pages/postView";
 import ThreadPage from "../pages/threadPage";
+import EditPost from "../pages/editPost";
 import { UserContextProvider } from "../context/userContext";
 
 function App(){
@@ -17,6 +18,7 @@ function App(){
                 <Route path="/" element={<Layout />}>
                     <Route index element={<Homepage />} />
                     <Route path={'/create-post'} element={<CreatePostPage />} />
+                    <Route path={'/edit-post/:id'} element={<EditPost />} />
                     <Route path={'/login'} element={<LoginPage />} />
                     <Route path={'/register'} element={<RegisterPage />} />
                     <Route path={'/user-profile/:username'} element={<ProfilePage />}/>

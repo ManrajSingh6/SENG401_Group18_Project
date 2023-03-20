@@ -44,11 +44,32 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
     }
 });
 
+router.put('/update', uploadMiddleware.single('postFile'), async (req, res) => {
+    let newPath = null;
+    if (req.file){
+        const {originalname, path} = req.file;
+        const parts = originalname.split('.');
+        const extension = parts[parts.length - 1];
+        newPath = path + '.' + extension;
+        filesystem.renameSync(path, newPath);
+    }
+    const {username, title, summary, body, postID} = req.body;
+    const userDoc = await user.findOne({username:username});
+    if (!userDoc){
+        res.status(400).json("Could not find user");
+    } else {
+        const postDoc = await post.findById(postID);
+        await postDoc.update({title, summary, body, postImgUrl: newPath ? newPath : postDoc.postImgUrl});
+        res.status(200).json(postDoc);
+    }
+
+});
+
 router.get('/find', async (req,res)=> {
     const {post_id} = req.query;
     //find post in database
     var post_objectId = mongoose.Types.ObjectId(post_id);
-    const Post = await post.findById(post_objectId).populate('author', 'username');
+    const Post = await post.findById(post_objectId).populate('author', 'username').populate('thread', 'threadname');
     if(Post){
         const postCommentsData = await comment.find({postId: Post._id}).populate({path: 'author', select: 'username profilePicture', model: 'User'}).sort({time: 1});
         res.json({Post, postCommentsData});

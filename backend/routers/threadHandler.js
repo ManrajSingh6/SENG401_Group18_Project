@@ -67,7 +67,7 @@ router.get("/allpostsbythread", async (req, res) => {
         const parentThreadInfo = {parentThreadName: Thread.threadname, dateCreated: Thread.dateCreated, userCreated: Thread.userCreated.username, description: Thread.description};
         postData.push(parentThreadInfo);
         for (let i = 0; i < threadPosts.length; i++){
-            const postDoc = await post.findById(threadPosts[i]);
+            const postDoc = await post.findById(threadPosts[i]).populate('author', 'username');
             if (postDoc){
                 postData.push(postDoc);
             }

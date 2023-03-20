@@ -3,10 +3,26 @@ import "./subbedThreads.css";
 
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
-import VisibilityRoundedIcon from '@mui/icons-material/VisibilityRounded';
 import { Link } from "react-router-dom";
 
 function UserPostCard(props){
+
+    async function deletePost(){
+        const response = await fetch('http://localhost:5000/posts/remove', {
+            method: 'POST',
+            body: JSON.stringify({post_id: props.postID}),
+            headers: {'Content-Type':'application/json'},
+            credentials: 'include',
+        });
+
+        if (response.ok){
+            console.log("Succesfully deleted post");
+            window.location.reload();
+        } else {
+            alert("Unable to delete the post.")
+        }
+    }
+
     return(
         <div className="sub-thread-card">
             <h4>{props.postName}</h4>
@@ -15,7 +31,11 @@ function UserPostCard(props){
                 <div><ThumbUpRoundedIcon /> {props.postLikes}</div>
                 <div><MessageRoundedIcon /> {props.postComments}</div>
             </div>
-            <Link to={`/${props.parentThread}/post/${props.postID}`} className="view-link"><div className="view-post-btn"><VisibilityRoundedIcon />View Post</div></Link>
+            <div className="post-options-container">
+                <Link to={`/${props.parentThread}/post/${props.postID}`} className="view-link"><p className="post-option-btn">View Post</p></Link>
+                <Link to={`/edit-post/${props.postID}`} className="view-link"><p role="button" className="post-option-btn" style={{color: "#004696"}}>Edit Post</p></Link>
+                <p onClick={deletePost} role="button" className="post-option-btn" style={{color: "red"}}>Delete Post</p>
+            </div>
         </div>
     );
 }

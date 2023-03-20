@@ -18,7 +18,6 @@ function ThreadPage({parentThread}){
             res.json().then(response => {
                 setParentThreadInfo(response[0]);
                 setNestedPosts(response.slice(1));
-                console.log(parentThreadInfo);
             });
         });
     }, []);
@@ -39,7 +38,7 @@ function ThreadPage({parentThread}){
                                     postTitle={post.title}
                                     postDate={post.time.substring(0, 10)}
                                     postTime={post.time.substring(11, 19)}
-                                    postUser={post.author}
+                                    postUser={post.author.username}
                                     parentThread={parentThreadInfo.parentThreadName}
                                     postSumm={post.summary}
                                     postLikes={post.votes}

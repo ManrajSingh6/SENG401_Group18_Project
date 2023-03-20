@@ -83,18 +83,36 @@
     border-radius: 10px;
     font-size: 0.9rem;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.585);
+    font-size: small;
 }
 
 .view-link{
     text-decoration: none;
     width: fit-content;
     align-self: center;
+    color: #004696;
 }
 
 .view-post-btn:hover{
     background-color: #004696;
     transition: all 0.3s ease;
 }
+
+.post-options-container{
+    /* border: 1px solid; */
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.post-option-btn:hover{
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 
 @media screen and (max-width: 768px){
     .sub-thread-card{

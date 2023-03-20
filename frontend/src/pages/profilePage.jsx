@@ -9,8 +9,6 @@ import {UserContext} from "../context/userContext";
 
 
 function ProfilePage(){
-
-    const {userInfo} = useContext(UserContext);
     const [userInfoState, setUserInfo] = useState('');
     const [userPosts, setUserPosts] = useState([]);
     const [subbedThreads, setSubbedThreads] = useState([]);
@@ -22,8 +20,11 @@ function ProfilePage(){
     const [userDesc, setUserDesc] = useState('');
     const [tempDesc, setTempDesc] = useState('');
 
+    const splitString = window.location.href.split("/");
+    const userName = splitString[splitString.length - 1];
+
     useEffect(() => {
-        fetch(`http://localhost:5000/users/find?username=${userInfo.username}`, {
+        fetch(`http://localhost:5000/users/find?username=${userName}`, {
             credentials: 'include'
         }).then(response => {
             response.json().then(userInfoRes => {
@@ -39,7 +40,7 @@ function ProfilePage(){
         // Update user information with backend and display updated information to frontend
         const data = new FormData();
         data.set('newDesc', tempDesc);
-        data.set('username', userInfo.username);
+        data.set('username', userName);
         if (files?.[0]){
             data.set('file', files?.[0]);
         }
@@ -69,7 +70,7 @@ function ProfilePage(){
                     <div className="profile-pic-container">
                         <img src={userInfoState.profilePicture === 'defaultUserProPic.png' ? (defaultProPic): 'http://localhost:5000/' + userInfoState.profilePicture} alt="user-profile-pic"/>
                     </div>
-                    <h2>{userInfo.username}</h2>
+                    <h2>{userInfoState.username}</h2>
                     <p style={{color: "grey", fontSize: "medium", marginTop: "-10px"}}>{userInfoState.email}</p>
                     <div className="user-desc-container">
                         <p>{userDesc}</p>

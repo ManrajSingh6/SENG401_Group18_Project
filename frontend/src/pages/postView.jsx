@@ -33,7 +33,7 @@ function PostView(){
                     <h1 className="post-info-title">{postData.title}</h1>
                     <p className="stats-text">{postData.votes ? (Object.keys(postData.votes).length) : 0} Likes | {postData.comments ? (Object.keys(postData.comments).length) : 0} comments</p>
                     {postData.author?._id === userInfo?.id ? (
-                        <Link className="edit-post-link">
+                        <Link className="edit-post-link" to={`/edit-post/${postData._id}`}>
                             <div className="edit-post-btn">Edit Post</div>
                         </Link>
                     ) : null}

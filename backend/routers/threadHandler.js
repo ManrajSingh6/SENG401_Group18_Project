@@ -80,9 +80,7 @@ router.get("/allpostsbythread", async (req, res) => {
 
 router.post('/subscribe', async (req,res)=>{
     const{thread_name,username} = req.body;
-    console.log(thread_name, username);
     const Thread = await thread.findOne({threadname:thread_name});
-
     if(!Thread){
         res.status(400).send('Thread not found');
     }
@@ -92,8 +90,13 @@ router.post('/subscribe', async (req,res)=>{
             res.status(400).send('User not found');
         }
         else{
-            await user.updateOne({"_id": User._id},{$push:{"subscribed": Thread._id}});
-            res.json(User);
+            const isAlreadySubbed = User.subscribed.includes(Thread._id);
+            if (isAlreadySubbed){
+                res.status(400).json("User is already subscribed to thread!");
+            } else {
+                await user.updateOne({"_id": User._id},{$push:{"subscribed": Thread._id}});
+                res.json(User);
+            }
         }
     }
 });
@@ -217,7 +220,9 @@ router.get("/allthreadnames", async (req, res) => {
 
 router.get("/getallthreads", async (req, res) => {
     res.json(
-        {threads: await thread.find({}, {}).populate('userCreated', 'username'), users: await user.find({}, {posts:1, username:1, profilePicture:1}).limit(10)}
+        {threads: await thread.find({}, {}).populate('userCreated', 'username'), 
+        users: await user.find({}, {posts:1, username:1, profilePicture:1}).limit(10),
+        }
     )
 });
 

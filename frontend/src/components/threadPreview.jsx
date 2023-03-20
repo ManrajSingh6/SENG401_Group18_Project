@@ -9,6 +9,9 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDown';
 function ThreadPreview(props){
     const {userInfo} = useContext(UserContext);
     const [threadLikes, setThreadLikes] = useState(props.likes);
+    const [isSuccess, setSuccess] = useState();
+    const [isError, setError] = useState();
+    const [errorMessage, setErrorMessage] = useState('');
     
     async function subscribeThread(){
         let username = null;
@@ -29,9 +32,15 @@ function ThreadPreview(props){
 
         if (response.ok){
             response.json().then(res => {
-                console.log(res);
-                console.log("Succesfully subscribed to thread");
-            })
+                setErrorMessage("Successfully subscribed to thread.");
+                setError(false);
+                setSuccess(true);
+                
+            });
+        } else {
+            setErrorMessage("Already subscribed to thread.");
+            setSuccess(false);
+            setError(true);
         }
 
     }
@@ -56,6 +65,9 @@ function ThreadPreview(props){
                 headers: {'Content-Type':'application/json'},
                 credentials: 'include',
             });
+            setSuccess(false);
+            setError(false);
+            setErrorMessage("Already liked this post.")
         }
 
         if (choice === "dislike-btn" && userID !== null){
@@ -65,6 +77,9 @@ function ThreadPreview(props){
                 headers: {'Content-Type':'application/json'},
                 credentials: 'include',
             });
+            setSuccess(false);
+            setError(false);
+            setErrorMessage("Already disliked this post.")
         }
 
         if (response.ok){
@@ -72,7 +87,7 @@ function ThreadPreview(props){
                 setThreadLikes(threadLikes.length);
             })
         } else {
-            console.log("Error");
+            setError(true);
         }
     }
 
@@ -99,6 +114,8 @@ function ThreadPreview(props){
                     <div role="button" className="button" onClick={handleLike} id="dislike-btn"><ThumbDownIcon fontSize="small"/></div>
                     <p>{threadLikes} likes | {props.postAmount} posts</p>
                 </div>
+                {isSuccess ? (<p style={{color: "#198754", fontSize: "small"}}>{errorMessage}</p>) : null}
+                {isError ? (<p style={{color: "red", fontSize: "small"}}>{errorMessage}</p>) : null}
             </div>
         </div>
     );

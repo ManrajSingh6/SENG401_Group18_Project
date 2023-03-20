@@ -1,14 +1,7 @@
 import React from "react";
 import "./subbedThreads.css";
-
-
 import SubbedThreadCard from "./subThreadCard";
 import Carousel from 'react-elastic-carousel';
-
-// Temporary data delete this later
-import { allThreads } from "../pages/homepage";
-
-
 
 // Breakpoint for carousel
 const breakpoints = [

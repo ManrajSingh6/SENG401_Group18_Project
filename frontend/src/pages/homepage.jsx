@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./homepage.css";
 import SearchIcon from '@mui/icons-material/Search';
 
 import Dropdown from "../components/dropdown";
 import SmallUserProfile from "../components/SmallUserProfile";
 
-import ironManImgTemp from "../images/ironmanTemp.png";
 import ThreadPreview from "../components/threadPreview";
 import { Link } from "react-router-dom";
+import { UserContext } from "../context/userContext";
 
-// Temporary Data
-const popularThreads = [
-    { name: "Food", likes: 25},
-    { name: "Cars", likes: 43},
-    { name: "Fitness", likes: 98},
-    { name: "Health", likes: 17},
-    { name: "Fiction", likes: 34}, 
-]
 
 function Homepage(){
 

@@ -101,7 +101,7 @@ router.post('/remove',async (req,res)=>{
         res.status(400).json("could not find user to delete");
     }
     else{
-        if(User.profilePicture && User.profilePicture!=="uploads\\defaultUserProPic.png"){
+        if(User.profilePicture && User.profilePicture!=="defaultUserProPic.png"){
             filesystem.unlink(User.profilePicture,(err)=>{
                 if(err){
                     console.log(err);
@@ -226,7 +226,7 @@ router.put('/updateprofile', uploadMiddleware.single('file'), async (req, res) =
     const {newDesc, username} = req.body;
 
     const userDoc = await user.findOne({username: username});
-    if(userDoc.profilePicture && userDoc.profilePicture!=="uploads\\defaultUserProPic.png"){
+    if(userDoc.profilePicture && userDoc.profilePicture!=="defaultUserProPic.png"){
         filesystem.unlink(userDoc.profilePicture,(err)=>{
             if(err){
                 console.log(err);

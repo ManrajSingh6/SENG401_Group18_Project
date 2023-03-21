@@ -70,11 +70,9 @@ router.post('/post',async (req,res)=> {
     
 });
 router.post('/comment/remove',async (req,res)=> {
-    const {vote_id} = req.body;
-
-    var vote_objectId = mongoose.Types.ObjectId(vote_id);
-    const Vote= await vote.findById(vote_objectId);
-    const Comment = await comment.findOne({_id:Vote.commentId});
+    const {username,commentID} = req.body;
+    const userDoc = await user.findOne({username: username});
+    const Vote= await vote.findOne({username: userDoc._id, commentId: commentID});
     if(!Vote){
         res.status(400).json("Could not find vote to delete");
     }
@@ -98,10 +96,10 @@ router.post('/comment/remove',async (req,res)=> {
     
 });
 router.post('/post/remove',async (req,res)=> {
-    const {vote_id} = req.body;
-
-    var vote_objectId = mongoose.Types.ObjectId(vote_id);
-    const Vote= await vote.findById(vote_objectId);
+    const {username, postID} = req.body;
+    const userDoc = await user.findOne({username: username});
+    var post_objectID = mongoose.Types.ObjectId(postID);
+    const Vote= await vote.findOne({username: userDoc._id, postId: post_objectID});
     if(!Vote){
         res.status(400).json("Could not find vote to delete");
     }

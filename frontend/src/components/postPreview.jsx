@@ -12,7 +12,7 @@ const tempStyle={
 function PostPreview(props){
     return(
         <div className="post-preview-container">
-            <p style={tempStyle}>{props.postDate} | {props.postTime}</p>
+            <p style={tempStyle}>{props.postDate} 🞄 {props.postTime}</p>
             <Link 
                 className="post-title-link" 
                 to={`/${props.parentThread}/post/${props.postID}`}><h2>{props.postTitle}</h2></Link>
@@ -20,7 +20,7 @@ function PostPreview(props){
             <p>{props.postSumm}</p>
             <div className="icons-divs">
                 <div><ThumbUpIcon /> {props.postLikes ? (Object.keys(props.postLikes).length) : 0}</div>
-                <div><CommentIcon /> {props.postComments ? (Object.keys(props.postLikes).length) : 0}</div>
+                <div><CommentIcon /> {props.postComments ? (Object.keys(props.postComments).length) : 0}</div>
             </div>        
         </div>
     );

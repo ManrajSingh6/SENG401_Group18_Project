@@ -103,16 +103,14 @@ function ThreadPreview(props){
                 <Link to={`/${props.threadTitle}`} 
                     className="thread-link" 
                     state={{from: props.threadTitle, user: props.userCreated, date: props.dateCreated, time: props.timeCreated }}>
-                    <h3>{props.threadTitle}</h3>
-                    <p className="thread-datetime">Created by {props.userCreated} | {props.dateTimeCreated.substring(0,10)} | {props.dateTimeCreated.substring(11,19)}</p>
+                    <h3>{props.threadTitle}</h3></Link>
+                    <p className="thread-datetime">Created by {props.userCreated} on {props.dateTimeCreated.substring(0,10)} at {props.dateTimeCreated.substring(11,19)}</p>
                     <p className="thread-desc">{props.threadDesc}</p>
-                </Link>
-
                 <div className="buttons-container">
                     <div role="button" className="button" onClick={subscribeThread}>Subscribe</div>
                     <div role="button" className="button" onClick={handleLike} id="like-btn"><ThumbUpIcon fontSize="small"/></div>
                     <div role="button" className="button" onClick={handleLike} id="dislike-btn"><ThumbDownIcon fontSize="small"/></div>
-                    <p>{threadLikes} likes | {props.postAmount} posts</p>
+                    <p>{threadLikes} likes 🞄 {props.postAmount} posts</p>
                 </div>
                 {isSuccess ? (<p style={{color: "#198754", fontSize: "small"}}>{errorMessage}</p>) : null}
                 {isError ? (<p style={{color: "red", fontSize: "small"}}>{errorMessage}</p>) : null}

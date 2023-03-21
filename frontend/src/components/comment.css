@@ -63,3 +63,19 @@
     text-decoration: underline;
 }
 
+.like-unlike-container{
+    display: flex;
+    flex-direction: row;
+    gap: 25px;
+    margin-right: 10px;
+}
+
+.like-unlike-container .icon{
+    color: #120460;
+    cursor: pointer;
+}
+
+.like-unlike-container .icon:hover{
+    color: #1E8EAB;
+    transition: all 0.3s ease;
+}

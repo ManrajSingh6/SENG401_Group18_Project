@@ -27,7 +27,7 @@ function Homepage(){
             });
         });
     }, []);
-    // Search functionality, add Dropdown functionality
+    
     function handleSearch(event){
         event.preventDefault();
         setSearchQuery(tempQuery);
@@ -46,7 +46,7 @@ function Homepage(){
                     <div className="form-field">
                         <input 
                             type="text" 
-                            placeholder="Search by name or user" 
+                            placeholder="Search by thread name or user" 
                             className="thread-searchbar"
                             value={tempQuery}
                             onChange={ev => setTempQuery(ev.target.value)} />
@@ -60,7 +60,7 @@ function Homepage(){
                 {/* Map all Available Threads from the database, and handle search functionality (filter) */}
                 {allThreads.filter((val) => {
                     if (searchQuery === ""){ return val;} 
-                    else if (val.threadname.toLowerCase().includes(searchQuery.toLowerCase()) || val.userCreated.toLowerCase().includes(searchQuery.toLowerCase()) ){
+                    else if (val.threadname.toLowerCase().includes(searchQuery.toLowerCase()) || val.userCreated.username.toLowerCase().includes(searchQuery.toLowerCase()) ){
                         return val;
                     }
                 }).map((threadItem) => {
@@ -87,7 +87,7 @@ function Homepage(){
                     <ul>
                         {allThreads.sort((a,b) => (a.votes.length - b.votes.length)).reverse()
                         .map((item, index) => {
-                            return (<Link className="pop-thread-link" to={`/${item.threadname}`}><li key={index}>{item.threadname} | <span>{item.votes.length} likes</span></li></Link>)
+                            return (<Link className="pop-thread-link" to={`/${item.threadname}`}><li key={index}>{item.threadname} 🞄 <span>{item.votes.length} likes</span></li></Link>)
                         })}
                     </ul>
                 </div>
@@ -95,8 +95,7 @@ function Homepage(){
                     <h3>Users in The Spotlight</h3>
                     <ul className="users-list">
                     {
-                        /* Fetch the image src from the DB here */
-                        // Sorting popular users by likes before mapping as elements
+                        // Sorting popular users by posts before mapping as elements
                         popularUsers.sort((a,b) => (a.posts.length - b.posts.length)).reverse().map((user, index) => {
                             return (
                                 <li key={index}>

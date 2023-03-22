@@ -110,8 +110,9 @@ router.get('/find', async (req,res)=> {
     var post_objectId = mongoose.Types.ObjectId(post_id);
     const Post = await post.findById(post_objectId).populate('author', 'username').populate('thread', 'threadname');
     if(Post){
+        const parentThread = await thread.findOne({posts:{$in:[Post._id]}});
         const postCommentsData = await comment.find({postId: Post._id}).populate({path: 'author', select: 'username profilePicture', model: 'User'}).sort({time: 1});
-        res.json({Post, postCommentsData});
+        res.json({Post, postCommentsData,parentThread});
     }
     else{
         res.status(400).json("Post could not be found");

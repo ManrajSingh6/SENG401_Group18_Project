@@ -14,6 +14,7 @@ function PostView(){
 
     const [postData, setPostData] = useState([]);
     const [allPostComments, setAllPostComments] = useState([]);
+    const [parentThread, setParentThread] = useState([]);
     const [isError, setIsError] = useState();
     const [errorMessage, setErrorMessage] = useState('');
     
@@ -25,6 +26,7 @@ function PostView(){
             res.json().then(resPostData => {
                 setPostData(resPostData.Post);
                 setAllPostComments(resPostData.postCommentsData);
+                setParentThread(resPostData.parentThread);
             });
         });
     }, []);
@@ -68,7 +70,21 @@ function PostView(){
             alert("You must login!");
         }
     }
+    async function deletePost(){
+        const response = await fetch('http://localhost:5000/posts/remove', {
+            method: 'POST',
+            body: JSON.stringify({post_id: postData._id}),
+            headers: {'Content-Type':'application/json'},
+            credentials: 'include',
+        });
 
+        if (response.ok){
+            console.log("Succesfully deleted post");
+            window.location.reload();
+        } else {
+            alert("Unable to delete the post.")
+        }
+    }
     return(
         <div className="main-post-container">
             <div className="post-content-container">
@@ -76,11 +92,26 @@ function PostView(){
                     <p className="stats-text">Posted by {postData.author?.username} on {new Date(postData.time).toLocaleDateString()} at {new Date(postData.time).toLocaleTimeString()}</p>
                     <h1 className="post-info-title">{postData.title}</h1>
                     <p className="stats-text">{postData.votes ? (Object.keys(postData.votes).length) : 0} likes 🞄 {postData.comments ? (Object.keys(postData.comments).length) : 0} comments</p>
-                    {postData.author?._id === userInfo?.id ? (
+                    {postData.author?._id === userInfo?.id ?  (
                         <Link className="edit-post-link" to={`/edit-post/${postData._id}`}>
                             <div className="edit-post-btn">Edit Post</div>
                         </Link>
-                    ) : null}
+                        
+                    ) : parentThread?.userCreated === userInfo?.id?(
+                        <Link className="edit-post-link" to={`/edit-post/${postData._id}`}>
+                        <div className="edit-post-btn">Edit Post</div>
+                    </Link>
+                        ):null}
+                        {postData.author?._id === userInfo?.id ?  (
+                       <Link className="edit-post-link" to={`/${parentThread.threadname}`}>
+                       <p onClick={deletePost} role="button" className="post-option-btn" style={{color: "red"}}>Delete Post</p>
+                       </Link>
+                        
+                    ) : parentThread?.userCreated === userInfo?.id?(
+                        <Link className="edit-post-link" to={`/${parentThread.threadname}`}>
+                        <p onClick={deletePost} role="button" className="post-option-btn" style={{color: "red"}}>Delete Post</p>
+                    </Link>
+                        ):null}
                     <p className="post-info content " dangerouslySetInnerHTML={{__html: postData.body}}></p>
                     <div style={{alignSelf: "center", display: "flex", gap: "20px", marginBottom: "10px", marginTop: "10px"}}>
                         <div className="like-btn" id="like-btn" onClick={handleLike} role="button">
@@ -111,6 +142,7 @@ function PostView(){
                             commentDateTime={comment.time}
                             commentLikes={comment.votes.length}
                             commentID={comment._id}
+                            parentThread ={parentThread}
                         />
                     )
                 })

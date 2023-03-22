@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect} from "react";
 import "./homepage.css";
 import SearchIcon from '@mui/icons-material/Search';
 
@@ -7,8 +7,6 @@ import SmallUserProfile from "../components/SmallUserProfile";
 
 import ThreadPreview from "../components/threadPreview";
 import { Link } from "react-router-dom";
-import { UserContext } from "../context/userContext";
-
 
 function Homepage(){
 
@@ -33,6 +31,7 @@ function Homepage(){
         setSearchQuery(tempQuery);
         setTempQuery('');    
     }
+
 
     function handleOptionChange(event){
         setFilterChoice(event.target.value === "" ? "" : event.target.value);
@@ -62,6 +61,16 @@ function Homepage(){
                     if (searchQuery === ""){ return val;} 
                     else if (val.threadname.toLowerCase().includes(searchQuery.toLowerCase()) || val.userCreated.username.toLowerCase().includes(searchQuery.toLowerCase()) ){
                         return val;
+                    }
+                }).sort((a, b) => {
+                    if (filterChoice === "Posts"){
+                        return (b.posts.length - a.posts.length);
+                    } else if (filterChoice === "Likes"){
+                        return (b.votes.length - a.votes.length);
+                    } else if (filterChoice === "Recent"){
+                        return (new Date(b.dateCreated) - new Date(a.dateCreated));
+                    } else {
+                        return (a, b);
                     }
                 }).map((threadItem) => {
                     return (

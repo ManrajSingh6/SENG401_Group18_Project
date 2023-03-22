@@ -28,12 +28,7 @@ async function sendPostNotifications(destAddr, username, title, summary, parentT
         from: "seng401project@gmail.com",
         to: destAddr,
         subject: `New Post Under Thread: ${parentThread}`,
-        text: `You're recieving this email because a thread you've subscribed to (${parentThread}) has a new post! Here are a few details:
-            Posted by: ${username}
-            Title: ${title}
-            A short summary: ${summary}
-               
-        View the full post on The Loop!`
+        text: `You're recieving this email because a thread you've subscribed to (${parentThread}) has a new post! Here are a few details: \n\n\tPosted by: ${username} \n\tTitle: ${title} \n\tA short summary: ${summary} \n\nView the full post on The Loop!`
     };
     
     transporter.sendMail(mailOptions, function(err, success) {

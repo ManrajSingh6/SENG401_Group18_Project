@@ -8,7 +8,6 @@ import QuillEditor from "../components/quillEditor";
 import { UserContext } from "../context/userContext";
 
 function CreatePostPage(){
-
     const {userInfo} = useContext(UserContext);
     
     // State mangement for form fields
@@ -33,10 +32,17 @@ function CreatePostPage(){
 
     // Function to handle new post (and possibly thread) creation
     async function createNewPost(event){
+        
+            document.getElementById('post-form').addEventListener('submit',function(event){
+                if((!postTitle||!postSummary||!postContent||!postImg||!threadChoice)&&(!newThreadName||newThreadSummary||newThreadImg)){
+                    event.preventDefault();
+                }
+            },false);
         event.preventDefault();
         console.log("Submitted form");
 
-        let threadCreated = true;
+        let threadCreated = false;
+        let threadError = false;
 
         if (newThreadName !== '' && newThreadSummary !== '' && newThreadImg !== ''){
 
@@ -60,51 +66,58 @@ function CreatePostPage(){
                 setIsError(false);
                 setErrorMsg('');
                 threadCreated = true;
+                setRedirect(true);
             } else {
                 setErrorMsg("Thread name already exists!");
                 setIsError(true);
-                threadCreated = false;
+                threadError = true;
+                setRedirect(false);
             }
         }
-
         // If the thread was --> Successfully created OR no new thread was created
-        if (threadCreated){
-            // Post Data
-            const postData = new FormData();
-            postData.set('title', postTitle);
-            postData.set('summary', postSummary);
-            postData.set('body', postContent);
-            if (threadChoice === ''){
-                postData.set('parentThread', newThreadName);
-            } else {
-                postData.set('parentThread', threadChoice);
-            }
-            postData.set('username', userInfo.username);
-            postData.set('postFile', postImg[0]);
-            
-            const postResponse = await fetch('http://localhost:5000/posts/create', {
-                method: 'POST',
-                body: postData,
-                credentials: 'include'
-            });
-            
-            // Error Handling
-            if (postResponse.ok){
-                console.log("Successfully created new post");
-                setErrorMsg('');
-                setIsError(false);
-            } else {
-                setErrorMsg('Post Creation Failed');
+        if (!threadError){
+            // thread not created and post fields are empty
+            if(!threadCreated&&(postTitle === '' || postSummary === '' || postContent === '' || postImg === '' || threadChoice === '')){
+                setErrorMsg('All fields must be filled');
                 setIsError(true);
+                setRedirect(false);
+            }
+            // post fields not empty
+            else if(postTitle !== '' && postSummary !== '' && postContent !== '' && postImg !== '' && threadChoice !== ''){
+                // Post Data
+                const postData = new FormData();
+                postData.set('title', postTitle);
+                postData.set('summary', postSummary);
+                postData.set('body', postContent);
+                if (threadChoice === ''){
+                    postData.set('parentThread', newThreadName);
+                } else {
+                    postData.set('parentThread', threadChoice);
+                }
+                postData.set('username', userInfo.username);
+                postData.set('postFile', postImg[0]);
+            
+                const postResponse = await fetch('http://localhost:5000/posts/create', {
+                    method: 'POST',
+                    body: postData,
+                    credentials: 'include'
+                });
+            
+                // Error Handling
+                if (postResponse.ok){
+                    console.log("Successfully created new post");
+                    setErrorMsg('');
+                    setIsError(false);
+                    setRedirect(true);
+                } else {
+                    setErrorMsg('Post Creation Failed');
+                    setIsError(true);
+                    setRedirect(false);
+                }
             }
         }
-
         // If post/thread creation is successful, redirect user to homepage
-        if (!isError){
-            setRedirect(true);
-        }
     }
-
     if (redirect){
         return <Navigate to={'/'} />;
     }
@@ -112,17 +125,17 @@ function CreatePostPage(){
     return(
         <div className="main-form-container">
             <h1 style={{textAlign: "center", fontSize: "1.5rem", fontWeight: "500", color: "#120460"}}>Create A New Post</h1>
-            <form onSubmit={createNewPost} className="post-form">
+            <form onSubmit={createNewPost} id = "post-form" className="post-form">
                 <h3 style={{color: "#120460", fontWeight: "400", marginBottom: "5px"}}>What do you want to share?</h3>
                 <QuillEditor value={postContent} onChange={setPostContent}/>
-                <input required 
+                <input 
                     value={postTitle} 
                     type="title" 
                     placeholder="Post Title (80 characters max)" 
                     maxLength={80}
                     onChange={(ev) => {setPostTitle(ev.target.value)}}></input>
                 
-                <textarea required 
+                <textarea 
                     value={postSummary} 
                     type="title" 
                     placeholder="Post Summary (250 characters max)" 
@@ -130,7 +143,7 @@ function CreatePostPage(){
                     onChange={(ev) => {setPostSumary(ev.target.value)}}></textarea>
 
                 <p>Choose an image for your post: </p>
-                <input required 
+                <input 
                     type="file" 
                     accept="image/*"
                     onChange={(ev) => {setPostImg(ev.target.files)}}></input>

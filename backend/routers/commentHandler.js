@@ -20,7 +20,8 @@ router.post('/create',async (req,res)=> {
     }
     else{
     //insert comment to database
-        const Comment= await comment.create({author:User._id,body:body,postId: Post._id});
+        const currentDateTime = new Date();
+        const Comment= await comment.create({author:User._id,body:body,postId: Post._id,time: currentDateTime});
             if(Comment){
                 await post.updateOne({"_id": Post._id},{$push:{"comments": Comment._id}});
                 await user.updateOne({"_id": User._id},{$push: {"comments": Comment._id}});

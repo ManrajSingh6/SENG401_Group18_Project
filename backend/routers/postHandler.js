@@ -71,9 +71,12 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
                 await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})
 
                 const allSubscribers = threadDoc.allSubscribers;
-                for (var i = 0; i < allSubscribers.length; i++){
-                    await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
+                if (allSubscribers.length !== 0){
+                    for (var i = 0; i < allSubscribers.length; i++){
+                        await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
+                    }
                 }
+                
 
                 res.json(postDoc);
             }

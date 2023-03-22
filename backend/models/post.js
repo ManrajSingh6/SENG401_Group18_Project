@@ -3,14 +3,10 @@ const mongoose = require('mongoose');
 const {Schema,model} = mongoose;
 const postSchema = new mongoose.Schema({
     author: {type:Schema.Types.ObjectId,ref:'User'},
-
     title: {type:String,required:true},
-
     summary: {type: String, required: true},
-
     body: {type:String,required:true},
     thread:{type:Schema.Types.ObjectId,ref:'Thread'},
-
     time: {
         type: Date,
         default: Date.now()

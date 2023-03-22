@@ -60,7 +60,8 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
         }
         else{
             //insert post to database
-            const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, postImgUrl: newPath});
+            const currentDateTime = new Date();
+            const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, postImgUrl: newPath, time: currentDateTime});
             if(postDoc){
                 await thread.updateOne({"_id": threadDoc._id},{$push:{"posts": postDoc._id}});
                 await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})

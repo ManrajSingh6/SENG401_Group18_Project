@@ -104,7 +104,7 @@ function ThreadPreview(props){
                     className="thread-link" 
                     state={{from: props.threadTitle, user: props.userCreated, date: props.dateCreated, time: props.timeCreated }}>
                     <h3>{props.threadTitle}</h3></Link>
-                    <p className="thread-datetime">Created by {props.userCreated} on {props.dateTimeCreated.substring(0,10)} at {props.dateTimeCreated.substring(11,19)}</p>
+                    <p className="thread-datetime">Created by {props.userCreated} on {props.dateCreated} at {props.timeCreated}</p>
                     <p className="thread-desc">{props.threadDesc}</p>
                 <div className="buttons-container">
                     <div role="button" className="button" onClick={subscribeThread}>Subscribe</div>

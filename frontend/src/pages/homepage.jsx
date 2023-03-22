@@ -79,7 +79,8 @@ function Homepage(){
                             threadID={threadItem._id}
                             threadTitle={threadItem.threadname}
                             userCreated={threadItem.userCreated.username}
-                            dateTimeCreated={threadItem.dateCreated}
+                            dateCreated={new Date(threadItem.dateCreated).toLocaleDateString()}
+                            timeCreated={new Date(threadItem.dateCreated).toLocaleTimeString()}
                             threadDesc={threadItem.description}
                             likes={threadItem.votes.length}
                             postAmount={threadItem.posts.length}

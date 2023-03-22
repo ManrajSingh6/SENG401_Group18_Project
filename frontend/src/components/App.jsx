@@ -9,6 +9,7 @@ import CreatePostPage from "../pages/createPost";
 import PostView from "../pages/postView";
 import ThreadPage from "../pages/threadPage";
 import EditPost from "../pages/editPost";
+import EditThread from "../pages/editThread";
 import { UserContextProvider } from "../context/userContext";
 
 function App(){
@@ -19,6 +20,7 @@ function App(){
                     <Route index element={<Homepage />} />
                     <Route path={'/create-post'} element={<CreatePostPage />} />
                     <Route path={'/edit-post/:id'} element={<EditPost />} />
+                    <Route path={'/edit-thread/:name'} element={<EditThread />} />
                     <Route path={'/login'} element={<LoginPage />} />
                     <Route path={'/register'} element={<RegisterPage />} />
                     <Route path={'/user-profile/:username'} element={<ProfilePage />}/>

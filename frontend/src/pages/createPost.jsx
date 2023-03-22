@@ -83,7 +83,7 @@ function CreatePostPage(){
                 setRedirect(false);
             }
             // post fields not empty
-            else if(postTitle !== '' && postSummary !== '' && postContent !== '' && postImg !== '' && threadChoice !== ''){
+            else if(postTitle !== '' && postSummary !== '' && postContent !== '' && postImg !== '' ){
                 // Post Data
                 const postData = new FormData();
                 postData.set('title', postTitle);

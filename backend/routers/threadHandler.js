@@ -152,6 +152,7 @@ router.post('/unsubscribe', async (req,res)=>{
         }
         else{
             await user.updateOne({"_id": User._id},{$pull:{"subscribed": Thread._id}});
+            await thread.updateOne({"_id": Thread._id}, {$pull: {"allSubscribers": User._id}});
             res.json(User);
         }
     }
@@ -180,6 +181,13 @@ router.post('/remove',async (req,res)=>{
         postsdeleted = 0;
         for(i of Thread.posts){
             Post = await post.findOne({"_id": i});
+             if(Post.postImgUrl){
+                filesystem.unlink(Post.postImgUrl,(err)=>{
+                    if(err){
+                        console.log(err);
+                    }
+                });
+            }
             for(const j of Post.votes){
                 await vote.deleteOne({"_id":j});
             }

@@ -33,11 +33,6 @@ function CreatePostPage(){
     // Function to handle new post (and possibly thread) creation
     async function createNewPost(event){
         
-        document.getElementById('post-form').addEventListener('submit',function(event){
-            if((!postTitle||!postSummary||!postContent||!postImg||!threadChoice)&&(!newThreadName||newThreadSummary||newThreadImg)){
-                event.preventDefault();
-            }
-        },false);
         event.preventDefault();
         console.log("Submitted form");
 

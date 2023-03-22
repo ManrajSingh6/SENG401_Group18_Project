@@ -84,12 +84,13 @@ router.get('/find', async (req,res)=> {
     const User = await user.findOne({username:username});
     if(User){
         const allPosts = await post.find({author: User._id}).populate('thread', 'threadname');
+        const createdThreads = await thread.find({userCreated:User._id}).populate('userCreated', 'username')
         let subbedThreads = [];
         for (let i = 0; i < User.subscribed.length; i++){
             const sThread = await thread.findOne({_id: User.subscribed[i]}).populate('userCreated', 'username');
             subbedThreads.push(sThread);
         }
-        res.send({User, userPosts: allPosts, subscribedThreads: subbedThreads});
+        res.send({User, userPosts: allPosts, createdThreads: createdThreads,subscribedThreads: subbedThreads});
     }
     else{
         res.status(400).send('User not found');

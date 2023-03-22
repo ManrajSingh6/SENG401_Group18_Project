@@ -48,9 +48,8 @@ router.get('/find', async (req,res)=> {
 });
 router.post('/remove',async (req,res)=> {
     const {comment_id} = req.body;
-
     var comment_objectId = mongoose.Types.ObjectId(comment_id);
-    const Comment = await comment.findOne({comment_objectId});
+    const Comment = await comment.findOne({_id: comment_objectId});
     if(!Comment){
         res.status(400).json("Could not find comment to delete");
     }

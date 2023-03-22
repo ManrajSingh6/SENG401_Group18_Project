@@ -5,7 +5,7 @@ import { UserContext } from "../context/userContext";
 import ThumbUpIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDownOffAlt';
 
-function Comment({commentUser, commentBody, commentDateTime, commentLikes, commentID}){
+function Comment({commentUser, commentBody, commentDateTime, commentLikes, commentID,parentThread}){
     const {userInfo} = useContext(UserContext);
     const [isError, setIsError] = useState();
     const [errorMessage, setErrorMessage] = useState('');
@@ -73,7 +73,9 @@ function Comment({commentUser, commentBody, commentDateTime, commentLikes, comme
 
                 {commentUser?.username === userInfo.username ? (
                     <p role="button" onClick={deleteComment} className="delete-comment-link" >Delete comment</p>
-                ) : null}
+                ) : parentThread?.userCreated === userInfo?.id?(
+                    <p role="button" onClick={deleteComment} className="delete-comment-link" >Delete comment</p>
+                ): null}
 
             </div>
             <div className="like-unlike-container">

@@ -4,9 +4,7 @@ import PostPreview from "../components/postPreview";
 
 import "./threadPage.css";
 
-function ThreadPage({parentThread}){
-
-    
+function ThreadPage(){
     const [parentThreadInfo, setParentThreadInfo] = useState([]);
     const [nestedPosts, setNestedPosts] = useState([]);
 
@@ -26,7 +24,7 @@ function ThreadPage({parentThread}){
         <div className="thread-post-container">
             <h1>{parentThreadInfo.parentThreadName}</h1>
             <p style={{textAlign: "center", marginTop: "10px", fontWeight: "500"}}>{parentThreadInfo.description}</p>
-            <p style={{marginTop: "10px", textAlign: "center", color: "#777777", marginBottom: "10px"}}>Created by {parentThreadInfo.userCreated} | {parentThreadInfo.dateCreated?.substring(0, 10)} | {parentThreadInfo.dateCreated?.substring(11, 19)}</p>
+            <p style={{marginTop: "10px", textAlign: "center", color: "#777777", marginBottom: "10px"}}>Created by {parentThreadInfo.userCreated} | {new Date(parentThreadInfo.dateCreated).toLocaleDateString()} | {new Date(parentThreadInfo.dateCreated).toLocaleTimeString()}</p>
             <Grid container spacing={2} style={{marginTop: 30}}>
                 {
                     nestedPosts.map((post) => {
@@ -36,8 +34,8 @@ function ThreadPage({parentThread}){
                                     key={post._id}
                                     postID={post._id} 
                                     postTitle={post.title}
-                                    postDate={post.time.substring(0, 10)}
-                                    postTime={post.time.substring(11, 19)}
+                                    postDate={new Date(post.time).toLocaleDateString()}
+                                    postTime={new Date(post.time).toLocaleTimeString()}
                                     postUser={post.author.username}
                                     parentThread={parentThreadInfo.parentThreadName}
                                     postSumm={post.summary}

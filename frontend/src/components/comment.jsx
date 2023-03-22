@@ -68,7 +68,7 @@ function Comment({commentUser, commentBody, commentDateTime, commentLikes, comme
                 <img src={commentUser?.profilePicture === 'defaultUserProPic.png' ? (defaultProPic): 'http://localhost:5000/' + commentUser?.profilePicture} alt="comment-profile-pic"/>
             </div>
             <div className="comment-info-container">
-                <p>{commentUser?.username} <span style={{color:"grey", fontWeight: "400"}}>on {commentDateTime?.substring(0, 10)} at {commentDateTime?.substring(11, 19)}</span> 🞄 <span>{commentLikes} likes</span></p>
+                <p>{commentUser?.username} <span style={{color:"grey", fontWeight: "400"}}>on {new Date(commentDateTime).toLocaleDateString()} at {new Date(commentDateTime).toLocaleTimeString()}</span> 🞄 <span>{commentLikes} likes</span></p>
                 <p>{commentBody}</p>
 
                 {commentUser?.username === userInfo.username ? (

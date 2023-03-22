@@ -29,7 +29,7 @@ function UserThreadCard(props){
         
          <div className="sub-thread-card">
          <Link className="view-link" style={{alignSelf: "start"}} to={`/${props.threadName}`}><h4>{props.threadName}</h4></Link>
-         <p className="creator-info">Created by {props.name} | {props.date.substring(0, 10)} | {props.time.substring(11, 19)}</p>
+         <p className="creator-info">Created by {props.name} 🞄 {new Date(props.date).toLocaleDateString()} 🞄 {new Date(props.time).toLocaleTimeString()}</p>
          <div className="likes-comments">
              <div><ThumbUpRoundedIcon /> {props.likes}</div>
              <div><ArticleIcon /> {props.comments}</div>

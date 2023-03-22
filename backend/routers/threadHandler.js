@@ -45,7 +45,8 @@ router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> 
             res.status(400).json("Thread name is already taken");
         }
         else{
-            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: newPath});
+            const currentDateTime = new Date();
+            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: newPath, dateCreated: currentDateTime});
             if(Thread){
                 res.json(Thread);
             }

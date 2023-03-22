@@ -73,7 +73,7 @@ function PostView(){
         <div className="main-post-container">
             <div className="post-content-container">
                 <div className="post-info">
-                    <p className="stats-text">Posted by {postData.author?.username} on {postData.time?.substring(0, 10)} at {postData.time?.substring(11, 19)}</p>
+                    <p className="stats-text">Posted by {postData.author?.username} on {new Date(postData.time).toLocaleDateString()} at {new Date(postData.time).toLocaleTimeString()}</p>
                     <h1 className="post-info-title">{postData.title}</h1>
                     <p className="stats-text">{postData.votes ? (Object.keys(postData.votes).length) : 0} likes 🞄 {postData.comments ? (Object.keys(postData.comments).length) : 0} comments</p>
                     {postData.author?._id === userInfo?.id ? (

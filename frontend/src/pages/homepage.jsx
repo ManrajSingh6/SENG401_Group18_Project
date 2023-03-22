@@ -51,7 +51,7 @@ function Homepage(){
                             value={tempQuery}
                             onChange={ev => setTempQuery(ev.target.value)} />
                         <div className="search-container" onClick={handleSearch}>
-                            <a><SearchIcon style={{color: "#FFFF"}}/></a>
+                            <SearchIcon style={{color: "#FFFF"}}/>
                         </div>
                     </div>
                     <Dropdown selectedOption={filterChoice} onOptionChange={handleOptionChange} className="dropdown" />

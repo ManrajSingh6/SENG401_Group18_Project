@@ -5,6 +5,7 @@ import "./profilePage.css";
 import defaultProPic from "../images/defaultUserProPic.png";
 import SubbedThreads from "../components/subbedThreads";
 import UserPosts from "../components/userPosts";
+import UserThreads from "../components/userThreads";
 import {UserContext} from "../context/userContext";
 
 
@@ -12,6 +13,7 @@ function ProfilePage(){
     const [userInfoState, setUserInfo] = useState('');
     const [userPosts, setUserPosts] = useState([]);
     const [subbedThreads, setSubbedThreads] = useState([]);
+    const [userThreads, setUserThreads] = useState([]);
 
     const [isError, setIsError] = useState(false);
 
@@ -31,7 +33,15 @@ function ProfilePage(){
                 setUserDesc(userInfoRes.User.description); 
                 setUserInfo(userInfoRes.User);
                 setSubbedThreads(userInfoRes.subscribedThreads);
-                setUserPosts(userInfoRes.userPosts)
+                setUserPosts(userInfoRes.userPosts);
+                
+            });
+        })
+        fetch(`http://localhost:5000/users/findThreads?username=${userName}`, {
+            credentials: 'include'
+        }).then(response => {
+            response.json().then(userThreadRes => {
+                setUserThreads(userThreadRes);
             });
         })
     }, []);
@@ -94,6 +104,7 @@ function ProfilePage(){
             </div>
 
             <SubbedThreads subbedThreads={subbedThreads}/>
+            <UserThreads userThreads={userThreads}/>
             <UserPosts userPosts={userPosts}/>
         </div>
     

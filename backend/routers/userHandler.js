@@ -246,5 +246,16 @@ router.put('/updateprofile', uploadMiddleware.single('file'), async (req, res) =
     }   
     
 });
+router.get('/findThreads', async (req, res, next) => {
+    const {username} = req.query;
+    const User = await user.findOne({username: username});
+    if(User){
+        res.json(await thread.find({userCreated:User._id}).populate('userCreated', 'username'));
+       
+    }
+    else{
+        res.status(400).json("User not found");
+    }
+}); 
 
 module.exports = router;

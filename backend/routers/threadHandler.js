@@ -49,7 +49,7 @@ router.get('/find',async (req,res)=> {
     
     const Thread = await thread.findOne({threadname:thread_name});
     if(Thread){
-        res.send(Thread);
+        res.json(Thread);
     }
     else{
         res.status(400).send('Thread not found');
@@ -120,12 +120,14 @@ router.post('/unsubscribe', async (req,res)=>{
 });
 router.post('/remove',async (req,res)=>{
     const {thread_name} = req.body;
-
+    //remove users subscribed to thread
     const Thread = await thread.findOne({threadname:thread_name});
     if(!Thread){
         res.status(400).json("could not find thread to delete");
     }
     else{
+       await user.updateMany({subscribed:{$in:[Thread._id]}},{$pull:{"subscribed": Thread._id}});
+      
         if(Thread.threadImgUrl){
             filesystem.unlink(Thread.threadImgUrl,(err)=>{
                 if(err){
@@ -235,12 +237,12 @@ router.put('/update', uploadMiddleware.single('threadFile'), async (req, res) =>
         newPath = path + '.' + extension;
         filesystem.renameSync(path, newPath);
     }
-    const {username, threadname, description, threadID} = req.body;
+    const {username, threadname, description} = req.body;
     const userDoc = await user.findOne({username:username});
     if (!userDoc){
         res.status(400).json("Could not find user");
     } else {
-        const threadDoc = await thread.findById(threadID);
+        const threadDoc = await thread.findOne({threadname:threadname});
         await threadDoc.update({threadname, description, threadImgUrl: newPath ? newPath : threadDoc.threadImgUrl});
         res.status(200).json(threadDoc);
     }

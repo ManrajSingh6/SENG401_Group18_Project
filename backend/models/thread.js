@@ -11,5 +11,6 @@ const threadSchema = new mongoose.Schema({
     },
     threadImgUrl: String,
     votes: [{type:Schema.Types.ObjectId,ref:'Vote'}],
+    allSubscribers: [{type: Schema.Types.ObjectId, ref:'User'}]
 });
 module.exports = mongoose.model('Thread', threadSchema);

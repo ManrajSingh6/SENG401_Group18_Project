@@ -11,6 +11,40 @@ const multer = require('multer');
 const uploadMiddleware = multer({dest: 'uploads/'});
 const filesystem = require('fs');
 
+const nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "seng401project@gmail.com",
+        pass: "wpqwjjhdkflewoqb"
+    },
+    tls: {
+        rejectUnauthorized: false,
+    }
+});
+
+async function sendPostNotifications(destAddr, username, title, summary, parentThread){
+    let mailOptions = {
+        from: "seng401project@gmail.com",
+        to: destAddr,
+        subject: `New Post Under Thread: ${parentThread}`,
+        text: `You're recieving this email because a thread you've subscribed to (${parentThread}) has a new post! Here are a few details:
+            Posted by: ${username}
+            Title: ${title}
+            A short summary: ${summary}
+               
+        View the full post on The Loop!`
+    };
+    
+    transporter.sendMail(mailOptions, function(err, success) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Email sent successfully");
+        }
+    });
+}
+
 router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
     const {username, title, summary, body, parentThread} = req.body;
 
@@ -25,7 +59,7 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
         res.status(400).json("Could not find user");
     }
     else{
-        const threadDoc = await thread.findOne({threadname: parentThread});
+        const threadDoc = await thread.findOne({threadname: parentThread}).populate('allSubscribers', 'email');
         if(!threadDoc){
             res.status(400).json("Could not find thread");
         }
@@ -35,6 +69,12 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
             if(postDoc){
                 await thread.updateOne({"_id": threadDoc._id},{$push:{"posts": postDoc._id}});
                 await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})
+
+                const allSubscribers = threadDoc.allSubscribers;
+                for (var i = 0; i < allSubscribers.length; i++){
+                    await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
+                }
+
                 res.json(postDoc);
             }
             else{

@@ -14,6 +14,37 @@ const multer = require('multer');
 const uploadMiddleware = multer({dest: 'uploads/'});
 const filesystem = require('fs');
 
+const nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "seng401project@gmail.com",
+        pass: "wpqwjjhdkflewoqb"
+    },
+    tls: {
+        rejectUnauthorized: false,
+    }
+});
+
+async function sendConfirmationEmail(destAddr, username){
+    let mailOptions = {
+        from: "seng401project@gmail.com",
+        to: destAddr,
+        subject: "The Loop: Account Registration Confirmation",
+        text: `A new user account has been created for The Loop with the following credentials:
+               email: ${destAddr}
+               username: ${username}`
+    };
+    
+    transporter.sendMail(mailOptions, function(err, success) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Email sent successfully");
+        }
+    });
+}
+
 router.post('/register', async (req,res)=>{
     const{username,password,email} = req.body;
 
@@ -25,10 +56,9 @@ router.post('/register', async (req,res)=>{
     }
     else{  //add user to database
         const User = await user.create({username,password:bcrypt.hashSync(password,10),email});
+        await sendConfirmationEmail(email, username);
         res.json(User);
     }
-    
- 
 });
 
 router.get('/find/:id', async (req,res)=> {

@@ -13,6 +13,19 @@ const multer = require('multer');
 const uploadMiddleware = multer({dest: 'uploads/'});
 const filesystem = require('fs');
 
+const nodemailer = require('nodemailer');
+let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "seng401project@gmail.com",
+        pass: "wpqwjjhdkflewoqb"
+    },
+    tls: {
+        rejectUnauthorized: false,
+    }
+});
+
+
 router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> {
     const {thread_name, thread_description, username} = req.body;
     
@@ -78,9 +91,28 @@ router.get("/allpostsbythread", async (req, res) => {
     }
 });
 
+async function sendEmailToThreadCreator(threadCreatorAddress, subscriberUsername, threadName){
+    let mailOptions = {
+        from: "seng401project@gmail.com",
+        to: threadCreatorAddress,
+        subject: `Thread: ${threadName} recieved a new subscriber!`,
+        text: `A new user (${subscriberUsername}) has subscribed to your thread (${threadName}).`
+    };
+    
+    transporter.sendMail(mailOptions, function(err, success) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("Email sent successfully");
+        }
+    });
+
+}
+
+
 router.post('/subscribe', async (req,res)=>{
     const{thread_name,username} = req.body;
-    const Thread = await thread.findOne({threadname:thread_name});
+    const Thread = await thread.findOne({threadname:thread_name}).populate('userCreated', 'email');
     if(!Thread){
         res.status(400).send('Thread not found');
     }
@@ -95,6 +127,12 @@ router.post('/subscribe', async (req,res)=>{
                 res.status(400).json("User is already subscribed to thread!");
             } else {
                 await user.updateOne({"_id": User._id},{$push:{"subscribed": Thread._id}});
+                await thread.updateOne({"_id": Thread._id}, {$push: {"allSubscribers": User._id}});
+                const threadEmail = Thread.userCreated.email;
+                const subscriber = username;
+                const threadName = thread_name;
+                await sendEmailToThreadCreator(threadEmail, subscriber, threadName);
+
                 res.json(User);
             }
         }

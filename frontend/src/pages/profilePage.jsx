@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import CheckIcon from '@mui/icons-material/Check';
 import "./profilePage.css";
 
@@ -6,7 +6,6 @@ import defaultProPic from "../images/defaultUserProPic.png";
 import SubbedThreads from "../components/subbedThreads";
 import UserPosts from "../components/userPosts";
 import UserThreads from "../components/userThreads";
-import {UserContext} from "../context/userContext";
 
 
 function ProfilePage(){

@@ -5,7 +5,11 @@ import { UserContext } from "../context/userContext";
 import ThumbUpIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDownOffAlt';
 
-function Comment({commentUser, commentBody, commentDateTime, commentLikes, commentID,parentThread}){
+// Toast notifications
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+function Comment({commentUser, commentBody, commentDateTime, commentLikes, commentID}){
     const {userInfo} = useContext(UserContext);
     const [isError, setIsError] = useState();
     const [errorMessage, setErrorMessage] = useState('');
@@ -44,7 +48,7 @@ function Comment({commentUser, commentBody, commentDateTime, commentLikes, comme
                 setIsError(true);
             }
         } else {
-            alert("You must login!");
+            toast.error('You must login!');
         }
     }
 

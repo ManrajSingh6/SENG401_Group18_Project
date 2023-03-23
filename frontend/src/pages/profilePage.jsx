@@ -33,14 +33,8 @@ function ProfilePage(){
                 setUserInfo(userInfoRes.User);
                 setSubbedThreads(userInfoRes.subscribedThreads);
                 setUserPosts(userInfoRes.userPosts);
+                setUserThreads(userInfoRes.createdThreads)
                 
-            });
-        })
-        fetch(`http://localhost:5000/users/findThreads?username=${userName}`, {
-            credentials: 'include'
-        }).then(response => {
-            response.json().then(userThreadRes => {
-                setUserThreads(userThreadRes);
             });
         })
     }, []);
@@ -71,7 +65,28 @@ function ProfilePage(){
             setIsError(true);
         }
     }
+    async function deleteUser(){
+     await fetch('http://localhost:5000/users/logout', {
+            method: 'POST',
+            body: JSON.stringify({}),
+            headers: {'Content-Type':'application/json'},
+            credentials: 'include',
+        });
 
+        const response = await fetch('http://localhost:5000/users/remove', {
+            method: 'POST',
+            body: JSON.stringify({username: userInfoState.username}),
+            headers: {'Content-Type':'application/json'},
+            credentials: 'include',
+        });
+
+        if (response.ok){
+            console.log("Succesfully deleted user");
+            window.location.assign('/');
+        } else {
+            alert("Unable to delete the user.")
+        }
+    }
     return(
         <div className="main-profile-container">
             <div className="user-profile-container">
@@ -84,6 +99,7 @@ function ProfilePage(){
                     <div className="user-desc-container">
                         <p>{userDesc}</p>
                     </div>
+                    <p onClick={deleteUser} role="button" className="post-option-btn" style={{color: "red"}}>Delete User</p>
                 </div>
 
                 <div className="edit-profile">

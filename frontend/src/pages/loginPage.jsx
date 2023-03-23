@@ -16,6 +16,7 @@ function LoginPage(){
     async function handleLogin(ev){
         ev.preventDefault();
         // Handle authentication here
+        console.log(username, password);
         const response = await fetch("http://localhost:5000/users/login", {
             method: 'POST',
             body: JSON.stringify({username, password}),
@@ -30,6 +31,7 @@ function LoginPage(){
                 setRedirect(true);
             });
         } else {
+            console.log(response.json());
             setError(true);
         }
     }

@@ -80,7 +80,6 @@ router.get('/find/:id', async (req,res)=> {
 router.get('/find', async (req,res)=> {
     const {username} = req.query;
     //get user from database
-    
     const User = await user.findOne({username:username});
     if(User){
         const allPosts = await post.find({author: User._id}).populate('thread', 'threadname');
@@ -110,10 +109,11 @@ router.post('/login',async (req,res)=>{
                 if (error) throw error;
                 res.cookie('auth',auth, {httpOnly:true,sameSite:'lax',secure:true}).json({username, id: userDoc._id});
             });
+        } else {
+            res.status(400).json('password is incorrect');
         }
-    }
-    else{
-        res.status(400).json('username or password is incorrect');
+    } else {
+        res.status(400).json('username is incorrect');
     }
 
 });

@@ -9,7 +9,7 @@ import ThumbDownIcon from '@mui/icons-material/ThumbDownOffAlt';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Comment({commentUser, commentBody, commentDateTime, commentLikes, commentID}){
+function Comment({commentUser, commentBody, commentDateTime, commentLikes, commentID, parentThread}){
     const {userInfo} = useContext(UserContext);
     const [isError, setIsError] = useState();
     const [errorMessage, setErrorMessage] = useState('');

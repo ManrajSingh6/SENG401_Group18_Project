@@ -7,7 +7,7 @@ import '@testing-library/jest-dom';
 // create-post page in App.jsx
 jest.mock('../pages/createPost', () => {
     const CreatePostPage = () => (
-      <div data-testid='testCreatePostPage'>Hello World</div>
+      <div data-testid='testCreatePostPage'>CreatePostPage</div>
     );
   
     return CreatePostPage;
@@ -27,7 +27,7 @@ jest.mock('../pages/createPost', () => {
 //login page router in App.jsx
  jest.mock('../pages/loginPage', () => {
   const LoginPage = () => (
-    <div data-testid='testLoginPage'>Hello World</div>
+    <div data-testid='testLoginPage'>LoginPage</div>
   );
 
   return LoginPage;
@@ -48,7 +48,7 @@ expect(screen.getByTestId("testLoginPage")).toBeInTheDocument();
 //Register page router in App.jsx
 jest.mock('../pages/registerPage', () => {
   const RegisterPage = () => (
-    <div data-testid='testRegisterPage'>Hello World</div>
+    <div data-testid='testRegisterPage'>RegisterPage</div>
   );
 
   return RegisterPage;
@@ -68,7 +68,7 @@ expect(screen.getByTestId("testRegisterPage")).toBeInTheDocument();
 //edit post page router in App.jsx
 jest.mock('../pages/editPost', () => {
   const EditPost = () => (
-    <div data-testid='testEditPost'>Hello World</div>
+    <div data-testid='testEditPost'>EditPost</div>
   );
 
   return EditPost;
@@ -88,7 +88,7 @@ expect(screen.getByTestId("testEditPost")).toBeInTheDocument();
 //edit thread page router in App.jsx
 jest.mock('../pages/editThread', () => {
   const EditThread = () => (
-    <div data-testid='testEditThread'>Hello World</div>
+    <div data-testid='testEditThread'>EditThread</div>
   );
 
   return EditThread;
@@ -108,7 +108,7 @@ expect(screen.getByTestId("testEditThread")).toBeInTheDocument();
 //profile page router in App.jsx
 jest.mock('../pages/profilePage', () => {
   const ProfilePage = () => (
-    <div data-testid='testProfilePage'>Hello World</div>
+    <div data-testid='testProfilePage'>ProfilePage</div>
   );
 
   return ProfilePage;
@@ -128,7 +128,7 @@ expect(screen.getByTestId("testProfilePage")).toBeInTheDocument();
 //thread page router in App.jsx
 jest.mock('../pages/threadPage', () => {
   const ThreadPage = () => (
-    <div data-testid='testThreadPage'>Hello World</div>
+    <div data-testid='testThreadPage'>ThreadPage</div>
   );
 
   return ThreadPage;
@@ -149,7 +149,7 @@ expect(screen.getByTestId("testThreadPage")).toBeInTheDocument();
 //post view page router in App.jsx
 jest.mock('../pages/postView', () => {
   const PostView = () => (
-    <div data-testid='testPostView'>Hello World</div>
+    <div data-testid='testPostView'>PostView</div>
   );
 
   return PostView;

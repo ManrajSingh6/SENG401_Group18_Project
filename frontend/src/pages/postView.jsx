@@ -8,6 +8,10 @@ import CommentEditor from "../components/commentEditor";
 import { UserContext } from "../context/userContext";
 import { Link } from "react-router-dom";
 
+// Toast Notifications
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function PostView(){
 
     const {userInfo} = useContext(UserContext);
@@ -36,8 +40,6 @@ function PostView(){
             const username = userInfo.username;
             const postID = postData._id;
             const choice = event.currentTarget.id;
-            console.log(username, postID);
-
             let response = null;
             if (choice === "like-btn"){
                 response = await fetch('http://localhost:5000/votes/post', {
@@ -67,7 +69,7 @@ function PostView(){
                 setIsError(true);
             }
         } else {
-            alert("You must login!");
+            toast.error('You must login to like or dislike posts!');
         }
     }
     async function deletePost(){
@@ -147,7 +149,6 @@ function PostView(){
                     )
                 })
             }
-
         </div>
     );
 }

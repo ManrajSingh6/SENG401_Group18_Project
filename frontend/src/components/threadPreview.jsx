@@ -1,10 +1,13 @@
 import React, {useContext, useState} from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "../context/userContext";
-
 import "./threadPreview.css";
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ThumbDownIcon from '@mui/icons-material/ThumbDown';
+
+// React Toast Notifications
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ThreadPreview(props){
     const {userInfo} = useContext(UserContext);
@@ -12,82 +15,73 @@ function ThreadPreview(props){
     const [isSuccess, setSuccess] = useState();
     const [isError, setError] = useState();
     const [errorMessage, setErrorMessage] = useState('');
-    
     async function subscribeThread(){
-        let username = null;
-        if (userInfo){
-            username = userInfo.username;
-        } else {
-            alert("You must login!");
-        }
-
-        const thread_name = props.threadTitle;
-
-        const response = await fetch ('http://localhost:5000/threads/subscribe', {
-            method: 'POST',
-            body: JSON.stringify({thread_name, username}),
-            headers: {'Content-Type':'application/json'},
-            credentials: 'include'
-        });
-
-        if (response.ok){
-            response.json().then(res => {
-                setErrorMessage("Successfully subscribed to thread.");
-                setError(false);
-                setSuccess(true);
-                
+        if (Object.keys(userInfo).length !== 0){
+            const username = userInfo.username;
+            const thread_name = props.threadTitle;
+            const response = await fetch ('http://localhost:5000/threads/subscribe', {
+                method: 'POST',
+                body: JSON.stringify({thread_name, username}),
+                headers: {'Content-Type':'application/json'},
+                credentials: 'include'
             });
+            if (response.ok){
+                response.json().then(res => {
+                    setErrorMessage("Successfully subscribed to thread.");
+                    setError(false);
+                    setSuccess(true);
+                });
+            } else {
+                setErrorMessage("Already subscribed to thread.");
+                setSuccess(false);
+                setError(true);
+            }
         } else {
-            setErrorMessage("Already subscribed to thread.");
-            setSuccess(false);
-            setError(true);
+            toast.error('You must login!');
         }
-
     }
 
     async function handleLike(event){
-        let userID = null;
-        if (Object.entries(userInfo).length !== 0){
-            userID = userInfo.id;
+        if (Object.keys(userInfo).length !== 0){
+            const userID = userInfo.id;
+            const threadID = props.threadID;
+            const choice = event.currentTarget.id;
+            let response = null;
+            if (choice === "like-btn" && userID !== null){
+                console.log(choice);
+                response = await fetch('http://localhost:5000/threads/likethread', {
+                    method: 'PUT',
+                    body: JSON.stringify({threadID, userID}),
+                    headers: {'Content-Type':'application/json'},
+                    credentials: 'include',
+                });
+                setSuccess(false);
+                setError(false);
+                setErrorMessage("Already liked this post.")
+            }
+
+            if (choice === "dislike-btn" && userID !== null){
+                response = await fetch('http://localhost:5000/threads/dislikethread', {
+                    method: 'PUT',
+                    body: JSON.stringify({threadID, userID}),
+                    headers: {'Content-Type':'application/json'},
+                    credentials: 'include',
+                });
+                setSuccess(false);
+                setError(false);
+                setErrorMessage("Already disliked this post.")
+            }
+
+            if (response.ok){
+                response.json().then(threadLikes => {
+                    setThreadLikes(threadLikes.length);
+                })
+            } else {
+                setError(true);
+            }
+
         } else {
-            alert("You must login!");
-        }
-        const threadID = props.threadID;
-
-        const choice = event.currentTarget.id;
-
-        let response = null;
-        if (choice === "like-btn" && userID !== null){
-            console.log(choice);
-            response = await fetch('http://localhost:5000/threads/likethread', {
-                method: 'PUT',
-                body: JSON.stringify({threadID, userID}),
-                headers: {'Content-Type':'application/json'},
-                credentials: 'include',
-            });
-            setSuccess(false);
-            setError(false);
-            setErrorMessage("Already liked this post.")
-        }
-
-        if (choice === "dislike-btn" && userID !== null){
-            response = await fetch('http://localhost:5000/threads/dislikethread', {
-                method: 'PUT',
-                body: JSON.stringify({threadID, userID}),
-                headers: {'Content-Type':'application/json'},
-                credentials: 'include',
-            });
-            setSuccess(false);
-            setError(false);
-            setErrorMessage("Already disliked this post.")
-        }
-
-        if (response.ok){
-            response.json().then(threadLikes => {
-                setThreadLikes(threadLikes.length);
-            })
-        } else {
-            setError(true);
+            toast.error('You must login!');
         }
     }
 

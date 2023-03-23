@@ -12,6 +12,10 @@ import { Link } from "react-router-dom";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+// Confirm popup
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 function PostView(){
 
     const {userInfo} = useContext(UserContext);
@@ -84,9 +88,26 @@ function PostView(){
             console.log("Succesfully deleted post");
             window.location.reload();
         } else {
-            alert("Unable to delete the post.")
+            toast.error("Unable to delete post");
         }
     }
+
+    function confirmDeletion(){
+        confirmAlert({
+            customUI: ({onClose}) => {
+                return (
+                    <div className="custom-ui">
+                        <h2>Confirm deletion.</h2>
+                        <p>Are you sure you want to do this? This action cannot be undone.</p>
+                        <button onClick={() => {deletePost(); onClose()}}>Yes</button>
+                        <button onClick={onClose}>No</button>
+                    </div>
+                );
+            }
+        });
+    }
+
+
     return(
         <div className="main-post-container">
             <div className="post-content-container">
@@ -94,26 +115,21 @@ function PostView(){
                     <p className="stats-text">Posted by {postData.author?.username} on {new Date(postData.time).toLocaleDateString()} at {new Date(postData.time).toLocaleTimeString()}</p>
                     <h1 className="post-info-title">{postData.title}</h1>
                     <p className="stats-text">{postData.votes ? (Object.keys(postData.votes).length) : 0} likes 🞄 {postData.comments ? (Object.keys(postData.comments).length) : 0} comments</p>
-                    {postData.author?._id === userInfo?.id ?  (
+                    {   
+                        // If the current logged in user = post author, give them permission to edit their post
+                        postData.author?._id === userInfo?.id ?  (
                         <Link className="edit-post-link" to={`/edit-post/${postData._id}`}>
                             <div className="edit-post-btn">Edit Post</div>
                         </Link>
-                        
-                    ) : parentThread?.userCreated === userInfo?.id?(
-                        <Link className="edit-post-link" to={`/edit-post/${postData._id}`}>
-                        <div className="edit-post-btn">Edit Post</div>
-                    </Link>
-                        ):null}
-                        {postData.author?._id === userInfo?.id ?  (
-                       <Link className="edit-post-link" to={`/${parentThread.threadname}`}>
-                       <p onClick={deletePost} role="button" className="post-option-btn" style={{color: "red"}}>Delete Post</p>
-                       </Link>
-                        
-                    ) : parentThread?.userCreated === userInfo?.id?(
+                    ) : null}
+                    
+                    {
+                        // If the creator of the thread = current logged in user, allow them to delete the post (admin privileges)
+                        parentThread?.userCreated === userInfo?.id?(
                         <Link className="edit-post-link" to={`/${parentThread.threadname}`}>
-                        <p onClick={deletePost} role="button" className="post-option-btn" style={{color: "red"}}>Delete Post</p>
-                    </Link>
-                        ):null}
+                        <p onClick={confirmDeletion} role="button" className="post-option-btn" style={{color: "red", fontSize: "small"}}>Delete Post (Admin)</p>
+                        </Link>) : null
+                    }
                     <p className="post-info content " dangerouslySetInnerHTML={{__html: postData.body}}></p>
                     <div style={{alignSelf: "center", display: "flex", gap: "20px", marginBottom: "10px", marginTop: "10px"}}>
                         <div className="like-btn" id="like-btn" onClick={handleLike} role="button">

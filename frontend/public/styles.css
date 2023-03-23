@@ -9,3 +9,27 @@ body{
     /* background-color: #f5f5f5; */
     background-color: #d7f1ff5e;
 }
+
+.custom-ui{
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    font-family: 'Roboto', sans-serif;
+    backdrop-filter: blur(20px);
+}
+
+.custom-ui button{
+    background-color: rgba(0, 110, 255, 0.5);
+    border: 1px solid #004696;
+    padding: 10px;
+    color: #FFFF;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.custom-ui button:hover{
+    background-color: rgba(0, 110, 255, 1);
+}

@@ -5,6 +5,14 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import MessageRoundedIcon from '@mui/icons-material/MessageRounded';
 import { Link } from "react-router-dom";
 
+// React Toast Notifications
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Confirm popup
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 function UserPostCard(props){
 
     async function deletePost(){
@@ -19,8 +27,23 @@ function UserPostCard(props){
             console.log("Succesfully deleted post");
             window.location.reload();
         } else {
-            alert("Unable to delete the post.")
+            toast.error("Unable to delete the post.");
         }
+    }
+
+    function confirmDeletion(){
+        confirmAlert({
+            customUI: ({onClose}) => {
+                return (
+                    <div className="custom-ui">
+                        <h2>Confirm deletion.</h2>
+                        <p>Are you sure you want to do this? This action cannot be undone.</p>
+                        <button onClick={() => {deletePost(); onClose()}}>Yes</button>
+                        <button onClick={onClose}>No</button>
+                    </div>
+                );
+            }
+        });
     }
 
     return(
@@ -34,7 +57,7 @@ function UserPostCard(props){
             <div className="post-options-container">
                 <Link to={`/${props.parentThread}/post/${props.postID}`} className="view-link"><p className="post-option-btn">View Post</p></Link>
                 <Link to={`/edit-post/${props.postID}`} className="view-link"><p role="button" className="post-option-btn" style={{color: "#004696"}}>Edit Post</p></Link>
-                <p onClick={deletePost} role="button" className="post-option-btn" style={{color: "red"}}>Delete Post</p>
+                <p onClick={confirmDeletion} role="button" className="post-option-btn" style={{color: "red"}}>Delete Post</p>
             </div>
         </div>
     );

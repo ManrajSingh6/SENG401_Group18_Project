@@ -4,6 +4,14 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import ArticleIcon from '@mui/icons-material/Article';
 import { Link, useParams } from "react-router-dom";
 
+// React Toast Notifications
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+// Confirm popup
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 function SubbedThreadCard(props){
     const {username} = useParams();
     async function unsubscribeThread() {
@@ -17,8 +25,23 @@ function SubbedThreadCard(props){
         if (response.ok){
             window.location.reload();
         } else {
-            alert("Unable to unsubscribe to thread");
+            toast.error("Unable to unsubscribe to thread.");
         }
+    }
+
+    function confirmUnsubscribe(){
+        confirmAlert({
+            customUI: ({onClose}) => {
+                return (
+                    <div className="custom-ui">
+                        <h2>Confirm Unsubscribe.</h2>
+                        <p>Are you sure you want to do this? This action cannot be undone.</p>
+                        <button onClick={() => {unsubscribeThread(); onClose()}}>Yes</button>
+                        <button onClick={onClose}>No</button>
+                    </div>
+                );
+            }
+        });
     }
 
     return(
@@ -29,7 +52,7 @@ function SubbedThreadCard(props){
                 <div><ThumbUpRoundedIcon /> {props.likes}</div>
                 <div><ArticleIcon /> {props.comments}</div>
             </div>
-            <p role="button" onClick={unsubscribeThread} className="post-option-btn" style={{alignSelf: "center", color: "red"}}>Unsubscribe</p>
+            <p role="button" onClick={confirmUnsubscribe} className="post-option-btn" style={{alignSelf: "center", color: "red"}}>Unsubscribe</p>
         </div>
     );
 }

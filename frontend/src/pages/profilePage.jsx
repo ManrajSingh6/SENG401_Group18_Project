@@ -6,9 +6,16 @@ import defaultProPic from "../images/defaultUserProPic.png";
 import SubbedThreads from "../components/subbedThreads";
 import UserPosts from "../components/userPosts";
 import UserThreads from "../components/userThreads";
+// React Toast Notifications
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
+// Confirm popup
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 function ProfilePage(){
+    
     const [userInfoState, setUserInfo] = useState('');
     const [userPosts, setUserPosts] = useState([]);
     const [subbedThreads, setSubbedThreads] = useState([]);
@@ -66,7 +73,7 @@ function ProfilePage(){
         }
     }
     async function deleteUser(){
-     await fetch('http://localhost:5000/users/logout', {
+        await fetch('http://localhost:5000/users/logout', {
             method: 'POST',
             body: JSON.stringify({}),
             headers: {'Content-Type':'application/json'},
@@ -84,9 +91,25 @@ function ProfilePage(){
             console.log("Succesfully deleted user");
             window.location.assign('/');
         } else {
-            alert("Unable to delete the user.")
+            toast.error("Unable to delete account.");
         }
     }
+
+    function confirmDeletion(){
+        confirmAlert({
+            customUI: ({onClose}) => {
+                return (
+                    <div className="custom-ui">
+                        <h2>Confirm deletion.</h2>
+                        <p>Are you sure you want to do this? This action cannot be undone.</p>
+                        <button onClick={() => {deleteUser(); onClose();}}>Yes</button>
+                        <button onClick={onClose}>No</button>
+                    </div>
+                );
+            }
+        });
+    }
+    
     return(
         <div className="main-profile-container">
             <div className="user-profile-container">
@@ -99,7 +122,7 @@ function ProfilePage(){
                     <div className="user-desc-container">
                         <p>{userDesc}</p>
                     </div>
-                    <p onClick={deleteUser} role="button" className="post-option-btn" style={{color: "red"}}>Delete User</p>
+                    <p onClick={confirmDeletion} role="button" className="post-option-btn" style={{color: "red"}}>Delete Account</p>
                 </div>
 
                 <div className="edit-profile">
@@ -122,7 +145,6 @@ function ProfilePage(){
             <UserThreads userThreads={userThreads}/>
             <UserPosts userPosts={userPosts}/>
         </div>
-    
     );
 }
 

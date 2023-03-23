@@ -55,12 +55,12 @@ router.post('/remove',async (req,res)=> {
     }
     else{
         const Post = await post.findOne({_id: Comment.postId});
-        const User = await user.findOne({_id: Comment.author}) ;
+        const User = await user.findOne({_id: Comment.author});
         if(!Post){
-        res.status(400).json("Could not find post with comment to delete");
+            res.status(400).json("Could not find post with comment to delete");
         }   
         else if(!User){
-        res.status(400).json("Could not find user with comment to delete");
+            res.status(400).json("Could not find user with comment to delete");
         }
         else{
         //remove vote for comment from database
@@ -79,7 +79,6 @@ router.post('/remove',async (req,res)=> {
                 else{
                     res.status(400).json("Comment deletion failed");
                 }
-            
         }
     }
 });

@@ -28,12 +28,12 @@
     padding: 10px;
     /* align-items: center ; */
 }
-
 .edit-post-link{
     text-decoration: none;
     width: fit-content;
     align-self: center;
 }
+
 .edit-post-btn{
     width: 80px;
     color: #004096;

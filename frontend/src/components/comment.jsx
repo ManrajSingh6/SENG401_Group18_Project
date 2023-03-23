@@ -77,7 +77,9 @@ function Comment({commentUser, commentBody, commentDateTime, commentLikes, comme
 
                 {commentUser?.username === userInfo.username ? (
                     <p role="button" onClick={deleteComment} className="delete-comment-link" >Delete comment</p>
-                ) : null}
+                ) : parentThread?.userCreated === userInfo?.id?(
+                    <p role="button" onClick={deleteComment} className="delete-comment-link" >Delete comment</p>
+                ): null}
 
             </div>
             <div className="like-unlike-container">

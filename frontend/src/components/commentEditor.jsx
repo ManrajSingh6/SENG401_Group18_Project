@@ -3,6 +3,10 @@ import "./commentEditor.css";
 import AddIcon from '@mui/icons-material/Add';
 import { UserContext } from "../context/userContext";
 
+// Toast notifications
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function CommentEditor(props){
 
     const {userInfo} = useContext(UserContext);
@@ -10,9 +14,6 @@ function CommentEditor(props){
 
     async function addNewComment(event){
         event.preventDefault();
-        console.log(newComment);
-        console.log(userInfo);
-
         if (Object.entries(userInfo).length !== 0){
             const commentUser = userInfo.username;
             const postID = props.postID;
@@ -30,7 +31,7 @@ function CommentEditor(props){
                 alert("Error adding comment!");
             }
         } else {
-            alert ("You must login to add comments!");
+            toast.error("You must login to add comments!");
         }
     }
 

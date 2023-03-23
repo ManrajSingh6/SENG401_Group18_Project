@@ -12,6 +12,9 @@ import EditPost from "../pages/editPost";
 import EditThread from "../pages/editThread";
 import { UserContextProvider } from "../context/userContext";
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App(){
     return (
         <UserContextProvider>
@@ -28,6 +31,7 @@ function App(){
                     <Route path={"/:threadName/post/:postID"} element={<PostView />} />
                 </Route>
             </Routes>
+            <ToastContainer />
         </UserContextProvider>
     );
 }

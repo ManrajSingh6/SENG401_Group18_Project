@@ -13,32 +13,46 @@ function RegisterPage(){
     const [isError, setError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    // Function to check if the password contains atleast one special character and has minimum length of 6 characters
+    function checkPasswordStrength(pass){
+        const regex = /^[a-zA-Z0-9!@#\$%\^\&*\)\(+=._-]{6,}$/g;
+        return (regex.test(pass));
+    }
 
     // Can do further authentication
     async function handleRegister(ev){
         ev.preventDefault();
 
-        // If passwords match, continue with registration
-        if (password === dupePass){
-            const response = await fetch("http://localhost:5000/users/register", {
-                method: 'POST',
-                body: JSON.stringify({email, username, password}),
-                headers: {'Content-Type':'application/json'}
-            });
+        const validPass = checkPasswordStrength(password);
+        if (validPass) {
+            // If password valid, check for match
+            if (password === dupePass){
+                // If passwords match
+                const response = await fetch("http://localhost:5000/users/register", {
+                    method: 'POST',
+                    body: JSON.stringify({email, username, password}),
+                    headers: {'Content-Type':'application/json'}
+                });
 
-            // If Valid response, redirect and display no error messages else display appropriate error message
-            if (response.ok){
-                setError(false);
-                setErrorMessage(null);
-                setRedirect(true);
+                // If Valid response, redirect and display no error messages else display appropriate error message
+                if (response.ok){
+                    setError(false);
+                    setErrorMessage(null);
+                    setRedirect(true);
+                } else {
+                    setError(true);
+                    setErrorMessage("Username is taken!")
+                }
             } else {
+                setErrorMessage("Passwords don't match!")
                 setError(true);
-                setErrorMessage("Username is taken!")
             }
         } else {
+            setErrorMessage("Your password must contain atleast 1 special character and be atleast 6 characters long.")
             setError(true);
-            setErrorMessage("Passwords don't match!")
         }
+
+        
     }
 
     if (redirect){

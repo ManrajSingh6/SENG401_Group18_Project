@@ -183,33 +183,46 @@ router.post('/remove',async (req,res)=>{
            
                     }
                 });
-                var vt = Votes = await vote.find({},{});
-               vt.forEach(async function(v){
-                    
-                    vote_id = v._id;
-                    
-                    if(v.username.equals(User._id) && !v.commentId){
-                        await fetch("http://localhost:5000/votes/post/remove", {
-                        method: 'POST',
-                        body: JSON.stringify({vote_id}),
-                        headers: {'Content-Type' : 'application/json'},
-                        credentials: 'include'
-                        
-                    });
-                    
-           
+                notificationStatus = true;
+                for(nID of User.notifications){
+                    nStatus =await notification.deleteOne({_id: nID});
+                    if(nStatus.deletedCount != 1){
+                        notificationStatus = false;
                     }
-                    else if(v.username.equals(User._id) && !v.postId){
-                        await fetch("http://localhost:5000/votes/comment/remove", {
+                }
+                if(notificationStatus){
+                    var vt  = await vote.find({},{});
+                    for(v of vt){ 
+                        if(v.username.equals(User._id) && !v.commentId&&!v.threadId){
+                            await fetch("http://localhost:5000/votes/post/remove", {
                             method: 'POST',
-                            body: JSON.stringify({vote_id}),
+                            body: JSON.stringify({username:username, postID: v.postId}),
                             headers: {'Content-Type' : 'application/json'},
                             credentials: 'include'
-                            
+                        
                         });
-                    }
                     
-                });
+                        
+                        }
+                        else if(v.username.equals(User._id) && !v.postId&&!v.threadId){
+                            await fetch("http://localhost:5000/votes/comment/remove", {
+                                method: 'POST',
+                                body: JSON.stringify({username: username, commentID: v.commentId}),
+                                headers: {'Content-Type' : 'application/json'},
+                                credentials: 'include'
+                            
+                            });
+                         }
+                        else if(v.username.equals(User._id) && !v.postId&&!v.commentId){
+                            await fetch("http://localhost:5000/threads/dislikethread", {
+                                method: 'PUT',
+                                body: JSON.stringify({threadID: v.threadId,userID: User._id}),
+                                headers: {'Content-Type' : 'application/json'},
+                                credentials: 'include'
+                            
+                            });
+                        }
+                    }
                 
                 const status = await user.deleteOne({username: username});
                  if(status.deletedCount == 1){
@@ -221,6 +234,10 @@ router.post('/remove',async (req,res)=>{
                 }
                 
             }
+            else{
+                res.status(400).json("Notifications of User could not be deleted");
+            }
+        }
             else{
                 console.log("User posts cant be delete");
                 res.status(400).json("Posts of User could not be deleted");

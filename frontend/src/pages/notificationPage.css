@@ -1,0 +1,39 @@
+.notifications-container{
+    width: 500px;
+    min-height: 500px;
+    background-color: #FFFF;
+    box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
+    margin: 50px auto 50px auto;
+    border-radius: 10px;
+    padding: 15px;
+    flex-direction: row;
+    display: column;
+}
+
+.notification{
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+}
+
+.notification p:nth-child(1){
+    font-size: small;
+    font-weight: 600;
+    color: #838383;
+}
+
+
+.main-noti-container{
+    padding: 5px;
+    margin-top: 25px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    border-bottom: 1px solid #c0c0c0;
+}
+.cancel-icon{
+    color: red;
+    cursor: pointer;
+}

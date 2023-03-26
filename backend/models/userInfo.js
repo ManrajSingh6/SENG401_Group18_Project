@@ -24,7 +24,8 @@ const userSchema = new mongoose.Schema({
     },
     subscribed: [{type:Schema.Types.ObjectId,ref:'Thread'}],
     description: {type: String, default: "You have yet to add a description."},
-    profilePicture: {type: String, default: "defaultUserProPic.png"}
+    profilePicture: {type: String, default: "defaultUserProPic.png"},
+    notifications: [{type:Schema.Types.ObjectId, ref: 'Notification'}]
 });
 
 module.exports = mongoose.model('User', userSchema);

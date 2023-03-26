@@ -4,6 +4,7 @@ const vote = require('../models/vote.js');
 const comment = require('../models/comment.js');
 const user = require('../models/userInfo.js');
 const post = require('../models/post.js');
+const notification = require('../models/notification.js');
 const router = express.Router();
 
 router.post('/comment',async (req,res)=> {
@@ -24,7 +25,7 @@ router.post('/comment',async (req,res)=> {
             res.status(400).json("Cannot Like the same comment again");
         } 
         else{
-        const Vote = await vote.create({username: User._id,commentId: Comment._id});
+            const Vote = await vote.create({username: User._id,commentId: Comment._id});
             if(Vote){
                 await comment.updateOne({"_id": Comment._id},{$push:{"votes": Vote._id}});
                 res.json(Vote);
@@ -39,11 +40,9 @@ router.post('/comment',async (req,res)=> {
 router.post('/post',async (req,res)=> {
     const {username,postID} = req.body;
 
-
     var post_objectId = mongoose.Types.ObjectId(postID);
     const Post = await post.findById(post_objectId);
     const User = await user.findOne({username:username});
-
 
    if(!Post){
         res.status(400).json("Could not find post to like");
@@ -59,6 +58,13 @@ router.post('/post',async (req,res)=> {
         else{
             const Vote = await vote.create({username: User._id,postId: Post._id});
             if(Vote){
+                // Get the post author's ID and update their notifications
+                const currentDateTime = new Date();
+                const postAuthorID = Post.author._id;
+                const notiMessage = `${username} liked your post!`;
+                const notiForAuthor = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
+                await user.updateOne({"_id": postAuthorID}, {$push: {"notifications": notiForAuthor}});
+
                 await post.updateOne({"_id": Post._id},{$push:{"votes": Vote._id}});
                 res.json(Vote);
             }

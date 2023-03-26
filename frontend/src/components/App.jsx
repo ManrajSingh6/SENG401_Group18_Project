@@ -10,6 +10,7 @@ import PostView from "../pages/postView";
 import ThreadPage from "../pages/threadPage";
 import EditPost from "../pages/editPost";
 import EditThread from "../pages/editThread";
+import NotificationPage from "../pages/notificationsPage";
 import { UserContextProvider } from "../context/userContext";
 
 import { ToastContainer } from 'react-toastify';
@@ -29,6 +30,7 @@ function App(){
                     <Route path={'/user-profile/:username'} element={<ProfilePage />}/>
                     <Route path={"/:threadName/"} element={<ThreadPage />} />
                     <Route path={"/:threadName/post/:postID"} element={<PostView />} />
+                    <Route path={"/notifications/:userID"} element={<NotificationPage />} />
                 </Route>
             </Routes>
             <ToastContainer />

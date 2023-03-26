@@ -15,6 +15,7 @@ function ThreadPreview(props){
     const [isSuccess, setSuccess] = useState();
     const [isError, setError] = useState();
     const [errorMessage, setErrorMessage] = useState('');
+
     async function subscribeThread(){
         if (Object.keys(userInfo).length !== 0){
             const username = userInfo.username;
@@ -104,7 +105,7 @@ function ThreadPreview(props){
                     <div role="button" className="button" onClick={subscribeThread}>Subscribe</div>
                     <div role="button" className="button" onClick={handleLike} id="like-btn"><ThumbUpIcon fontSize="small"/></div>
                     <div role="button" className="button" onClick={handleLike} id="dislike-btn"><ThumbDownIcon fontSize="small"/></div>
-                    <p>{threadLikes} likes 🞄 {props.postAmount} posts</p>
+                    <p>{threadLikes} likes • {props.postAmount} posts</p>
                 </div>
                 {isSuccess ? (<p style={{color: "#198754", fontSize: "small"}}>{errorMessage}</p>) : null}
                 {isError ? (<p style={{color: "red", fontSize: "small"}}>{errorMessage}</p>) : null}

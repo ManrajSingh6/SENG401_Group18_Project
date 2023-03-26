@@ -49,7 +49,7 @@ function UserPostCard(props){
     return(
         <div className="sub-thread-card">
             <h4>{props.postName}</h4>
-            <p style={{color: "#888888", fontWeight: 300, fontSize: "0.9rem"}}>in {props.parentThread} ({new Date(props.dateCreated).toLocaleDateString()} 🞄 {new Date(props.timeCreated).toLocaleTimeString()})</p>
+            <p style={{color: "#888888", fontWeight: 300, fontSize: "0.9rem"}}>in {props.parentThread} ({new Date(props.dateCreated).toLocaleDateString()} • {new Date(props.timeCreated).toLocaleTimeString()})</p>
             <div className="likes-comments">
                 <div><ThumbUpRoundedIcon /> {props.postLikes}</div>
                 <div><MessageRoundedIcon /> {props.postComments}</div>

@@ -97,7 +97,7 @@ function Homepage(){
                     <ul>
                         {allThreads.sort((a,b) => (a.votes.length - b.votes.length)).reverse()
                         .map((item, index) => {
-                            return (<Link className="pop-thread-link" to={`/${item.threadname}`}><li key={index}>{item.threadname} 🞄 <span>{item.votes.length} likes</span></li></Link>)
+                            return (<Link className="pop-thread-link" to={`/${item.threadname}`}><li key={index}>{item.threadname} • <span>{item.votes.length} likes</span></li></Link>)
                         })}
                     </ul>
                 </div>

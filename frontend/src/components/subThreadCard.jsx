@@ -47,7 +47,7 @@ function SubbedThreadCard(props){
     return(
         <div className="sub-thread-card">
             <Link className="view-link" style={{alignSelf: "start"}} to={`/${props.threadName}`}><h4>{props.threadName}</h4></Link>
-            <p className="creator-info">Created by {props.name} 🞄 {new Date(props.date).toLocaleDateString()} 🞄 {new Date(props.time).toLocaleTimeString()}</p>
+            <p className="creator-info">Created by {props.name} • {new Date(props.date).toLocaleDateString()} • {new Date(props.time).toLocaleTimeString()}</p>
             <div className="likes-comments">
                 <div><ThumbUpRoundedIcon /> {props.likes}</div>
                 <div><ArticleIcon /> {props.comments}</div>

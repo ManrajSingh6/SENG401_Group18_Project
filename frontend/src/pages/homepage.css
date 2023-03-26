@@ -145,3 +145,14 @@
         width: 100%;
     }
 }
+
+@media only screen and (max-width: 600px){
+    .form-container{
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .form-field{
+        width: 100%;
+    }
+}

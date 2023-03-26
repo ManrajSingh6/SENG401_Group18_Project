@@ -8,7 +8,7 @@ function SmallUserProfile(props){
             <div className="profile-pic">
                 <img src={props.imgSrc} alt="profile-img"></img>
             </div>
-            <h4>{props.name} 🞄 <span>{props.likes} posts</span></h4>
+            <h4>{props.name} • <span>{props.likes} posts</span></h4>
         </div>
     );
 }

@@ -79,3 +79,10 @@
     color: #1E8EAB;
     transition: all 0.3s ease;
 }
+
+@media only screen and (max-width: 600px){
+    .main-comment-container{
+        margin-top: 20px;
+        flex-direction: column;
+    }
+}

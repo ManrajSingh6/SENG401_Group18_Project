@@ -88,6 +88,10 @@
         display: flex; 
         flex-direction: column;
     }
+
+    .thread-info-container{
+        align-self: flex-start;
+    }
 }
 
 @media screen and (max-width: 400px){

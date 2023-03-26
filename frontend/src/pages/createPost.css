@@ -107,4 +107,14 @@
     .create-new-thread input{
         width: 100%;
     }
+
+    .post-form textarea{
+        height: 120px;
+    }
+}
+
+@media only screen and (max-width: 600px){
+    .post-form textarea{
+        height: 130px;
+    }
 }

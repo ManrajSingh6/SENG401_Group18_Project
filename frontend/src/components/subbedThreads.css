@@ -17,11 +17,9 @@
     font-size: 0.9rem;
 }
 .sub-thread-card{
-    border: 1px solid #004696;
     border-radius: 10px;
     padding: 15px;
     width: 100%;
-    height: fit-content;
     background-color: #FFFF;
     margin: 5px;
     display: flex;
@@ -29,6 +27,7 @@
     gap: 10px;
     word-wrap: break-word;
     box-shadow: 0px 0px 5px 0px rgba(0, 0, 0, 0.285);
+    height: 270px;
 }
 
 .sub-thread-card:hover{
@@ -114,8 +113,23 @@
 }
 
 
-@media screen and (max-width: 768px){
+@media screen and (max-width: 600px){
     .sub-thread-card{
-        height: 180px;
+        height: 330px;
+    }
+    .post-options-container{
+        flex-direction: column;
+        gap: 10px;
+    }
+    .post-option-btn{
+        font-size: small;
+        text-align: center;
+    }
+}
+
+@media screen and (max-width: 440px){
+    .sub-thread-card{
+        height: 370px;
+        justify-content: center;
     }
 }

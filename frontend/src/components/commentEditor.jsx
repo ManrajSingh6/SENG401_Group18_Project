@@ -18,17 +18,20 @@ function CommentEditor(props){
             const commentUser = userInfo.username;
             const postID = props.postID;
 
-            const response = await fetch('http://localhost:5000/comments/create', {
-                method: 'POST',
-                body: JSON.stringify({post_id: postID, body: newComment, username: commentUser}),
-                headers: {'Content-Type':'application/json'},
-                credentials: 'include'
-            });
-
-            if (response.ok){
-                window.location.reload();
+            if (!/\S/.test(newComment)){
+                toast.error("Comment is empty!");
             } else {
-                alert("Error adding comment!");
+                const response = await fetch('http://localhost:5000/comments/create', {
+                    method: 'POST',
+                    body: JSON.stringify({post_id: postID, body: newComment, username: commentUser}),
+                    headers: {'Content-Type':'application/json'},
+                    credentials: 'include'
+                });
+                if (response.ok){
+                    window.location.reload();
+                } else {
+                    alert("Error adding comment!");
+                }
             }
         } else {
             toast.error("You must login to add comments!");

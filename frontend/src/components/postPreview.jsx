@@ -12,7 +12,7 @@ const tempStyle={
 function PostPreview(props){
     return(
         <div className="post-preview-container">
-            <p style={tempStyle}>{props.postDate} 🞄 {props.postTime}</p>
+            <p style={tempStyle}>{props.postDate} • {props.postTime}</p>
             <Link 
                 className="post-title-link" 
                 to={`/${props.parentThread}/post/${props.postID}`}><h2>{props.postTitle}</h2></Link>

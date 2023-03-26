@@ -13,6 +13,7 @@ const multer = require('multer');
 const uploadMiddleware = multer({dest: 'uploads/'});
 const filesystem = require('fs');
 
+// Email notification settings
 const nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
     service: "gmail",
@@ -107,12 +108,10 @@ async function sendEmailToThreadCreator(threadCreatorAddress, subscriberUsername
             console.log("Email sent successfully");
         }
     });
-
 }
 
-
 router.post('/subscribe', async (req,res)=>{
-    const{thread_name,username} = req.body;
+    const{thread_name,username, subscription} = req.body;
     const Thread = await thread.findOne({threadname:thread_name}).populate('userCreated', 'email');
     if(!Thread){
         res.status(400).send('Thread not found');

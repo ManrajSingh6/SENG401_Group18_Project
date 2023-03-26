@@ -73,16 +73,17 @@ function ProfilePage(){
         }
     }
     async function deleteUser(){
-        await fetch('http://localhost:5000/users/logout', {
-            method: 'POST',
-            body: JSON.stringify({}),
-            headers: {'Content-Type':'application/json'},
-            credentials: 'include',
-        });
 
         const response = await fetch('http://localhost:5000/users/remove', {
             method: 'POST',
             body: JSON.stringify({username: userInfoState.username}),
+            headers: {'Content-Type':'application/json'},
+            credentials: 'include',
+        });
+
+        await fetch('http://localhost:5000/users/logout', {
+            method: 'POST',
+            body: JSON.stringify({}),
             headers: {'Content-Type':'application/json'},
             credentials: 'include',
         });

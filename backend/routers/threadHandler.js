@@ -6,6 +6,7 @@ const user= require('../models/userInfo.js');
 const vote = require('../models/vote.js');
 const comment = require('../models/comment.js');
 const post = require('../models/post.js');
+const notification = require('../models/notification.js');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
@@ -128,6 +129,13 @@ router.post('/subscribe', async (req,res)=>{
             } else {
                 await user.updateOne({"_id": User._id},{$push:{"subscribed": Thread._id}});
                 await thread.updateOne({"_id": Thread._id}, {$push: {"allSubscribers": User._id}});
+
+                // Updating notification for thread creator
+                const currentDateTime = new Date();
+                const notiMessage = `A user (${username}) subscribed to your thread (${thread_name}).`
+                const notificationForThreadOwner = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
+                await user.updateOne({"_id": Thread.userCreated._id}, {$push: {notifications: notificationForThreadOwner}});
+
                 const threadEmail = Thread.userCreated.email;
                 const subscriber = username;
                 const threadName = thread_name;
@@ -219,9 +227,18 @@ router.put('/likethread', async (req, res) => {
     var tid = mongoose.Types.ObjectId(threadID);
     var uid = mongoose.Types.ObjectId(userID);
     const voteDoc = await vote.findOne({username: uid, threadId: tid});
+    const User = await user.findOne({_id: uid});
     if (voteDoc){
         res.status(400).send("Already liked this post");
     } else {
+        // Create a notification for thread owner that 
+        const threadDoc = await thread.findOne({_id: threadID});
+        const currentDateTime = new Date();
+        const threadCreator = threadDoc.userCreated._id
+        const notiMessage = `${User.username} liked your thread (${threadDoc.threadname})!`;
+        const notiForAuthor = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
+        await user.updateOne({"_id": threadCreator}, {$push: {"notifications": notiForAuthor}});
+
         const newVote = await vote.create({username: uid, threadId: tid});
         const updatedThreadDoc = await thread.findOneAndUpdate(
             {_id: tid},
@@ -240,8 +257,6 @@ router.put('/dislikethread', async (req, res) => {
     var uid = mongoose.Types.ObjectId(userID);
     // Find vote to be deleted (from vote collection)
     const voteDoc = await vote.findOne({username: uid, threadId: tid});
-    // const updatedThreadDoc = await thread.updateOne({_id: threadID}, {$pull: {'votes': {'_id': voteDoc._id}}});
-    // await vote.deleteOne({_id: voteDoc._id});
     if (voteDoc){
         // Remove vote from thread
         const updatedThreadDoc = await thread.findOneAndUpdate(

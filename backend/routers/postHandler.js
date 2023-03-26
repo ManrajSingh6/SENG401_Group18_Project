@@ -5,6 +5,7 @@ const user = require('../models/userInfo.js');
 const thread = require('../models/thread.js');
 const vote = require('../models/vote.js');
 const comment = require('../models/comment.js');
+const notification = require('../models/notification.js');
 const router = express.Router();
 
 const multer = require('multer');
@@ -69,6 +70,12 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
                 const allSubscribers = threadDoc.allSubscribers;
                 if (allSubscribers.length !== 0){
                     for (var i = 0; i < allSubscribers.length; i++){
+                        // Updating notification for thread creator
+                        const currentDateTime = new Date();
+                        const notiMessage = `New post in thread (${parentThread})`;
+                        const notificationForSubscribers = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
+                        await user.updateOne({"_id": allSubscribers[i]._id}, {$push: {notifications: notificationForSubscribers}});
+                        
                         await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
                     }
                 }

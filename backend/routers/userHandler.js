@@ -4,6 +4,7 @@ const user = require('../models/userInfo.js');
 const thread = require('../models/thread.js');
 const vote = require('../models/vote.js');
 const post = require('../models/post.js');
+const notification = require('../models/notification.js');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -129,6 +130,7 @@ router.post('/remove',async (req,res)=>{
      
      const User = await user.findOne({username:username});
     if(!User){
+        console.log("Error cant find user");
         res.status(400).json("could not find user to delete");
     }
     else{
@@ -214,15 +216,18 @@ router.post('/remove',async (req,res)=>{
                     res.status(200).json("User successfully deleted");
                 }
                 else{
+                    console.log("Error cant delete user here");
                     res.status(400).json("User could not be deleted");
                 }
                 
             }
             else{
+                console.log("User posts cant be delete");
                 res.status(400).json("Posts of User could not be deleted");
             }
         }
         else{
+            console.log("User comments could not be deleted");
             res.status(400).json("Comments of User could not be deleted");
         }
     }
@@ -288,5 +293,40 @@ router.get('/findThreads', async (req, res, next) => {
         res.status(400).json("User not found");
     }
 }); 
+
+router.get('/allnotifications', async (req, res) => {
+    const {userID} = req.query;
+    const User = await user.findOne({_id: userID});
+    if (User){
+        const allUserNotificatons = User.notifications;
+        const notiArray = [];
+        for (var i = 0; i < allUserNotificatons.length; i++){
+            const notiDoc = await notification.findOne({_id: allUserNotificatons[i]._id});
+            notiArray.push(notiDoc);
+        }
+        res.json(notiArray);
+    } else {
+        res.status(400).json("User not found!");
+    }
+});
+
+router.post('/acknowledgenotification', async (req, res) => {
+    const {userID, notificationID} = req.body;
+    const User = await user.findOne({_id: userID});
+    if (User){
+        // Pull the notification from the User's notifications
+        await user.updateOne({_id: userID},{$pull:{notifications: notificationID}});
+        const status = await notification.deleteOne({_id: notificationID});
+        if(status.deletedCount === 1){
+            res.status(200).json("Notification succesfully deleted");
+        }
+        else{
+            res.status(400).json("Notification deletion failed");
+        }
+    } else {
+        res.status(400).json("User not found");
+    }
+
+});
 
 module.exports = router;

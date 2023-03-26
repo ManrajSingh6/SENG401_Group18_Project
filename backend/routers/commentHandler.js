@@ -4,6 +4,7 @@ const post = require('../models/post.js');
 const user = require('../models/userInfo.js');
 const comment = require('../models/comment.js');
 const vote = require("../models/vote.js");
+const notification = require('../models/notification.js');
 const router = express.Router();
 
 router.post('/create',async (req,res)=> {
@@ -22,6 +23,13 @@ router.post('/create',async (req,res)=> {
         const currentDateTime = new Date();
         const Comment= await comment.create({author:User._id,body:body,postId: Post._id,time: currentDateTime});
             if(Comment){
+                // Get post author ID and update their notifications
+                const currentDateTime = new Date();
+                const postAuthorID = Post.author._id;
+                const notiMessage = `${username} commented on your post!`;
+                const notiForAuthor = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
+                await user.updateOne({"_id": postAuthorID}, {$push: {"notifications": notiForAuthor}});
+
                 await post.updateOne({"_id": Post._id},{$push:{"comments": Comment._id}});
                 await user.updateOne({"_id": User._id},{$push: {"comments": Comment._id}});
                 res.json(Comment);

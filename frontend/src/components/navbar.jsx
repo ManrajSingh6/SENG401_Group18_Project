@@ -8,6 +8,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
 function Navbar(){
 
@@ -60,6 +61,12 @@ function Navbar(){
                         <li className="nav__item">
                             <AddCircleIcon className="mui-icon"/>
                                 Create Post
+                        </li>
+                    </Link>
+                    <Link to={`/notifications/${userInfo.id}`} className="nav__link">
+                        <li className="nav__item">
+                            <NotificationsActiveIcon className="mui-icon"/>
+                                Notifications
                         </li>
                     </Link>
                     <Link to={`/user-profile/${username}`} className="nav__link">

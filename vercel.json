@@ -6,17 +6,5 @@
             "source": "/backend/(.*)",
             "destination": "/backend/index.js"
         }
-    ],
-    "builds" : [
-        {
-            "src": "/backend/(.*)",
-            "dest": "/"
-        }
-    ],
-    "routes": [
-        {
-            "src":"/(.*)",
-            "dest": "/"
-        }
-    ] 
+    ]
 }

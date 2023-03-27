@@ -27,11 +27,11 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.use(express.json());
 app.use(cors({credentials:true,origin:'http://localhost:3000'}));
-app.use('/threads',threadHandler);
-app.use('/users',userHandler);
-app.use('/posts',postHandler);
-app.use('/comments',commentHandler);
-app.use('/votes',voteHandler);
+app.use('/backend/threads',threadHandler);
+app.use('/backend/users',userHandler);
+app.use('/backend/posts',postHandler);
+app.use('/backend/comments',commentHandler);
+app.use('/backend/votes',voteHandler);
 
 if (process.env.API_PORT){
     app.listen(process.env.API_PORT,()=>{

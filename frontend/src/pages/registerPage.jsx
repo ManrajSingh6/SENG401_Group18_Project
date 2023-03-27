@@ -28,7 +28,7 @@ function RegisterPage(){
             // If password valid, check for match
             if (password === dupePass){
                 // If passwords match
-                const response = await fetch("http://localhost:5000/users/register", {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/users/register`, {
                     method: 'POST',
                     body: JSON.stringify({email, username, password}),
                     headers: {'Content-Type':'application/json'}

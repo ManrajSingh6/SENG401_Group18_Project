@@ -15,7 +15,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 function SubbedThreadCard(props){
     const {username} = useParams();
     async function unsubscribeThread() {
-        const response = await fetch('http://localhost:5000/threads/unsubscribe', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/threads/unsubscribe`, {
             method: 'POST',
             credentials: 'include',
             body: JSON.stringify({thread_name: props.threadName, username: username}),

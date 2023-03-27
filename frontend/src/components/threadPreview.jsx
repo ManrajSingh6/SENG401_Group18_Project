@@ -20,7 +20,7 @@ function ThreadPreview(props){
         if (Object.keys(userInfo).length !== 0){
             const username = userInfo.username;
             const thread_name = props.threadTitle;
-            const response = await fetch ('http://localhost:5000/threads/subscribe', {
+            const response = await fetch (`${process.env.REACT_APP_API_URL}/threads/subscribe`, {
                 method: 'POST',
                 body: JSON.stringify({thread_name, username}),
                 headers: {'Content-Type':'application/json'},
@@ -50,7 +50,7 @@ function ThreadPreview(props){
             let response = null;
             if (choice === "like-btn" && userID !== null){
                 console.log(choice);
-                response = await fetch('http://localhost:5000/threads/likethread', {
+                response = await fetch(`${process.env.REACT_APP_API_URL}/threads/likethread`, {
                     method: 'PUT',
                     body: JSON.stringify({threadID, userID}),
                     headers: {'Content-Type':'application/json'},
@@ -62,7 +62,7 @@ function ThreadPreview(props){
             }
 
             if (choice === "dislike-btn" && userID !== null){
-                response = await fetch('http://localhost:5000/threads/dislikethread', {
+                response = await fetch(`${process.env.REACT_APP_API_URL}/threads/dislikethread`, {
                     method: 'PUT',
                     body: JSON.stringify({threadID, userID}),
                     headers: {'Content-Type':'application/json'},

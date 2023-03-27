@@ -17,7 +17,7 @@ function ThreadPage(){
 
     // Fetch all thread information and nested posts upon page load
     useEffect(() => {
-        fetch(`http://localhost:5000/threads/allpostsbythread?thread_name=${threadName}`).then(res => {
+        fetch(`${process.env.REACT_APP_API_URL}/threads/allpostsbythread?thread_name=${threadName}`).then(res => {
             res.json().then(response => {
                 setParentThreadInfo(response[0]);
                 setNestedPosts(response.slice(1));

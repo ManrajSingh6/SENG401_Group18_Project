@@ -14,7 +14,7 @@ import 'react-toastify/dist/ReactToastify.css';
 
 function UserThreadCard(props){
     async function deleteThread(){
-        const response = await fetch('http://localhost:5000/threads/remove', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/threads/remove`, {
             method: 'POST',
             body: JSON.stringify({thread_name: props.threadName}),
             headers: {'Content-Type':'application/json'},

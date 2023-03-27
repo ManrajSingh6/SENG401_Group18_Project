@@ -33,10 +33,13 @@ app.use('/posts',postHandler);
 app.use('/comments',commentHandler);
 app.use('/votes',voteHandler);
 
-const PORT = 5000;
-app.listen(PORT,()=>{
-    console.log(`Server running on port ${PORT}. `);
-});
+if (process.env.API_PORT){
+    app.listen(process.env.API_PORT,()=>{
+        console.log(`Server running on port ${process.env.API_PORT}. `);
+    });
+}
+
+module.exports = app;
 
 
 

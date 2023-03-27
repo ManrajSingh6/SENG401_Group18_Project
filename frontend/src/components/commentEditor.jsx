@@ -21,7 +21,7 @@ function CommentEditor(props){
             if (!/\S/.test(newComment)){
                 toast.error("Comment is empty!");
             } else {
-                const response = await fetch('http://localhost:5000/comments/create', {
+                const response = await fetch(`${process.env.REACT_APP_API_URL}/comments/create`, {
                     method: 'POST',
                     body: JSON.stringify({post_id: postID, body: newComment, username: commentUser}),
                     headers: {'Content-Type':'application/json'},

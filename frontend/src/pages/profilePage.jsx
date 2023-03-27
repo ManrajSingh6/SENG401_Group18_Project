@@ -33,7 +33,7 @@ function ProfilePage(){
 
     // Fetch user profile information upon page load
     useEffect(() => {
-        fetch(`http://localhost:5000/users/find?username=${userName}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/users/find?username=${userName}`, {
             credentials: 'include'
         }).then(response => {
             response.json().then(userInfoRes => {
@@ -56,7 +56,7 @@ function ProfilePage(){
             data.set('file', files?.[0]);
         }
 
-        const response = await fetch ('http://localhost:5000/users/updateprofile', {
+        const response = await fetch (`${process.env.REACT_APP_API_URL}/users/updateprofile`, {
             method: 'PUT',
             body: data,
             credentials: 'include'
@@ -76,14 +76,14 @@ function ProfilePage(){
 
     // Method to delete the user's account
     async function deleteUser(){
-        const response = await fetch('http://localhost:5000/users/remove', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/users/remove`, {
             method: 'POST',
             body: JSON.stringify({username: userInfoState.username}),
             headers: {'Content-Type':'application/json'},
             credentials: 'include',
         });
 
-        await fetch('http://localhost:5000/users/logout', {
+        await fetch(`${process.env.REACT_APP_API_URL}/users/logout`, {
             method: 'POST',
             body: JSON.stringify({}),
             headers: {'Content-Type':'application/json'},

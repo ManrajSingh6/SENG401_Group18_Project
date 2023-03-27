@@ -39,22 +39,43 @@ function CreatePostPage(){
         let threadCreated = false;
         let threadError = false;
 
-        if (newThreadName !== '' && newThreadSummary !== '' && newThreadImg !== ''){
+        if (newThreadName !== '' && newThreadSummary !== ''){
 
             // Thread Data
             const threadData = new FormData();
             threadData.set('thread_name', newThreadName);
             threadData.set('thread_description', newThreadSummary);
-            threadData.set('threadFile', newThreadImg[0]);
             threadData.set('username', userInfo.username);
-            
+            if(newThreadImg != ''){
+            threadData.set('threadFile', newThreadImg[0]);
             // Create thread with backend
             const threadResponse = await fetch(`${process.env.REACT_APP_API_URL}/threads/create`, {
                 method: 'POST',
                 body: threadData,
                 credentials: 'include'
+                
             });
-
+               // Error handling
+               if (threadResponse.ok){
+                console.log("Successfully created new thread");
+                setIsError(false);
+                setErrorMsg('');
+                threadCreated = true;
+                setRedirect(true);
+            } else {
+                setErrorMsg("Thread name already exists!");
+                setIsError(true);
+                threadError = true;
+                setRedirect(false);
+            }
+            }
+            else{
+                const threadResponse = await fetch(`${process.env.REACT_APP_API_URL}/threads/createNoImg`, {
+                    method: 'POST',
+                    body: threadData,
+                    credentials: 'include'
+                    
+                });
             // Error handling
             if (threadResponse.ok){
                 console.log("Successfully created new thread");
@@ -69,16 +90,17 @@ function CreatePostPage(){
                 setRedirect(false);
             }
         }
+        }
         // If the thread was --> Successfully created OR no new thread was created
         if (!threadError){
             // thread not created and post fields are empty
-            if(!threadCreated&&(postTitle === '' || postSummary === '' || postContent === '' || postImg === '' || threadChoice === '')){
+            if(!threadCreated&&(postTitle === '' || postSummary === '' || postContent === '' || threadChoice === '')){
                 setErrorMsg('All fields must be filled');
                 setIsError(true);
                 setRedirect(false);
             }
             // post fields not empty
-            else if(postTitle !== '' && postSummary !== '' && postContent !== '' && postImg !== '' ){
+            else if(postTitle !== '' && postSummary !== '' && postContent !== '' ){
                 // Post Data
                 const postData = new FormData();
                 postData.set('title', postTitle);
@@ -90,6 +112,7 @@ function CreatePostPage(){
                     postData.set('parentThread', threadChoice);
                 }
                 postData.set('username', userInfo.username);
+                if(postImg != ''){
                 postData.set('postFile', postImg[0]);
             
                 const postResponse = await fetch(`${process.env.REACT_APP_API_URL}/posts/create`, {
@@ -109,6 +132,27 @@ function CreatePostPage(){
                     setIsError(true);
                     setRedirect(false);
                 }
+            }
+            else{
+                    
+                const postResponse = await fetch(`${process.env.REACT_APP_API_URL}/posts/createNoImg`, {
+                    method: 'POST',
+                    body: postData,
+                    credentials: 'include'
+                });
+            
+                // Error Handling
+                if (postResponse.ok){
+                    console.log("Successfully created new post");
+                    setErrorMsg('');
+                    setIsError(false);
+                    setRedirect(true);
+                } else {
+                    setErrorMsg('Post Creation Failed');
+                    setIsError(true);
+                    setRedirect(false);
+                }
+            }
             }
         }
     }

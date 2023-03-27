@@ -17,7 +17,6 @@ function LoginPage(){
     async function handleLogin(ev){
         ev.preventDefault();
         // Handle authentication here
-        console.log(username, password);
         const response = await fetch(`${process.env.REACT_APP_API_URL}/users/login`, {
             method: 'POST',
             body: JSON.stringify({username, password}),
@@ -29,7 +28,7 @@ function LoginPage(){
             response.json().then(tempUserInfo => {
                 setError(false);
                 setUserInfo(tempUserInfo);
-                setRedirect(true);
+                setRedirect(true);                
             });
         } else {
             console.log(response.json());

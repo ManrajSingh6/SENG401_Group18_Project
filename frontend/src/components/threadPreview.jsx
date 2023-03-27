@@ -58,7 +58,7 @@ function ThreadPreview(props){
                 });
                 setSuccess(false);
                 setError(false);
-                setErrorMessage("Already liked this post.")
+                setErrorMessage("Already liked this thread.")
             }
 
             if (choice === "dislike-btn" && userID !== null){
@@ -70,7 +70,7 @@ function ThreadPreview(props){
                 });
                 setSuccess(false);
                 setError(false);
-                setErrorMessage("Already disliked this post.")
+                setErrorMessage("Already disliked this thread.")
             }
 
             if (response.ok){

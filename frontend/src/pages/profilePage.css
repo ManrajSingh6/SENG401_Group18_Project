@@ -1,6 +1,5 @@
 .main-profile-container{
     width: 90%;
-    /* border: 1px solid red; */
     margin: 50px auto 50px auto;
     display: flex;
     flex-direction: column;
@@ -8,16 +7,13 @@
 }
 
 .user-profile-container{
-    /* border: 1px solid; */
     display: flex;
     flex-direction: row;
     gap: 10px;
 }
 .user-info{
-    /* border: 1px solid blue; */
     border-radius: 10px;
     width: 35%;
-    /* height: 330px; */
     padding: 20px;
     display: flex;
     flex-direction: column;

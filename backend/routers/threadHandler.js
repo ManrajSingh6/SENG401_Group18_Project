@@ -234,7 +234,7 @@ router.put('/likethread', async (req, res) => {
         // Create a notification for thread owner that 
         const threadDoc = await thread.findOne({_id: threadID});
         const currentDateTime = new Date();
-        const threadCreator = threadDoc.userCreated._id
+        const threadCreator = threadDoc.userCreated;
         const notiMessage = `${User.username} liked your thread (${threadDoc.threadname})!`;
         const notiForAuthor = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
         await user.updateOne({"_id": threadCreator}, {$push: {"notifications": notiForAuthor}});

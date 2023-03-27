@@ -14,6 +14,7 @@ function EditThread() {
     const [errorMsg, setErrorMsg] = useState('');
     const [redirect, setRedirect] = useState(false);
 
+    // Get previously filled form data and change values in edit post form
     useEffect(() => {
         fetch(`http://localhost:5000/posts/find?thread_name=${name}`)
         .then(res => {
@@ -50,6 +51,7 @@ function EditThread() {
         }
     }
 
+    // If sucessfully changed post data, redirect user
     if (redirect){
         return <Navigate to={`/${name}`} />;
     }
@@ -59,15 +61,12 @@ function EditThread() {
             <h1 style={{textAlign: "center", fontSize: "1.5rem", fontWeight: "500", color: "#120460"}}>Edit Your Post</h1>
             <form onSubmit={updateThread} className="post-form">
                 <h3 style={{color: "#120460", fontWeight: "400", marginBottom: "5px"}}>What changes do you want to make?</h3>
-        
-                
                 <textarea required 
                     value={threadDescription} 
                     type="title" 
                     placeholder="Thread Description (200 characters max)" 
                     maxLength={200}
                     onChange={(ev) => {setThreadDesc(ev.target.value)}}></textarea>
-
                 <p>Change your thread image: </p>
                 <input
                     type="file" 
@@ -78,7 +77,6 @@ function EditThread() {
             {isError ? (<p style={{alignSelf: "center"}}>{errorMsg}</p>) : null}
         </div>
     );
-
 }
 
 export default EditThread;

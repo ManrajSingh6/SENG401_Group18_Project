@@ -29,6 +29,7 @@ function PostView(){
     const splitPath = (window.location.pathname).split("/");
     const postID = splitPath[splitPath.length -1];
 
+    // Fetch post information and images upon page load
     useEffect(() => {
         fetch(`http://localhost:5000/posts/find?post_id=${postID}`).then(res => {
             res.json().then(resPostData => {
@@ -39,6 +40,7 @@ function PostView(){
         });
     }, []);
 
+    // If the user is logged in, allow permission to like, else show error
     async function handleLike(event) {
         if (Object.entries(userInfo).length !== 0){
             const username = userInfo.username;
@@ -76,6 +78,8 @@ function PostView(){
             toast.error('You must login to like or dislike posts!');
         }
     }
+
+    // Delete posts from the database, if response is ok, refresh. else show error
     async function deletePost(){
         const response = await fetch('http://localhost:5000/posts/remove', {
             method: 'POST',
@@ -92,6 +96,7 @@ function PostView(){
         }
     }
 
+    // Function to show delete confirmation
     function confirmDeletion(){
         confirmAlert({
             customUI: ({onClose}) => {

@@ -6,7 +6,6 @@
 
 body{
     font-family: 'Roboto', sans-serif;
-    /* background-color: #f5f5f5; */
     background-color: #d7f1ff5e;
 }
 
@@ -32,7 +31,4 @@ body{
 
 .custom-ui button:hover{
     background-color: rgba(0, 110, 255, 1);
-}
-
-.dot{
 }

@@ -6,7 +6,6 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
 function Dropdown({selectedOption, onOptionChange}){
-
     return(
         <Box sx={{ maxWidth: 150, width: "50%"}}>
             <FormControl sx={{width: "100%"}} size="small">

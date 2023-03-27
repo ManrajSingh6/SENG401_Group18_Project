@@ -15,6 +15,7 @@ function ThreadPage(){
     const splitPath = (window.location.pathname).split("/");
     const threadName = splitPath[splitPath.length -1];
 
+    // Fetch all thread information and nested posts upon page load
     useEffect(() => {
         fetch(`http://localhost:5000/threads/allpostsbythread?thread_name=${threadName}`).then(res => {
             res.json().then(response => {

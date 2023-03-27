@@ -1,6 +1,4 @@
 .editor-container{
-    /* border: 1px solid; */
-    /* margin-bottom: 20px; */
     display: flex;
     flex-direction: row;
     padding: 20px;
@@ -9,7 +7,6 @@
 }
 
 .editor-container textarea{
-    /* margin-left: 60px; */
     resize:vertical;
     min-height: 80px;
     padding: 10px;

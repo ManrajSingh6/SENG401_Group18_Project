@@ -111,8 +111,8 @@ function CreatePostPage(){
                 }
             }
         }
-        // If post/thread creation is successful, redirect user to homepage
     }
+    // If post/thread creation is successful, redirect user to homepage
     if (redirect){
         return <Navigate to={'/'} />;
     }

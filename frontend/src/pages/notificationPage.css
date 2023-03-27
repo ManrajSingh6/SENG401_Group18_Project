@@ -22,7 +22,6 @@
     color: #838383;
 }
 
-
 .main-noti-container{
     padding: 5px;
     margin-top: 25px;
@@ -36,4 +35,10 @@
 .cancel-icon{
     color: red;
     cursor: pointer;
+}
+
+@media screen and (max-width: 500px){
+    .notifications-container{
+        width: 90%;
+    }
 }

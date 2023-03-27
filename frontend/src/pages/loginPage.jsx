@@ -13,6 +13,7 @@ function LoginPage(){
 
     const {setUserInfo} = useContext(UserContext);
 
+    // Handle login function
     async function handleLogin(ev){
         ev.preventDefault();
         // Handle authentication here
@@ -36,6 +37,7 @@ function LoginPage(){
         }
     }
 
+    // if valid login, redirect to homepage
     if (redirect){
         return <Navigate to={'/'} />
     }

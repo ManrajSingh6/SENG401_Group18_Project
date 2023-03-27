@@ -1,5 +1,5 @@
 {
-    "buildCommand": "cd frontend && npm install && npm run build",
+    "buildCommand": "cd frontend && npm install && npm run build && npm i npm i react-elastic-carousel --legacy-peer-deps ",
     "outputDirectory": "frontend/build",
     "framework": "create-react-app",
     "rewrites": [

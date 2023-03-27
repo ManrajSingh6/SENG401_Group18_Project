@@ -34,6 +34,7 @@ function PostView(){
         fetch(`http://localhost:5000/posts/find?post_id=${postID}`).then(res => {
             res.json().then(resPostData => {
                 setPostData(resPostData.Post);
+                console.log(resPostData.post);
                 setAllPostComments(resPostData.postCommentsData);
                 setParentThread(resPostData.parentThread);
             });
@@ -148,7 +149,7 @@ function PostView(){
                         
                 </div>
                 <div className="post-img-container">
-                    <img src={'http://localhost:5000/' + postData.postImgUrl} alt="post-img"></img>
+                    <img src={postData.postImgUrl} alt="post-img"></img>
                 </div>
             </div>
 

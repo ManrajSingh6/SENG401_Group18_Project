@@ -6,8 +6,12 @@ const comment = require('../models/comment.js');
 const vote = require("../models/vote.js");
 const notification = require('../models/notification.js');
 const router = express.Router();
+const path = require('path');
+require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
 
 router.post('/create',async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {username,body,post_id} = req.body;
     const User = await user.findOne({username:username});
     var post_objectId = mongoose.Types.ObjectId(post_id);
@@ -41,6 +45,8 @@ router.post('/create',async (req,res)=> {
     
 });
 router.get('/find', async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {comment_id} = req.query;
     //find comment in database
     var comment_objectId = mongoose.Types.ObjectId(comment_id);
@@ -54,6 +60,8 @@ router.get('/find', async (req,res)=> {
     
 });
 router.post('/remove',async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {comment_id} = req.body;
     var comment_objectId = mongoose.Types.ObjectId(comment_id);
     const Comment = await comment.findOne({_id: comment_objectId});

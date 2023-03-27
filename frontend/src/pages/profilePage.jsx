@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import CheckIcon from '@mui/icons-material/Check';
 import "./profilePage.css";
 
-import defaultProPic from "../images/defaultUserProPic.png";
 import SubbedThreads from "../components/subbedThreads";
 import UserPosts from "../components/userPosts";
 import UserThreads from "../components/userThreads";
@@ -120,7 +119,7 @@ function ProfilePage(){
             <div className="user-profile-container">
                 <div className="user-info">
                     <div className="profile-pic-container">
-                        <img src={userInfoState.profilePicture === 'defaultUserProPic.png' ? (defaultProPic): 'http://localhost:5000/' + userInfoState.profilePicture} alt="user-profile-pic"/>
+                        <img src={userInfoState.profilePicture === 'defaultUserProPic.png' ? ("https://seng401project.s3.us-east-2.amazonaws.com/defaultUserProPic.png") : userInfoState.profilePicture} alt="user-profile-pic"/>
                     </div>
                     <h2>{userInfoState.username}</h2>
                     <p style={{color: "grey", fontSize: "medium", marginTop: "-10px"}}>{userInfoState.email}</p>

@@ -7,10 +7,38 @@ const vote = require('../models/vote.js');
 const comment = require('../models/comment.js');
 const notification = require('../models/notification.js');
 const router = express.Router();
-
-const multer = require('multer');
-const uploadMiddleware = multer({dest: 'uploads/'});
 const filesystem = require('fs');
+const multer = require('multer');
+
+const path = require('path');
+require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
+
+// AWS S3 Client
+const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
+
+async function uploadToS3(path, originalFileName, mimetype){
+    const client = new S3Client({
+        region: 'us-east-2',
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+        },
+    });
+
+    const parts = originalFileName.split('.');
+    const ext = parts[parts.length - 1];
+    const newFileName = Date.now() + '.' + ext;
+    await client.send(new PutObjectCommand({
+        Bucket: 'seng401project',
+        Body: filesystem.readFileSync(path),
+        Key: newFileName,
+        ContentType: mimetype,
+        ACL: 'public-read'
+    }));
+
+    return (`https://seng401project.s3.amazonaws.com/${newFileName}`);
+
+}
 
 const nodemailer = require('nodemailer');
 let transporter = nodemailer.createTransport({
@@ -41,15 +69,17 @@ async function sendPostNotifications(destAddr, username, title, summary, parentT
     });
 }
 
+const uploadMiddleware = multer({dest: '/tmp'});
 router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
-    const {username, title, summary, body, parentThread} = req.body;
+    mongoose.connect(process.env.MONGO_URL);
 
-    const {originalname, path} = req.file;
-    const parts = originalname.split('.');
-    const extension = parts[parts.length - 1];
-    const newPath = path + '.' + extension;
-    filesystem.renameSync(path, newPath);
-    
+    const {username, title, summary, body, parentThread} = req.body;
+    const {originalname, path, mimetype} = req.file;
+    // const parts = originalname.split('.');
+    // const extension = parts[parts.length - 1];
+    // const newPath = path + '.' + extension;
+    // filesystem.renameSync(path, newPath);
+
     const userDoc = await user.findOne({username:username});
     if(!userDoc){
         res.status(400).json("Could not find user");
@@ -60,9 +90,11 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
             res.status(400).json("Could not find thread");
         }
         else{
+            const imageURL = await uploadToS3(path, originalname, mimetype);
             //insert post to database
             const currentDateTime = new Date();
-            const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, postImgUrl: newPath, time: currentDateTime});
+            const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, postImgUrl: imageURL, time: currentDateTime});
+
             if(postDoc){
                 await thread.updateOne({"_id": threadDoc._id},{$push:{"posts": postDoc._id}});
                 await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})
@@ -91,13 +123,16 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
 });
 
 router.put('/update', uploadMiddleware.single('postFile'), async (req, res) => {
-    let newPath = null;
+    mongoose.connect(process.env.MONGO_URL);
+
+    let imageURL = null;
     if (req.file){
-        const {originalname, path} = req.file;
-        const parts = originalname.split('.');
-        const extension = parts[parts.length - 1];
-        newPath = path + '.' + extension;
-        filesystem.renameSync(path, newPath);
+        const {originalname, path, mimetype} = req.file;
+        // const parts = originalname.split('.');
+        // const extension = parts[parts.length - 1];
+        // newPath = path + '.' + extension;
+        // filesystem.renameSync(path, newPath);
+        imageURL = await uploadToS3(path, originalname, mimetype);
     }
     const {username, title, summary, body, postID} = req.body;
     const userDoc = await user.findOne({username:username});
@@ -105,13 +140,15 @@ router.put('/update', uploadMiddleware.single('postFile'), async (req, res) => {
         res.status(400).json("Could not find user");
     } else {
         const postDoc = await post.findById(postID);
-        await postDoc.update({title, summary, body, postImgUrl: newPath ? newPath : postDoc.postImgUrl});
+        await postDoc.update({title, summary, body, postImgUrl: imageURL ? imageURL : postDoc.postImgUrl});
         res.status(200).json(postDoc);
     }
 
 });
 
 router.get('/find', async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {post_id} = req.query;
     //find post in database
     var post_objectId = mongoose.Types.ObjectId(post_id);
@@ -128,6 +165,8 @@ router.get('/find', async (req,res)=> {
 });
 
 router.post('/remove',async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {post_id} = req.body;
     var post_objectId = mongoose.Types.ObjectId(post_id);
     const Post = await post.findById(post_objectId);

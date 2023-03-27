@@ -11,8 +11,9 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
 const multer = require('multer');
-const uploadMiddleware = multer({dest: 'uploads/'});
 const filesystem = require('fs');
+const path = require('path');
+require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
 
 // Email notification settings
 const nodemailer = require('nodemailer');
@@ -27,15 +28,43 @@ let transporter = nodemailer.createTransport({
     }
 });
 
+// AWS S3 Client
+const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
 
+async function uploadToS3(path, originalFileName, mimetype){
+    const client = new S3Client({
+        region: 'us-east-2',
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+        },
+    });
+
+    const parts = originalFileName.split('.');
+    const ext = parts[parts.length - 1];
+    const newFileName = Date.now() + '.' + ext;
+    await client.send(new PutObjectCommand({
+        Bucket: 'seng401project',
+        Body: filesystem.readFileSync(path),
+        Key: newFileName,
+        ContentType: mimetype,
+        ACL: 'public-read'
+    }));
+
+    return (`https://seng401project.s3.amazonaws.com/${newFileName}`);
+}
+
+const uploadMiddleware = multer({dest: '/tmp'});
 router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {thread_name, thread_description, username} = req.body;
     
-    const {originalname, path} = req.file;
-    const parts = originalname.split('.');
-    const extension = parts[parts.length - 1];
-    const newPath = path + '.' + extension;
-    filesystem.renameSync(path, newPath);
+    const {originalname, path, mimetype} = req.file;
+    // const parts = originalname.split('.');
+    // const extension = parts[parts.length - 1];
+    // const newPath = path + '.' + extension;
+    // filesystem.renameSync(path, newPath);
 
     const userDoc = await user.findOne({username:username});
     if(!userDoc){
@@ -47,8 +76,9 @@ router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> 
             res.status(400).json("Thread name is already taken");
         }
         else{
+            const imageURL = await uploadToS3(path, originalname, mimetype);
             const currentDateTime = new Date();
-            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: newPath, dateCreated: currentDateTime});
+            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: imageURL, dateCreated: currentDateTime});
             if(Thread){
                 res.json(Thread);
             }
@@ -60,9 +90,10 @@ router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> 
 });
 
 router.get('/find',async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {thread_name} = req.query;
     //find thread in database
-    
     const Thread = await thread.findOne({threadname:thread_name});
     if(Thread){
         res.json(Thread);
@@ -74,6 +105,8 @@ router.get('/find',async (req,res)=> {
 });
 
 router.get("/allpostsbythread", async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {thread_name} = req.query;
     const Thread = await thread.findOne({threadname: thread_name}).populate('userCreated', 'username');
     
@@ -112,7 +145,9 @@ async function sendEmailToThreadCreator(threadCreatorAddress, subscriberUsername
 }
 
 router.post('/subscribe', async (req,res)=>{
-    const{thread_name,username, subscription} = req.body;
+    mongoose.connect(process.env.MONGO_URL);
+
+    const{thread_name,username} = req.body;
     const Thread = await thread.findOne({threadname:thread_name}).populate('userCreated', 'email');
     if(!Thread){
         res.status(400).send('Thread not found');
@@ -147,6 +182,8 @@ router.post('/subscribe', async (req,res)=>{
     }
 });
 router.post('/unsubscribe', async (req,res)=>{
+    mongoose.connect(process.env.MONGO_URL);
+
     const{thread_name,username} = req.body;
     const Thread = await thread.findOne({threadname:thread_name});
 
@@ -166,6 +203,8 @@ router.post('/unsubscribe', async (req,res)=>{
     }
 });
 router.post('/remove',async (req,res)=>{
+    mongoose.connect(process.env.MONGO_URL);
+
     const {thread_name} = req.body;
     //remove users subscribed to thread
     const Thread = await thread.findOne({threadname:thread_name});
@@ -223,6 +262,8 @@ router.post('/remove',async (req,res)=>{
 });
 
 router.put('/likethread', async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {threadID, userID} = req.body;
     var tid = mongoose.Types.ObjectId(threadID);
     var uid = mongoose.Types.ObjectId(userID);
@@ -252,6 +293,8 @@ router.put('/likethread', async (req, res) => {
 });
 
 router.put('/dislikethread', async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {threadID, userID} = req.body;
     var tid = mongoose.Types.ObjectId(threadID);
     var uid = mongoose.Types.ObjectId(userID);
@@ -276,12 +319,16 @@ router.put('/dislikethread', async (req, res) => {
 });
 
 router.get("/allthreadnames", async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     res.json(
         await thread.find({}, {threadname:1})
     )
 });
 
 router.get("/getallthreads", async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     res.json(
         {threads: await thread.find({}, {}).populate('userCreated', 'username'), 
         users: await user.find({}, {posts:1, username:1, profilePicture:1}).limit(10),
@@ -290,21 +337,28 @@ router.get("/getallthreads", async (req, res) => {
 });
 
 router.put('/update', uploadMiddleware.single('threadFile'), async (req, res) => {
-    let newPath = null;
-    if (req.file){
-        const {originalname, path} = req.file;
-        const parts = originalname.split('.');
-        const extension = parts[parts.length - 1];
-        newPath = path + '.' + extension;
-        filesystem.renameSync(path, newPath);
-    }
+    // let newPath = null;
+    // if (req.file){
+    //     const {originalname, path, mimetype} = req.file;
+    //     const parts = originalname.split('.');
+    //     const extension = parts[parts.length - 1];
+    //     newPath = path + '.' + extension;
+    //     filesystem.renameSync(path, newPath);
+    // }
+    mongoose.connect(process.env.MONGO_URL);
+
     const {username, threadname, description} = req.body;
     const userDoc = await user.findOne({username:username});
     if (!userDoc){
         res.status(400).json("Could not find user");
     } else {
+        let imageURL = null;
+        if (req.file){
+            const {originalname, path, mimetype} = req.file;
+            imageURL = await uploadToS3(path, originalname, mimetype);
+        }
         const threadDoc = await thread.findOne({threadname:threadname});
-        await threadDoc.update({threadname, description, threadImgUrl: newPath ? newPath : threadDoc.threadImgUrl});
+        await threadDoc.update({threadname, description, threadImgUrl: imageURL ? imageURL : threadDoc.threadImgUrl});
         res.status(200).json(threadDoc);
     }
 

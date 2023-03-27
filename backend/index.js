@@ -26,7 +26,7 @@ app.use(express.json());
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
 app.use(express.json());
-app.use(cors({credentials:true,origin:'http://localhost:3000'}));
+app.use(cors({credentials:true,origin:'https://the-loop-project.onrender.com/'}));
 app.use('/threads',threadHandler);
 app.use('/users',userHandler);
 app.use('/posts',postHandler);

@@ -148,9 +148,12 @@ function PostView(){
                     {isError ? (<p style={{color: "red", textAlign: "center"}}>{errorMessage}</p>) : null}
                         
                 </div>
-                <div className="post-img-container">
-                    <img src={postData.postImgUrl} alt="post-img"></img>
-                </div>
+                {
+                        postData.postImgUrl?(
+                            <div className="post-img-container">
+                            <img src={postData.postImgUrl} alt="post-img"></img>
+                        </div>) : null
+                    }
             </div>
 
             <hr style={{marginTop:"15px", marginBottom: "15px"}}/>

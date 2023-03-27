@@ -85,14 +85,20 @@ function ThreadPreview(props){
             toast.error('You must login!');
         }
     }
-
+    console.log(props.img);
     return(
         <div className="thread-prev-container">
-            <Link to={`/${props.threadTitle}`} state={{from: props.threadTitle, user: props.userCreated, date: props.dateCreated, time: props.timeCreated }}>
-                <div className="thread-img-container">
-                    <img src={props.img} alt="thread-preview"></img>
-                </div>
-            </Link>
+              {
+                        
+                        props?.img?(
+                            <Link to={`/${props.threadTitle}`} state={{from: props.threadTitle, user: props.userCreated, date: props.dateCreated, time: props.timeCreated }}>
+                            <div className="thread-img-container">
+                                <img src={props.img} alt="thread-preview"></img>
+                            </div>
+                            
+                        </Link>) : null
+                    }
+                
             <div className="thread-info-container">
                 <Link to={`/${props.threadTitle}`} 
                     className="thread-link" 

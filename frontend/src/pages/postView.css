@@ -1,16 +1,13 @@
 .main-post-container{
-    /* border: 1px solid; */
     width: 90%;
     margin: 50px auto 50px auto;
     background-color: #FFFF;
-    /* height: 600px; */
     border-radius: 10px;
     box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.1);
     padding: 10px;
 }
 
 .post-content-container{
-    /* border: 1px solid; */
     width: 100%;
     height: auto;
     padding: 5px;
@@ -20,13 +17,11 @@
 }
 
 .post-info{
-    /* border: 1px solid green; */
     display: flex;
     flex-direction: column;
     gap: 10px;
     word-wrap: break-word;
     padding: 10px;
-    /* align-items: center ; */
 }
 .edit-post-link{
     text-decoration: none;
@@ -61,7 +56,6 @@
 }
 
 .post-img-container{
-    /* border: 1px solid red; */
     height: 300px;
     align-self: center;
     display: block;
@@ -87,7 +81,6 @@
     border-radius: 10px;
     cursor: pointer;
     box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
-    /* width: 80px; */
     align-self: center;
 }
 .like-btn:hover{

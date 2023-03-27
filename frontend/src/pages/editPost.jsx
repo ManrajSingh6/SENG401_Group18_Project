@@ -18,6 +18,7 @@ function EditPost() {
     const [errorMsg, setErrorMsg] = useState('');
     const [redirect, setRedirect] = useState(false);
 
+    // Get previous post data and update the form fields
     useEffect(() => {
         fetch(`http://localhost:5000/posts/find?post_id=${id}`)
         .then(res => {
@@ -59,6 +60,7 @@ function EditPost() {
         }
     }
 
+    // If successful change, redirect the user
     if (redirect){
         return <Navigate to={`/${parentThread}/post/${id}`} />;
     }
@@ -75,14 +77,12 @@ function EditPost() {
                     placeholder="Post Title (80 characters max)" 
                     maxLength={80}
                     onChange={(ev) => {setPostTitle(ev.target.value)}}></input>
-                
                 <textarea required 
                     value={postSummary} 
                     type="title" 
                     placeholder="Post Summary (250 characters max)" 
                     maxLength={250}
                     onChange={(ev) => {setPostSumary(ev.target.value)}}></textarea>
-
                 <p>Change your post image: </p>
                 <input
                     type="file" 
@@ -93,7 +93,6 @@ function EditPost() {
             {isError ? (<p style={{alignSelf: "center"}}>{errorMsg}</p>) : null}
         </div>
     );
-
 }
 
 export default EditPost;

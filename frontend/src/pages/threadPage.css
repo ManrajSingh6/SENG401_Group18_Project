@@ -1,5 +1,4 @@
 .thread-post-container{
-    /* border: 1px solid; */
     width: 95%;
     margin: 50px auto 50px auto;
     padding: 5px;
@@ -13,7 +12,6 @@
 }
 
 .search-form-container{
-    /* border: 1px solid; */
     width: 50%;
     display: flex;
     align-items: center;

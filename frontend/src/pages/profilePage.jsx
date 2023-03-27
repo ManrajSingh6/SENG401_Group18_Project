@@ -6,6 +6,7 @@ import defaultProPic from "../images/defaultUserProPic.png";
 import SubbedThreads from "../components/subbedThreads";
 import UserPosts from "../components/userPosts";
 import UserThreads from "../components/userThreads";
+
 // React Toast Notifications
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,6 +32,7 @@ function ProfilePage(){
     const splitString = window.location.href.split("/");
     const userName = splitString[splitString.length - 1];
 
+    // Fetch user profile information upon page load
     useEffect(() => {
         fetch(`http://localhost:5000/users/find?username=${userName}`, {
             credentials: 'include'
@@ -72,8 +74,9 @@ function ProfilePage(){
             setIsError(true);
         }
     }
-    async function deleteUser(){
 
+    // Method to delete the user's account
+    async function deleteUser(){
         const response = await fetch('http://localhost:5000/users/remove', {
             method: 'POST',
             body: JSON.stringify({username: userInfoState.username}),
@@ -96,6 +99,7 @@ function ProfilePage(){
         }
     }
 
+    // Function to show deletion confirmation
     function confirmDeletion(){
         confirmAlert({
             customUI: ({onClose}) => {

@@ -17,6 +17,7 @@ function Homepage(){
     const [allThreads, setAllThreads] = useState([]);
     const [popularUsers, setPopularUsers] = useState([]);
 
+    // get all thread information and user information
     useEffect(() => {
         fetch('http://localhost:5000/threads/getallthreads').then(res => {
             res.json().then(resData => {
@@ -26,13 +27,14 @@ function Homepage(){
         });
     }, []);
     
+    // Handle search bar queries
     function handleSearch(event){
         event.preventDefault();
         setSearchQuery(tempQuery);
         setTempQuery('');    
     }
 
-
+    // Handle dropdown functionality change
     function handleOptionChange(event){
         setFilterChoice(event.target.value === "" ? "" : event.target.value);
     }

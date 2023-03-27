@@ -11,6 +11,7 @@ function NotificationPage(){
     
     const [allNotifications, setAllNotifications] = useState([]);
 
+    // Fetch all user notifications from database upon page load
     useEffect(() => {
         fetch(`http://localhost:5000/users/allnotifications?userID=${userID}`, {
             credentials: 'include',
@@ -27,8 +28,9 @@ function NotificationPage(){
                 <NotificationsIcon fontSize="large"/>
                 <h2>Your Notifications ({allNotifications.length})</h2>
             </div>
-            {
-                allNotifications.map((notification) => {
+            {   
+                // Sort the notifications by date beefore mapping
+                allNotifications.sort((a, b) => new Date(b.dateTime) - new Date(a.dateTime)).map((notification) => {
                     return (
                         <Notification 
                             dateTime={notification.dateTime}

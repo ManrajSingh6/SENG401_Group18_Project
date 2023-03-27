@@ -1,17 +1,13 @@
 .main-container{
     width: 90%;
-    /* border: 1px solid red; */
     margin: 50px auto 50px auto;
     padding: 10px;
     display: flex;
     flex-direction: row;
-    /* background-color: #FFFF; */
 }
 
 .thread-container{
-    /* border: 1px solid green; */
     width: 70%;
-    /* height: 500px; */
     margin: 5px;
     padding: 20px;
     background-color: #FFFF;
@@ -22,7 +18,6 @@
 .form-container{
     display: flex;
     justify-content: space-between;
-    /* border: 1px solid blue; */
     align-items: center;
     gap: 30px;
 }
@@ -33,7 +28,6 @@
 }
 
 .form-field{
-    /* border: 1px solid red; */
     width: 70%;
     height: 35px;
     display: flex;
@@ -71,7 +65,6 @@
 }
 
 .sub-container{
-    /* border: 1px solid blue; */
     margin: 5px;
     width: 30%;
 }
@@ -137,7 +130,6 @@
     }
     .popular-users-container{
         margin-top: 10px;
-        /* margin-left: 10px; */
         width: 100%;
     }
 

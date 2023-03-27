@@ -1,5 +1,4 @@
 .thread-prev-container{
-    /* border: 1px solid #1E8EAB; */
     margin-top: 25px;
     padding: 15px;
     display: grid;
@@ -84,7 +83,6 @@
 /* Responsiveness */
 @media screen and (max-width: 900px){
     .thread-prev-container{
-        /* grid-template-columns: 0.9fr 1.1fr; */
         display: flex; 
         flex-direction: column;
     }

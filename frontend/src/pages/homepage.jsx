@@ -19,7 +19,7 @@ function Homepage(){
 
     // get all thread information and user information
     useEffect(() => {
-        fetch(`${import.meta.env.REACT_APP_API_URL}/threads/getallthreads`).then(res => {
+        fetch(`${process.env.REACT_APP_API_URL}/threads/getallthreads`).then(res => {
             res.json().then(resData => {
                 setAllThreads(resData.threads);
                 setPopularUsers(resData.users);

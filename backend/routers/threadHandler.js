@@ -326,7 +326,7 @@ router.get("/allthreadnames", async (req, res) => {
     )
 });
 
-router.get("/getallthreads", async (req, res) => {
+router.get("/backend/getallthreads", async (req, res) => {
     mongoose.connect(process.env.MONGO_URL);
 
     res.json(

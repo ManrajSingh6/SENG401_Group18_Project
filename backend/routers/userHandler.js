@@ -5,14 +5,13 @@ const thread = require('../models/thread.js');
 const vote = require('../models/vote.js');
 const post = require('../models/post.js');
 const notification = require('../models/notification.js');
-
+const mongoose = require("mongoose");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
 require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
 
 const multer = require('multer');
-const uploadMiddleware = multer({dest: 'uploads/'});
 const filesystem = require('fs');
 
 const nodemailer = require('nodemailer');
@@ -26,6 +25,32 @@ let transporter = nodemailer.createTransport({
         rejectUnauthorized: false,
     }
 });
+
+// AWS S3 Client
+const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
+
+async function uploadToS3(path, originalFileName, mimetype){
+    const client = new S3Client({
+        region: 'us-east-2',
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+        },
+    });
+
+    const parts = originalFileName.split('.');
+    const ext = parts[parts.length - 1];
+    const newFileName = Date.now() + '.' + ext;
+    await client.send(new PutObjectCommand({
+        Bucket: 'seng401project',
+        Body: filesystem.readFileSync(path),
+        Key: newFileName,
+        ContentType: mimetype,
+        ACL: 'public-read'
+    }));
+
+    return (`https://seng401project.s3.amazonaws.com/${newFileName}`);
+}
 
 async function sendConfirmationEmail(destAddr, username){
     let mailOptions = {
@@ -47,6 +72,8 @@ async function sendConfirmationEmail(destAddr, username){
 }
 
 router.post('/register', async (req,res)=>{
+    mongoose.connect(process.env.MONGO_URL);
+
     const{username,password,email} = req.body;
 
     if( await user.findOne({username:username}).exec() ){
@@ -63,6 +90,8 @@ router.post('/register', async (req,res)=>{
 });
 
 router.get('/find/:id', async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {id} = req.params;
     //get user from database
 
@@ -79,6 +108,8 @@ router.get('/find/:id', async (req,res)=> {
 });
 
 router.get('/find', async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {username} = req.query;
     //get user from database
     const User = await user.findOne({username:username});
@@ -100,6 +131,7 @@ router.get('/find', async (req,res)=> {
 
 
 router.post('/login',async (req,res)=>{
+    mongoose.connect(process.env.MONGO_URL);
 
     const{username,password} = req.body;
     //check for user in database
@@ -125,6 +157,8 @@ router.post('/logout',async (req,res)=>{
 });
 
 router.post('/remove',async (req,res)=>{
+    mongoose.connect(process.env.MONGO_URL);
+
     const{username} = req.body;
      //delete user from database
      
@@ -252,6 +286,8 @@ router.post('/remove',async (req,res)=>{
 });
 
 router.get('/verifyprofile', async (req, res, next) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {auth} = req.cookies;
     if (!auth) { return next(); }
     try {
@@ -267,14 +303,18 @@ router.get('/verifyprofile', async (req, res, next) => {
     
 });
 
+const uploadMiddleware = multer({dest: '/tmp'});
 router.put('/updateprofile', uploadMiddleware.single('file'), async (req, res) => {
-    let newPath = null;
+    mongoose.connect(process.env.MONGO_URL);
+
+    let imageURL = null;
     if (req.file){
-        const {originalname, path} = req.file;
-        const parts = originalname.split('.');
-        const extension = parts[parts.length - 1];
-        newPath = path + '.' + extension;
-        filesystem.renameSync(path, newPath);
+        const {originalname, path, mimetype} = req.file;
+        // const parts = originalname.split('.');
+        // const extension = parts[parts.length - 1];
+        // newPath = path + '.' + extension;
+        // filesystem.renameSync(path, newPath);
+        imageURL = await uploadToS3(path, originalname, mimetype);
     }
     const {newDesc, username} = req.body;
 
@@ -288,7 +328,7 @@ router.put('/updateprofile', uploadMiddleware.single('file'), async (req, res) =
     }
     const updatedDoc = await user.findOneAndUpdate(
         {username: username},
-        {description: newDesc === '' ? userDoc.description : newDesc, profilePicture: newPath ? newPath : userDoc.profilePicture},
+        {description: newDesc === '' ? userDoc.description : newDesc, profilePicture: imageURL ? imageURL : userDoc.profilePicture},
         {returnOriginal: false}
     );
 
@@ -300,11 +340,12 @@ router.put('/updateprofile', uploadMiddleware.single('file'), async (req, res) =
     
 });
 router.get('/findThreads', async (req, res, next) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {username} = req.query;
     const User = await user.findOne({username: username});
     if(User){
         res.json(await thread.find({userCreated:User._id}).populate('userCreated', 'username'));
-       
     }
     else{
         res.status(400).json("User not found");
@@ -312,6 +353,8 @@ router.get('/findThreads', async (req, res, next) => {
 }); 
 
 router.get('/allnotifications', async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {userID} = req.query;
     const User = await user.findOne({_id: userID});
     if (User){
@@ -328,6 +371,8 @@ router.get('/allnotifications', async (req, res) => {
 });
 
 router.post('/acknowledgenotification', async (req, res) => {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {userID, notificationID} = req.body;
     const User = await user.findOne({_id: userID});
     if (User){

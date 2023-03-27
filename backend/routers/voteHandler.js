@@ -6,8 +6,12 @@ const user = require('../models/userInfo.js');
 const post = require('../models/post.js');
 const notification = require('../models/notification.js');
 const router = express.Router();
+const path = require('path');
+require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
 
 router.post('/comment',async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {username,commentID} = req.body;
 
     var comment_objectId = mongoose.Types.ObjectId(commentID);
@@ -38,6 +42,8 @@ router.post('/comment',async (req,res)=> {
     
 });
 router.post('/post',async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {username,postID} = req.body;
 
     var post_objectId = mongoose.Types.ObjectId(postID);
@@ -76,6 +82,8 @@ router.post('/post',async (req,res)=> {
     
 });
 router.post('/comment/remove',async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {username,commentID} = req.body;
 
     const userDoc = await user.findOne({username: username});
@@ -108,6 +116,8 @@ router.post('/comment/remove',async (req,res)=> {
     
 });
 router.post('/post/remove',async (req,res)=> {
+    mongoose.connect(process.env.MONGO_URL);
+
     const {username, postID} = req.body;
     const userDoc = await user.findOne({username: username});
     if(!userDoc){

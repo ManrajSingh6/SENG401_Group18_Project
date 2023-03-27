@@ -1,6 +1,5 @@
 import React, {useContext, useState} from "react";
 import "./comment.css";
-import defaultProPic from "../images/defaultUserProPic.png";
 import { UserContext } from "../context/userContext";
 import ThumbUpIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -69,7 +68,7 @@ function Comment({commentUser, commentBody, commentDateTime, commentLikes, comme
     return(
         <div className="main-comment-container">
             <div className="pro-pic-container">
-                <img src={commentUser?.profilePicture === 'defaultUserProPic.png' ? (defaultProPic): 'http://localhost:5000/' + commentUser?.profilePicture} alt="comment-profile-pic"/>
+                <img src={commentUser?.profilePicture === 'defaultUserProPic.png' ? ("https://seng401project.s3.us-east-2.amazonaws.com/defaultUserProPic.png") : commentUser?.profilePicture} alt="comment-profile-pic"/>
             </div>
             <div className="comment-info-container">
                 <p>{commentUser?.username} <span style={{color:"grey", fontWeight: "400"}}>on {new Date(commentDateTime).toLocaleDateString()} at {new Date(commentDateTime).toLocaleTimeString()}</span> • <span>{commentLikes} likes</span></p>

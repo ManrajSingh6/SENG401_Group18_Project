@@ -112,7 +112,7 @@ function Homepage(){
                             return (
                                 <li key={index}>
                                     <SmallUserProfile
-                                        imgSrc={user.profilePicture === "defaultUserProPic.png" ? (require("../images/defaultUserProPic.png")) : ('http://localhost:5000/' + user.profilePicture)}
+                                        imgSrc={user.profilePicture === "defaultUserProPic.png" ? ("https://seng401project.s3.us-east-2.amazonaws.com/defaultUserProPic.png") : (user.profilePicture)}
                                         name={user.username}
                                         likes={user.posts.length}/>
                                 </li>

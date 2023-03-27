@@ -10,16 +10,20 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const jwt = require('jsonwebtoken')
 const cookieParser = require('cookie-parser');
+const path = require('path');
+
 const app = express();
 
+require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
+
 //database connection
-mongoose.connect("mongodb+srv://theloop:q2qXUJsMiWfGA6rF@theloopcluster.mfexsh3.mongodb.net/?retryWrites=true&w=majority");
+mongoose.connect(process.env.MONGO_URL);
+
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(express.json());
 app.use('/uploads', express.static(__dirname + '/uploads'));
-
 
 app.use(express.json());
 app.use(cors({credentials:true,origin:'http://localhost:3000'}));

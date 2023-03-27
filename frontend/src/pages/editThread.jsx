@@ -16,7 +16,7 @@ function EditThread() {
 
     // Get previously filled form data and change values in edit post form
     useEffect(() => {
-        fetch(`http://localhost:5000/posts/find?thread_name=${name}`)
+        fetch(`${process.env.REACT_APP_API_URL}/posts/find?thread_name=${name}`)
         .then(res => {
             res.json().then(threadInfo => {
                 setThreadDesc(threadInfo.description);
@@ -34,7 +34,7 @@ function EditThread() {
         threadData.set('threadFile', threadImg[0]);
         threadData.set('threadname', name);
         
-        const threadResponse = await fetch('http://localhost:5000/threads/update', {
+        const threadResponse = await fetch(`${process.env.REACT_APP_API_URL}/threads/update`, {
             method: 'PUT',
             body: threadData,
             credentials: 'include'

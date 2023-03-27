@@ -20,7 +20,7 @@ function EditPost() {
 
     // Get previous post data and update the form fields
     useEffect(() => {
-        fetch(`http://localhost:5000/posts/find?post_id=${id}`)
+        fetch(`${process.env.REACT_APP_API_URL}/posts/find?post_id=${id}`)
         .then(res => {
             res.json().then(postInfo => {
                 setPostTitle(postInfo.Post.title);
@@ -43,7 +43,7 @@ function EditPost() {
         postData.set('postFile', postImg[0]);
         postData.set('postID', id);
         
-        const postResponse = await fetch('http://localhost:5000/posts/update', {
+        const postResponse = await fetch(`${process.env.REACT_APP_API_URL}/posts/update`, {
             method: 'PUT',
             body: postData,
             credentials: 'include'

@@ -31,7 +31,7 @@ function PostView(){
 
     // Fetch post information and images upon page load
     useEffect(() => {
-        fetch(`http://localhost:5000/posts/find?post_id=${postID}`).then(res => {
+        fetch(`${process.env.REACT_APP_API_URL}/posts/find?post_id=${postID}`).then(res => {
             res.json().then(resPostData => {
                 setPostData(resPostData.Post);
                 console.log(resPostData.post);
@@ -49,7 +49,7 @@ function PostView(){
             const choice = event.currentTarget.id;
             let response = null;
             if (choice === "like-btn"){
-                response = await fetch('http://localhost:5000/votes/post', {
+                response = await fetch(`${process.env.REACT_APP_API_URL}/votes/post`, {
                     method: 'POST',
                     body: JSON.stringify({username, postID}),
                     headers: {'Content-Type':'application/json'},
@@ -60,7 +60,7 @@ function PostView(){
             }
 
             if (choice === "dislike-btn"){
-                response = await fetch('http://localhost:5000/votes/post/remove', {
+                response = await fetch(`${process.env.REACT_APP_API_URL}/votes/post/remove`, {
                     method: 'POST',
                     body: JSON.stringify({username, postID}),
                     headers: {'Content-Type':'application/json'},
@@ -82,7 +82,7 @@ function PostView(){
 
     // Delete posts from the database, if response is ok, refresh. else show error
     async function deletePost(){
-        const response = await fetch('http://localhost:5000/posts/remove', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/remove`, {
             method: 'POST',
             body: JSON.stringify({post_id: postData._id}),
             headers: {'Content-Type':'application/json'},

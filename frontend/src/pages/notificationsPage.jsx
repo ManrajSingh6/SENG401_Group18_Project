@@ -13,7 +13,7 @@ function NotificationPage(){
 
     // Fetch all user notifications from database upon page load
     useEffect(() => {
-        fetch(`http://localhost:5000/users/allnotifications?userID=${userID}`, {
+        fetch(`${process.env.REACT_APP_API_URL}/users/allnotifications?userID=${userID}`, {
             credentials: 'include',
         }).then(response => {
             response.json().then(notifications => {

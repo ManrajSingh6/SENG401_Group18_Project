@@ -49,7 +49,7 @@ function CreatePostPage(){
             threadData.set('username', userInfo.username);
             
             // Create thread with backend
-            const threadResponse = await fetch('http://localhost:5000/threads/create', {
+            const threadResponse = await fetch(`${process.env.REACT_APP_API_URL}/threads/create`, {
                 method: 'POST',
                 body: threadData,
                 credentials: 'include'
@@ -92,7 +92,7 @@ function CreatePostPage(){
                 postData.set('username', userInfo.username);
                 postData.set('postFile', postImg[0]);
             
-                const postResponse = await fetch('http://localhost:5000/posts/create', {
+                const postResponse = await fetch(`${process.env.REACT_APP_API_URL}/posts/create`, {
                     method: 'POST',
                     body: postData,
                     credentials: 'include'

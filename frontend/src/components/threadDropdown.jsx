@@ -9,7 +9,7 @@ function ThreadDropdown({selectedOption, onSelectedOptionChange}){
     const [threadNames, setThreadNames] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:5000/threads/allthreadnames').then(res => {
+        fetch(`${process.env.REACT_APP_API_URL}/threads/allthreadnames`).then(res => {
             res.json().then(names => {
                 setThreadNames(names);
             });

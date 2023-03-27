@@ -13,7 +13,7 @@ function Notification(props){
     const {userID} = useParams();
 
     async function acknowledgeNotification(){
-        const response = await fetch('http://localhost:5000/users/acknowledgenotification', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/users/acknowledgenotification`, {
             method: 'POST',
             body: JSON.stringify({userID, notificationID: props.notificationID}),
             headers: {'Content-Type':'application/json'},

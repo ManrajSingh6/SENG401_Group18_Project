@@ -19,7 +19,7 @@ function Comment({commentUser, commentBody, commentDateTime, commentLikes, comme
             
             let response = null;
             if (choice === "likeComment-btn"){
-                response = await fetch('http://localhost:5000/votes/comment', {
+                response = await fetch(`${process.env.REACT_APP_API_URL}/votes/comment`, {
                     method: 'POST',
                     body: JSON.stringify({username: userInfo.username, commentID}),
                     headers: {'Content-Type':'application/json'},
@@ -30,7 +30,7 @@ function Comment({commentUser, commentBody, commentDateTime, commentLikes, comme
             }
 
             if (choice === "dislikeComment-btn"){
-                response = await fetch('http://localhost:5000/votes/comment/remove', {
+                response = await fetch(`${process.env.REACT_APP_API_URL}/votes/comment/remove`, {
                     method: 'POST',
                     body: JSON.stringify({username: userInfo.username, commentID}),
                     headers: {'Content-Type':'application/json'},
@@ -52,7 +52,7 @@ function Comment({commentUser, commentBody, commentDateTime, commentLikes, comme
     }
 
     async function deleteComment(){
-        const res = await fetch ('http://localhost:5000/comments/remove', {
+        const res = await fetch (`${process.env.REACT_APP_API_URL}/comments/remove`, {
             method: 'POST',
             body: JSON.stringify({comment_id: commentID}),
             headers: {'Content-Type':'application/json'},

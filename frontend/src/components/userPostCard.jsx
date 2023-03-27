@@ -16,7 +16,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 function UserPostCard(props){
 
     async function deletePost(){
-        const response = await fetch('http://localhost:5000/posts/remove', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/posts/remove`, {
             method: 'POST',
             body: JSON.stringify({post_id: props.postID}),
             headers: {'Content-Type':'application/json'},

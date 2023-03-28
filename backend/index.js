@@ -33,6 +33,11 @@ app.use('/posts',postHandler);
 app.use('/comments',commentHandler);
 app.use('/votes',voteHandler);
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 if (process.env.API_PORT){
     app.listen(process.env.API_PORT,()=>{
         console.log(`Server running on port ${process.env.API_PORT}. `);

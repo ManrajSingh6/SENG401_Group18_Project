@@ -116,7 +116,7 @@ function PostView(){
 
     return(
         <div className="main-post-container">
-            <div className="post-content-container" style={{gridTemplateColumns: postData.postImgUrl === undefined ? ("1fr") : ("0.7fr 1.2fr")}}>
+            <div className="post-content-container" style={{gridTemplateColumns: postData.postImgUrl === undefined ? ("1fr") : ("1.1fr 0.7fr")}}>
                 <div className="post-info">
                     <p className="stats-text">Posted by {postData.author?.username} on {new Date(postData.time).toLocaleDateString()} at {new Date(postData.time).toLocaleTimeString()}</p>
                     <h1 className="post-info-title">{postData.title}</h1>

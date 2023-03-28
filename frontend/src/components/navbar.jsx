@@ -15,13 +15,20 @@ function Navbar(){
     const {userInfo, setUserInfo} = useContext(UserContext);
 
     useEffect(() => {
-        fetch(`${process.env.REACT_APP_API_URL}/users/verifyprofile`, {
-            credentials: 'include',
-        }).then(response => {
-            response.json().then(tempUserInfo => {
-                setUserInfo(tempUserInfo);
-            });
-        });
+        // fetch(`${process.env.REACT_APP_API_URL}/users/verifyprofile`, {
+        //     credentials: 'include',
+        // }).then(response => {
+        //     response.json().then(tempUserInfo => {
+        //         setUserInfo(tempUserInfo);
+        //         console.log("navbar log: " + JSON.stringify(tempUserInfo));
+        //     });
+        // });
+        const isLoggedIn = window.localStorage.getItem('isLoggedIn');
+        if (isLoggedIn){
+            const userInformationUsername = window.localStorage.getItem('UserInfoUsername');
+            const userInformationID = window.localStorage.getItem('UserInfoID');
+            setUserInfo({username: userInformationUsername, id: userInformationID});
+        }
     }, []);
 
     function handleLogout(){
@@ -30,6 +37,8 @@ function Navbar(){
             method: 'POST',
         });
         setUserInfo(null);
+        window.localStorage.clear();
+        window.location.reload();
     }
 
     const username = userInfo?.username;

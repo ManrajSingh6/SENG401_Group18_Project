@@ -28,7 +28,10 @@ function LoginPage(){
             response.json().then(tempUserInfo => {
                 setError(false);
                 setUserInfo(tempUserInfo);
-                setRedirect(true);                
+                setRedirect(true);
+                window.localStorage.setItem('UserInfoUsername', tempUserInfo.username);
+                window.localStorage.setItem('UserInfoID', tempUserInfo.id);
+                window.localStorage.setItem('isLoggedIn', true);                
             });
         } else {
             console.log(response.json());

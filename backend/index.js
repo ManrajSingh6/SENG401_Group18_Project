@@ -19,6 +19,11 @@ require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
 //database connection
 mongoose.connect(process.env.MONGO_URL);
 
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    next();
+});
+
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 app.use(cookieParser());
@@ -33,10 +38,7 @@ app.use('/posts',postHandler);
 app.use('/comments',commentHandler);
 app.use('/votes',voteHandler);
 
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Origin', '*');
-    next();
-});
+
 
 if (process.env.API_PORT){
     app.listen(process.env.API_PORT,()=>{

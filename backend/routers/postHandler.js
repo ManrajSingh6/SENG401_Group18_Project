@@ -153,8 +153,6 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
                         await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
                     }
                 }
-                
-
                 res.json(postDoc);
             }
             else{
@@ -172,10 +170,6 @@ router.put('/update', uploadMiddleware.single('postFile'), async (req, res) => {
     let imageURL = null;
     if (req.file){
         const {originalname, path, mimetype} = req.file;
-        // const parts = originalname.split('.');
-        // const extension = parts[parts.length - 1];
-        // newPath = path + '.' + extension;
-        // filesystem.renameSync(path, newPath);
         imageURL = await uploadToS3(path, originalname, mimetype);
     }
     const {username, title, summary, body, postID} = req.body;

@@ -72,8 +72,50 @@ async function sendPostNotifications(destAddr, username, title, summary, parentT
 const uploadMiddleware = multer({dest: '/tmp'});
 router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);
-
+    
     const {username, title, summary, body, parentThread} = req.body;
+    if(!req.file){
+        const userDoc = await user.findOne({username:username});
+        if(!userDoc){
+            res.status(400).json("Could not find user");
+        }
+        else{
+            const threadDoc = await thread.findOne({threadname: parentThread}).populate('allSubscribers', 'email');
+            if(!threadDoc){
+                res.status(400).json("Could not find thread");
+            }
+            else{
+                //insert post to database
+                const currentDateTime = new Date();
+                const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, time: currentDateTime});
+    
+                if(postDoc){
+                    await thread.updateOne({"_id": threadDoc._id},{$push:{"posts": postDoc._id}});
+                    await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})
+    
+                    const allSubscribers = threadDoc.allSubscribers;
+                    if (allSubscribers.length !== 0){
+                        for (var i = 0; i < allSubscribers.length; i++){
+                            // Updating notification for thread creator
+                            const currentDateTime = new Date();
+                            const notiMessage = `New post in thread (${parentThread})`;
+                            const notificationForSubscribers = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
+                            await user.updateOne({"_id": allSubscribers[i]._id}, {$push: {notifications: notificationForSubscribers}});
+    
+                            await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
+                        }
+                    }
+    
+    
+                    res.json(postDoc);
+                }
+                else{
+                    res.status(400).json("Post creation failed");
+                }
+            }
+        }
+    }
+    else{
     const {originalname, path, mimetype} = req.file;
     // const parts = originalname.split('.');
     // const extension = parts[parts.length - 1];
@@ -120,52 +162,9 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
             }
         }
     }
+}
 });
 
-router.post('/createNoImg', async (req,res)=> {
-    const {username, title, summary, body, parentThread} = req.body;
-    mongoose.connect(process.env.MONGO_URL);
-
-    const userDoc = await user.findOne({username:username});
-    if(!userDoc){
-        res.status(400).json("Could not find user");
-    }
-    else{
-        const threadDoc = await thread.findOne({threadname: parentThread}).populate('allSubscribers', 'email');
-        if(!threadDoc){
-            res.status(400).json("Could not find thread");
-        }
-        else{
-            //insert post to database
-            const currentDateTime = new Date();
-            const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, time: currentDateTime});
-
-            if(postDoc){
-                await thread.updateOne({"_id": threadDoc._id},{$push:{"posts": postDoc._id}});
-                await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})
-
-                const allSubscribers = threadDoc.allSubscribers;
-                if (allSubscribers.length !== 0){
-                    for (var i = 0; i < allSubscribers.length; i++){
-                        // Updating notification for thread creator
-                        const currentDateTime = new Date();
-                        const notiMessage = `New post in thread (${parentThread})`;
-                        const notificationForSubscribers = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
-                        await user.updateOne({"_id": allSubscribers[i]._id}, {$push: {notifications: notificationForSubscribers}});
-                        
-                        await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
-                    }
-                }
-                
-
-                res.json(postDoc);
-            }
-            else{
-                res.status(400).json("Post creation failed");
-            }
-        }
-    }
-});
 
 router.put('/update', uploadMiddleware.single('postFile'), async (req, res) => {
     mongoose.connect(process.env.MONGO_URL);

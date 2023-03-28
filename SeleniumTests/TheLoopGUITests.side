@@ -1,0 +1,435 @@
+{
+  "id": "8fa42f0d-d786-43e8-a365-8905b085704c",
+  "version": "2.0",
+  "name": "TheLoopGUITests",
+  "url": "https://seng401-the-loop.onrender.com/user-profile/Aarushi",
+  "tests": [{
+    "id": "b6348a2c-b60e-4690-9cb5-09958d655661",
+    "name": "A_Create_Thread_and_Post",
+    "commands": [{
+      "id": "3ff473c7-b5ae-43b0-a7ba-778d0e3d6cec",
+      "comment": "",
+      "command": "open",
+      "target": "https://seng401-the-loop.onrender.com/create-post",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1334acf8-3132-4f4b-b353-31132046e589",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1936x1015",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "00eed276-e088-4b08-9c0b-4f7838ab83fc",
+      "comment": "",
+      "command": "click",
+      "target": "css=.ql-editor",
+      "targets": [
+        ["css=.ql-editor", "css:finder"],
+        ["xpath=//form[@id='post-form']/div/div/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "bb79079c-aa2e-4bd6-8bd2-84e653616234",
+      "comment": "",
+      "command": "editContent",
+      "target": "css=.ql-editor",
+      "targets": [
+        ["css=.ql-editor", "css:finder"],
+        ["xpath=//form[@id='post-form']/div/div/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div/div[2]/div", "xpath:position"]
+      ],
+      "value": "<p>testpost</p>"
+    }, {
+      "id": "50d515d4-e73e-4c79-9d05-80066ea7eb6b",
+      "comment": "",
+      "command": "click",
+      "target": "css=input:nth-child(3)",
+      "targets": [
+        ["css=input:nth-child(3)", "css:finder"],
+        ["xpath=//input[@value='']", "xpath:attributes"],
+        ["xpath=//form[@id='post-form']/input", "xpath:idRelative"],
+        ["xpath=//form/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ced8665b-c675-4ebc-80e9-c536d304e6b3",
+      "comment": "",
+      "command": "type",
+      "target": "css=input:nth-child(3)",
+      "targets": [
+        ["css=input:nth-child(3)", "css:finder"],
+        ["xpath=//input[@value='testpost']", "xpath:attributes"],
+        ["xpath=//form[@id='post-form']/input", "xpath:idRelative"],
+        ["xpath=//form/input", "xpath:position"]
+      ],
+      "value": "testpost"
+    }, {
+      "id": "9b6caecd-13e4-486c-ac4c-342d62db0567",
+      "comment": "",
+      "command": "click",
+      "target": "css=textarea:nth-child(4)",
+      "targets": [
+        ["css=textarea:nth-child(4)", "css:finder"],
+        ["xpath=//textarea[@type='title']", "xpath:attributes"],
+        ["xpath=//form[@id='post-form']/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "47b6a0ed-630f-40f5-a8c1-18562a50f1e6",
+      "comment": "",
+      "command": "type",
+      "target": "css=textarea:nth-child(4)",
+      "targets": [
+        ["css=textarea:nth-child(4)", "css:finder"],
+        ["xpath=//textarea[@type='title']", "xpath:attributes"],
+        ["xpath=//form[@id='post-form']/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "testpost"
+    }, {
+      "id": "fac7d66a-19c3-4a4f-be16-f5ae1d35f4f2",
+      "comment": "",
+      "command": "click",
+      "target": "css=input:nth-child(1)",
+      "targets": [
+        ["css=input:nth-child(1)", "css:finder"],
+        ["xpath=(//input[@value=''])[2]", "xpath:attributes"],
+        ["xpath=//form[@id='post-form']/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "4f908949-9dc4-4c55-9ea8-17b920a5084b",
+      "comment": "",
+      "command": "type",
+      "target": "css=input:nth-child(1)",
+      "targets": [
+        ["css=input:nth-child(1)", "css:finder"],
+        ["xpath=//input[@value='new thread with selenium']", "xpath:attributes"],
+        ["xpath=//form[@id='post-form']/div[2]/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "new thread with selenium"
+    }, {
+      "id": "68d916c4-b4f1-4ebf-910c-ef66674513a3",
+      "comment": "",
+      "command": "click",
+      "target": "css=textarea:nth-child(2)",
+      "targets": [
+        ["css=textarea:nth-child(2)", "css:finder"],
+        ["xpath=//textarea[@type='text']", "xpath:attributes"],
+        ["xpath=//form[@id='post-form']/div[2]/div[2]/textarea", "xpath:idRelative"],
+        ["xpath=//div[2]/textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2222a429-e007-4014-81fc-9d8fe2a6dee8",
+      "comment": "",
+      "command": "type",
+      "target": "css=textarea:nth-child(2)",
+      "targets": [
+        ["css=textarea:nth-child(2)", "css:finder"],
+        ["xpath=//textarea[@type='text']", "xpath:attributes"],
+        ["xpath=//form[@id='post-form']/div[2]/div[2]/textarea", "xpath:idRelative"],
+        ["xpath=//div[2]/textarea", "xpath:position"]
+      ],
+      "value": "new thread with selenium"
+    }, {
+      "id": "60ce78e8-b8db-4ff8-8617-a315e7157fee",
+      "comment": "",
+      "command": "click",
+      "target": "css=.submit-btn",
+      "targets": [
+        ["css=.submit-btn", "css:finder"],
+        ["xpath=//form[@id='post-form']/button", "xpath:idRelative"],
+        ["xpath=//form/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Create Post')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "928feff5-8bcc-4560-9451-cdd0e6f773fc",
+      "comment": "",
+      "command": "pause",
+      "target": "2000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "15ef0399-46e7-4290-b4b2-5e27b79a9600",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "77c8e5c0-f9ad-483e-a9ed-5262ba3ea0a9",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "255fc6e6-f6d6-4a76-981f-456211f9b24f",
+      "comment": "",
+      "command": "pause",
+      "target": "5000",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "856ed63c-3f2a-4f6d-adf3-e354cd06d618",
+    "name": "B_Comment_on_Post",
+    "commands": [{
+      "id": "bd5d56f0-7c8f-40c3-9885-166aa098de16",
+      "comment": "",
+      "command": "open",
+      "target": "https://seng401-the-loop.onrender.com/new%20thread%20with%20selenium/post/64236bfb2cdc8b58fb2f4e86",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "bd3868f9-29cb-4d11-b787-1c7dbec20b38",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x999",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "85abdb33-9c7c-40b6-a63f-09cc15c76bd3",
+      "comment": "",
+      "command": "click",
+      "target": "css=textarea",
+      "targets": [
+        ["css=textarea", "css:finder"],
+        ["xpath=//div[@id='root']/main/div/div[2]/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "080414ac-42b5-4394-8fb6-f54adb1511eb",
+      "comment": "",
+      "command": "type",
+      "target": "css=textarea",
+      "targets": [
+        ["css=textarea", "css:finder"],
+        ["xpath=//div[@id='root']/main/div/div[2]/textarea", "xpath:idRelative"],
+        ["xpath=//textarea", "xpath:position"]
+      ],
+      "value": "test comment"
+    }, {
+      "id": "ad29ee0c-16f5-40f4-b4d4-b587911b79e9",
+      "comment": "",
+      "command": "click",
+      "target": "css=.add-comment-btn",
+      "targets": [
+        ["css=.add-comment-btn", "css:finder"],
+        ["xpath=//div[@id='root']/main/div/div[2]/div", "xpath:idRelative"],
+        ["xpath=//div/div[2]/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "b3278d9f-3ffb-4df5-8a5d-b37165859fe6",
+      "comment": "",
+      "command": "pause",
+      "target": "5000",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "bab67f3e-30a3-4b14-94d5-2631017f8f21",
+    "name": "C_Like_Dislike_Post",
+    "commands": [{
+      "id": "c6818b87-c3d1-4ce2-8b3b-60408cf408d9",
+      "comment": "",
+      "command": "open",
+      "target": "https://seng401-the-loop.onrender.com/new%20thread%20with%20selenium/post/64236bfb2cdc8b58fb2f4e86",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4e6fe8f1-d3ad-4938-9caa-7f118d47fc29",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1920x999",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7f369c69-4c4b-46d2-8cba-1a55ded106fa",
+      "comment": "",
+      "command": "click",
+      "target": "id=likeComment-btn",
+      "targets": [
+        ["id=likeComment-btn", "id"],
+        ["css=#likeComment-btn", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "f36b73b5-fe4b-4a8f-ab6f-d5cde4ca83cb",
+      "comment": "",
+      "command": "pause",
+      "target": "1000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "417f9b4a-2aee-4d51-af60-9ece66c637c2",
+      "comment": "",
+      "command": "click",
+      "target": "id=dislikeComment-btn",
+      "targets": [
+        ["id=dislikeComment-btn", "id"],
+        ["css=#dislikeComment-btn", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "7239bcb0-9abe-4beb-90b7-744c1f6910ea",
+      "comment": "",
+      "command": "pause",
+      "target": "1000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7a6ef682-5197-40a1-a4ba-06c488ab31d1",
+      "comment": "",
+      "command": "click",
+      "target": "css=#like-btn path",
+      "targets": [
+        ["css=#like-btn path", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "add64b69-6d2e-49f3-80ef-1a25d3e61087",
+      "comment": "",
+      "command": "pause",
+      "target": "1000",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "b40c09aa-e024-4740-8fbb-fab8b5c37f4e",
+      "comment": "",
+      "command": "click",
+      "target": "id=dislike-btn",
+      "targets": [
+        ["id=dislike-btn", "id"],
+        ["css=#dislike-btn", "css:finder"],
+        ["xpath=//div[@id='dislike-btn']", "xpath:attributes"],
+        ["xpath=//div[@id='root']/main/div/div/div/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div/div/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8d076282-82aa-4466-b39b-e5c8526444b2",
+      "comment": "",
+      "command": "pause",
+      "target": "4000",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "3857b99c-6512-48f0-8464-3a5a2730e991",
+    "name": "D_Delete_Post",
+    "commands": [{
+      "id": "0bf35921-732d-4c32-a322-da9efd32dadc",
+      "comment": "",
+      "command": "open",
+      "target": "https://seng401-the-loop.onrender.com/new%20thread%20with%20selenium/post/64236bfb2cdc8b58fb2f4e86",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "04d00f1c-6f4e-40c3-9173-8dbc2c60aa05",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1936x1015",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "39155be0-b4bd-4f12-ba71-e1c82cfebc24",
+      "comment": "",
+      "command": "click",
+      "target": "css=.post-option-btn",
+      "targets": [
+        ["css=.post-option-btn", "css:finder"],
+        ["xpath=//div[@id='root']/main/div/div/div/a[2]/p", "xpath:idRelative"],
+        ["xpath=//a[2]/p", "xpath:position"],
+        ["xpath=//p[contains(.,'Delete Post (Admin)')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "84ec6c19-ed9c-4430-81f7-07cf3884015c",
+      "comment": "",
+      "command": "click",
+      "target": "css=button:nth-child(3)",
+      "targets": [
+        ["css=button:nth-child(3)", "css:finder"],
+        ["xpath=//div[@id='react-confirm-alert']/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//button", "xpath:position"],
+        ["xpath=//button[contains(.,'Yes')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2299bd34-1868-4a9a-bb46-5b0530cb09c9",
+      "comment": "",
+      "command": "pause",
+      "target": "5000",
+      "targets": [],
+      "value": ""
+    }]
+  }, {
+    "id": "e6aadd02-6054-43bf-875f-a14df9481173",
+    "name": "E_Delete_Thread",
+    "commands": [{
+      "id": "5d885ece-9680-49de-96db-1d60e656333f",
+      "comment": "",
+      "command": "open",
+      "target": "https://seng401-the-loop.onrender.com/user-profile/Aarushi",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ea411477-c91a-4056-8975-381623d9e14d",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1936x1015",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a3922f54-e954-4ece-a853-d3378c0c4c91",
+      "comment": "",
+      "command": "click",
+      "target": "xpath=//div[@id='2']/div/div[2]/p",
+      "targets": [
+        ["xpath=//div[@id='2']/div/div[2]/p", "xpath:idRelative"],
+        ["xpath=//div[3]/div/div/div[2]/p", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "31fa9ee7-6872-460e-adca-b8b2636dd4dd",
+      "comment": "",
+      "command": "click",
+      "target": "css=.custom-ui > button:nth-child(3)",
+      "targets": [
+        ["css=.custom-ui > button:nth-child(3)", "css:finder"],
+        ["xpath=//div[@id='react-confirm-alert']/div/div/div/button", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Yes')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "4b1eeb06-02bb-4c71-b110-f158673ff7d9",
+      "comment": "",
+      "command": "pause",
+      "target": "5000",
+      "targets": [],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "46b3b095-358e-4d16-ab20-bf9b06e44f54",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["https://seng401-the-loop.onrender.com/create-post", "https://seng401-the-loop.onrender.com/new%20thread%20with%20selenium/post/64236bfb2cdc8b58fb2f4e86", "https://seng401-the-loop.onrender.com/user-profile/Aarushi"],
+  "plugins": []
+}

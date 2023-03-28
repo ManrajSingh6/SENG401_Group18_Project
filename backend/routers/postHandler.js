@@ -14,7 +14,7 @@ const path = require('path');
 require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
 
 // AWS S3 Client
-const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
+const {S3Client, PutObjectCommand, DeleteObjectCommand} = require('@aws-sdk/client-s3');
 
 async function uploadToS3(path, originalFileName, mimetype){
     const client = new S3Client({
@@ -211,6 +211,13 @@ router.get('/find', async (req,res)=> {
 
 router.post('/remove',async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);
+    const client = new S3Client({
+        region: 'us-east-2',
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+        },
+    });
 
     const {post_id} = req.body;
     var post_objectId = mongoose.Types.ObjectId(post_id);
@@ -221,11 +228,10 @@ router.post('/remove',async (req,res)=> {
     }
     else{
        if(Post.postImgUrl){
-        filesystem.unlink(Post.postImgUrl,(err)=>{
-            if(err){
-                console.log(err);
-            }
-        });
+            await client.send(new DeleteObjectCommand({
+                Bucket:"seng401project",
+                Key: Post.postImgUrl
+            }));
         }
      
         const User = await user.findOne({_id:Post.author});

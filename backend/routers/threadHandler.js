@@ -29,7 +29,7 @@ let transporter = nodemailer.createTransport({
 });
 
 // AWS S3 Client
-const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
+const {S3Client, PutObjectCommand,DeleteObjectCommand} = require('@aws-sdk/client-s3');
 
 async function uploadToS3(path, originalFileName, mimetype){
     const client = new S3Client({
@@ -57,10 +57,33 @@ async function uploadToS3(path, originalFileName, mimetype){
 const uploadMiddleware = multer({dest: '/tmp'});
 router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);
-
     const {thread_name, thread_description, username} = req.body;
-    
+    if(!req.file){
+        const userDoc = await user.findOne({username:username});
+        if(!userDoc){
+            res.status(400).send('User not found to create thread');
+        }
+        else{
+            //insert thread into database
+            if(await thread.findOne({threadname:thread_name}).exec()){
+                res.status(400).json("Thread name is already taken");
+            }
+            else{
+                const currentDateTime = new Date();
+                const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, dateCreated: currentDateTime});
+                if(Thread){
+                    res.json(Thread);
+                }
+                else{
+                    res.status(400).json("Thread creation failed");
+                }
+            }
+        }
+    }
+    else{
     const {originalname, path, mimetype} = req.file;
+    
+    
     // const parts = originalname.split('.');
     // const extension = parts[parts.length - 1];
     // const newPath = path + '.' + extension;
@@ -76,42 +99,19 @@ router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> 
             res.status(400).json("Thread name is already taken");
         }
         else{
+         
             const imageURL = await uploadToS3(path, originalname, mimetype);
             const currentDateTime = new Date();
-            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: imageURL, dateCreated: currentDateTime});
+                const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: imageURL, dateCreated: currentDateTime});
             if(Thread){
                 res.json(Thread);
             }
             else{
                 res.status(400).json("Thread creation failed");
             }
-        }
     }
-});
-router.post('/createNoImg', async (req,res)=> {
-    mongoose.connect(process.env.MONGO_URL);
-
-    const {thread_name, thread_description, username} = req.body;
-    const userDoc = await user.findOne({username:username});
-    if(!userDoc){
-        res.status(400).send('User not found to create thread');
     }
-    else{
-        //insert thread into database
-        if(await thread.findOne({threadname:thread_name}).exec()){
-            res.status(400).json("Thread name is already taken");
-        }
-        else{
-            const currentDateTime = new Date();
-            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, dateCreated: currentDateTime});
-            if(Thread){
-                res.json(Thread);
-            }
-            else{
-                res.status(400).json("Thread creation failed");
-            }
-        }
-    }
+}
 });
 router.get('/find',async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);
@@ -228,7 +228,13 @@ router.post('/unsubscribe', async (req,res)=>{
 });
 router.post('/remove',async (req,res)=>{
     mongoose.connect(process.env.MONGO_URL);
-
+    const client = new S3Client({
+        region: 'us-east-2',
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+        },
+    });
     const {thread_name} = req.body;
     //remove users subscribed to thread
     const Thread = await thread.findOne({threadname:thread_name});
@@ -238,13 +244,12 @@ router.post('/remove',async (req,res)=>{
     else{
        await user.updateMany({subscribed:{$in:[Thread._id]}},{$pull:{"subscribed": Thread._id}});
       
-        if(Thread.threadImgUrl){
-            filesystem.unlink(Thread.threadImgUrl,(err)=>{
-                if(err){
-                    console.log(err);
-                }
-            });
-        }
+       if(Thread.threadImgUrl){
+        await client.send(new DeleteObjectCommand({
+            Bucket:"seng401project",
+            Key: Thread.threadImgUrl
+        }));
+    }
         for(k of Thread.votes){
             await vote.deleteOne({"_id":k});
         }
@@ -253,11 +258,11 @@ router.post('/remove',async (req,res)=>{
         for(i of Thread.posts){
             Post = await post.findOne({"_id": i});
              if(Post.postImgUrl){
-                filesystem.unlink(Post.postImgUrl,(err)=>{
-                    if(err){
-                        console.log(err);
-                    }
-                });
+                await client.send(new DeleteObjectCommand({
+                     Bucket:"seng401project",
+                    Key: Post.postImgUrl
+                }));
+                
             }
             for(const j of Post.votes){
                 await vote.deleteOne({"_id":j});

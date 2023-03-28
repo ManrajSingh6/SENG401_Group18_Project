@@ -27,7 +27,7 @@ let transporter = nodemailer.createTransport({
 });
 
 // AWS S3 Client
-const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
+const {S3Client, PutObjectCommand, DeleteObjectCommand} = require('@aws-sdk/client-s3');
 
 async function uploadToS3(path, originalFileName, mimetype){
     const client = new S3Client({
@@ -158,7 +158,13 @@ router.post('/logout',async (req,res)=>{
 
 router.post('/remove',async (req,res)=>{
     mongoose.connect(process.env.MONGO_URL);
-
+    const client = new S3Client({
+        region: 'us-east-2',
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+        },
+    });
     const{username} = req.body;
      //delete user from database
      
@@ -169,11 +175,10 @@ router.post('/remove',async (req,res)=>{
     }
     else{
         if(User.profilePicture && User.profilePicture!=="defaultUserProPic.png"){
-            filesystem.unlink(User.profilePicture,(err)=>{
-                if(err){
-                    console.log(err);
-                }
-            });
+            await client.send(new DeleteObjectCommand({
+                Bucket:"seng401project",
+                Key: User.profilePicture
+            }));
         }
         commentStatus = true;
         postStatus = true;

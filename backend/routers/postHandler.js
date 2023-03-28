@@ -14,7 +14,7 @@ const path = require('path');
 require('dotenv').config({path: path.resolve(__dirname, '../../configs/.env')});
 
 // AWS S3 Client
-const {S3Client, PutObjectCommand} = require('@aws-sdk/client-s3');
+const {S3Client, PutObjectCommand, DeleteObjectCommand} = require('@aws-sdk/client-s3');
 
 async function uploadToS3(path, originalFileName, mimetype){
     const client = new S3Client({
@@ -72,8 +72,50 @@ async function sendPostNotifications(destAddr, username, title, summary, parentT
 const uploadMiddleware = multer({dest: '/tmp'});
 router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);
-
+    
     const {username, title, summary, body, parentThread} = req.body;
+    if(!req.file){
+        const userDoc = await user.findOne({username:username});
+        if(!userDoc){
+            res.status(400).json("Could not find user");
+        }
+        else{
+            const threadDoc = await thread.findOne({threadname: parentThread}).populate('allSubscribers', 'email');
+            if(!threadDoc){
+                res.status(400).json("Could not find thread");
+            }
+            else{
+                //insert post to database
+                const currentDateTime = new Date();
+                const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, time: currentDateTime});
+    
+                if(postDoc){
+                    await thread.updateOne({"_id": threadDoc._id},{$push:{"posts": postDoc._id}});
+                    await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})
+    
+                    const allSubscribers = threadDoc.allSubscribers;
+                    if (allSubscribers.length !== 0){
+                        for (var i = 0; i < allSubscribers.length; i++){
+                            // Updating notification for thread creator
+                            const currentDateTime = new Date();
+                            const notiMessage = `New post in thread (${parentThread})`;
+                            const notificationForSubscribers = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
+                            await user.updateOne({"_id": allSubscribers[i]._id}, {$push: {notifications: notificationForSubscribers}});
+    
+                            await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
+                        }
+                    }
+    
+    
+                    res.json(postDoc);
+                }
+                else{
+                    res.status(400).json("Post creation failed");
+                }
+            }
+        }
+    }
+    else{
     const {originalname, path, mimetype} = req.file;
     // const parts = originalname.split('.');
     // const extension = parts[parts.length - 1];
@@ -120,52 +162,9 @@ router.post('/create', uploadMiddleware.single('postFile'), async (req,res)=> {
             }
         }
     }
+}
 });
 
-router.post('/createNoImg', async (req,res)=> {
-    const {username, title, summary, body, parentThread} = req.body;
-    mongoose.connect(process.env.MONGO_URL);
-
-    const userDoc = await user.findOne({username:username});
-    if(!userDoc){
-        res.status(400).json("Could not find user");
-    }
-    else{
-        const threadDoc = await thread.findOne({threadname: parentThread}).populate('allSubscribers', 'email');
-        if(!threadDoc){
-            res.status(400).json("Could not find thread");
-        }
-        else{
-            //insert post to database
-            const currentDateTime = new Date();
-            const postDoc = await post.create({author: userDoc._id,title:title, summary: summary, body:body,thread: threadDoc._id, time: currentDateTime});
-
-            if(postDoc){
-                await thread.updateOne({"_id": threadDoc._id},{$push:{"posts": postDoc._id}});
-                await user.updateOne({"_id": userDoc._id},{$push:{"posts": postDoc._id}})
-
-                const allSubscribers = threadDoc.allSubscribers;
-                if (allSubscribers.length !== 0){
-                    for (var i = 0; i < allSubscribers.length; i++){
-                        // Updating notification for thread creator
-                        const currentDateTime = new Date();
-                        const notiMessage = `New post in thread (${parentThread})`;
-                        const notificationForSubscribers = await notification.create({notificationMessage: notiMessage, dateTime: currentDateTime});
-                        await user.updateOne({"_id": allSubscribers[i]._id}, {$push: {notifications: notificationForSubscribers}});
-                        
-                        await sendPostNotifications(allSubscribers[i].email, username, title, summary, parentThread);
-                    }
-                }
-                
-
-                res.json(postDoc);
-            }
-            else{
-                res.status(400).json("Post creation failed");
-            }
-        }
-    }
-});
 
 router.put('/update', uploadMiddleware.single('postFile'), async (req, res) => {
     mongoose.connect(process.env.MONGO_URL);
@@ -211,6 +210,13 @@ router.get('/find', async (req,res)=> {
 
 router.post('/remove',async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);
+    const client = new S3Client({
+        region: 'us-east-2',
+        credentials: {
+            accessKeyId: process.env.S3_ACCESS_KEY,
+            secretAccessKey: process.env.S3_SECRET_ACCESS_KEY
+        },
+    });
 
     const {post_id} = req.body;
     var post_objectId = mongoose.Types.ObjectId(post_id);
@@ -221,11 +227,10 @@ router.post('/remove',async (req,res)=> {
     }
     else{
        if(Post.postImgUrl){
-        filesystem.unlink(Post.postImgUrl,(err)=>{
-            if(err){
-                console.log(err);
-            }
-        });
+            await client.send(new DeleteObjectCommand({
+                Bucket:"seng401project",
+                Key: Post.postImgUrl
+            }));
         }
      
         const User = await user.findOne({_id:Post.author});

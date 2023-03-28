@@ -57,10 +57,33 @@ async function uploadToS3(path, originalFileName, mimetype){
 const uploadMiddleware = multer({dest: '/tmp'});
 router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);
-
     const {thread_name, thread_description, username} = req.body;
-    
+    if(!req.file){
+        const userDoc = await user.findOne({username:username});
+        if(!userDoc){
+            res.status(400).send('User not found to create thread');
+        }
+        else{
+            //insert thread into database
+            if(await thread.findOne({threadname:thread_name}).exec()){
+                res.status(400).json("Thread name is already taken");
+            }
+            else{
+                const currentDateTime = new Date();
+                const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, dateCreated: currentDateTime});
+                if(Thread){
+                    res.json(Thread);
+                }
+                else{
+                    res.status(400).json("Thread creation failed");
+                }
+            }
+        }
+    }
+    else{
     const {originalname, path, mimetype} = req.file;
+    
+    
     // const parts = originalname.split('.');
     // const extension = parts[parts.length - 1];
     // const newPath = path + '.' + extension;
@@ -76,43 +99,19 @@ router.post('/create', uploadMiddleware.single('threadFile'), async (req,res)=> 
             res.status(400).json("Thread name is already taken");
         }
         else{
+         
             const imageURL = await uploadToS3(path, originalname, mimetype);
             const currentDateTime = new Date();
-            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: imageURL, dateCreated: currentDateTime});
+                const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, threadImgUrl: imageURL, dateCreated: currentDateTime});
             if(Thread){
                 res.json(Thread);
             }
             else{
                 res.status(400).json("Thread creation failed");
             }
-        }
     }
-});
-router.post('/createNoImg', async (req,res)=> {
-    mongoose.connect(process.env.MONGO_URL);
-
-    const {thread_name, thread_description, username} = req.body;
-    console.log(thread_name);
-    const userDoc = await user.findOne({username:username});
-    if(!userDoc){
-        res.status(400).send('User not found to create thread');
     }
-    else{
-        //insert thread into database
-        if(await thread.findOne({threadname:thread_name}).exec()){
-            res.status(400).json("Thread name is already taken");
-        }
-        else{
-            const currentDateTime = new Date();
-            const Thread = await thread.create({threadname:thread_name, description:thread_description, userCreated: userDoc._id, dateCreated: currentDateTime});
-            if(Thread){
-                res.json(Thread);
-            }
-            else{
-                res.status(400).json("Thread creation failed");
-            }
-        }
-    }
+}
 });
 router.get('/find',async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);

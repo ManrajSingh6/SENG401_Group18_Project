@@ -46,7 +46,7 @@ function CreatePostPage(){
             threadData.set('thread_name', newThreadName);
             threadData.set('thread_description', newThreadSummary);
             threadData.set('username', userInfo.username);
-            if(newThreadImg !== ''){
+            if(newThreadImg != ''){
             threadData.set('threadFile', newThreadImg[0]);
             // Create thread with backend
             const threadResponse = await fetch(`${process.env.REACT_APP_API_URL}/threads/create`, {
@@ -112,7 +112,7 @@ function CreatePostPage(){
                     postData.set('parentThread', threadChoice);
                 }
                 postData.set('username', userInfo.username);
-                if(postImg !== ''){
+                if(postImg != ''){
                 postData.set('postFile', postImg[0]);
             
                 const postResponse = await fetch(`${process.env.REACT_APP_API_URL}/posts/create`, {

@@ -4,8 +4,8 @@ JWT_SECRET=<your_jwt_secret>
 MONGO_URL=<your_mongodb_atlas_cluster_url>
 S3_ACCESS_KEY=<your_aws_s3_bucket_access_key>
 S3_SECRET_ACCESS_KEY=<your_aws_s3_bucket_secret_access_key>
-API_PORT=<port_of_yours_choice>
+API_PORT=5000
 
 Frontend .env template (note: the API_PORT below should match the API_PORT you chose for the backend):
 
-REACT_APP_API_URL=http://localhost:<API_PORT>
+REACT_APP_API_URL=http://localhost:5000

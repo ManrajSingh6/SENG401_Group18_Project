@@ -14,14 +14,13 @@ function ThreadPage(){
 
     const splitPath = (window.location.pathname).split("/");
     const threadName = splitPath[splitPath.length -1];
-
+    
     // Fetch all thread information and nested posts upon page load
     useEffect(() => {
         fetch(`${process.env.REACT_APP_API_URL}/threads/allpostsbythread?thread_name=${threadName}`).then(res => {
             res.json().then(response => {
                 setParentThreadInfo(response[0]);
                 setNestedPosts(response.slice(1));
-                console.log(nestedPosts);
             });
         });
     }, []);

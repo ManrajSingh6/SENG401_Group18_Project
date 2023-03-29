@@ -1,12 +1,14 @@
 {
   "name": "seng401_group18_project",
   "version": "1.0.0",
-  "description": "SENG 401 Gorup 18 Final Project - Reddit Clone",
+  "description": "SENG 401 Group 18 Final Project - Reddit Clone",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "cd backend && npm install && cd ../frontend && npm install && npm run build",
-    "start": "node backend/index.js"
+    "server": "npm start --prefix backend",
+    "client": "npm start --prefix frontend",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,7 @@
   },
   "homepage": "https://github.com/ManrajSingh6/SENG401_Group18_Project#readme",
   "dependencies": {
+    "concurrently": "^8.0.1",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "mongoose": "^6.9.1"

@@ -26,7 +26,6 @@ function CreatePostPage(){
     const [redirect, setRedirect] = useState(false);
 
     function handleOptionChange(event){
-        console.log(event.target.value)
         setThreadChoice(event.target.value === "" ? "" : event.target.value);
     }
 
@@ -34,7 +33,6 @@ function CreatePostPage(){
     async function createNewPost(event){
         
         event.preventDefault();
-        console.log("Submitted form");
 
         let threadCreated = false;
         let threadError = false;
@@ -56,7 +54,6 @@ function CreatePostPage(){
             });
                // Error handling
                if (threadResponse.ok){
-                console.log("Successfully created new thread");
                 setIsError(false);
                 setErrorMsg('');
                 threadCreated = true;
@@ -102,7 +99,6 @@ function CreatePostPage(){
                 
                     // Error Handling
                     if (postResponse.ok){
-                        console.log("Successfully created new post");
                         setErrorMsg('');
                         setIsError(false);
                         setRedirect(true);

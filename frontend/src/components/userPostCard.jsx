@@ -24,7 +24,6 @@ function UserPostCard(props){
         });
 
         if (response.ok){
-            console.log("Succesfully deleted post");
             window.location.reload();
         } else {
             toast.error("Unable to delete the post.");

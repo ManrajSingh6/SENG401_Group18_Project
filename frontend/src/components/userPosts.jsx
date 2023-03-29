@@ -1,7 +1,6 @@
 import React from "react";
 import "./subbedThreads.css";
 
-import SubbedThreadCard from "./subThreadCard";
 import Carousel from 'react-elastic-carousel';
 import UserPostCard from "./userPostCard";
 

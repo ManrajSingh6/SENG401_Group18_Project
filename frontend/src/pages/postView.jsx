@@ -34,7 +34,6 @@ function PostView(){
         fetch(`${process.env.REACT_APP_API_URL}/posts/find?post_id=${postID}`).then(res => {
             res.json().then(resPostData => {
                 setPostData(resPostData.Post);
-                console.log(resPostData.post);
                 setAllPostComments(resPostData.postCommentsData);
                 setParentThread(resPostData.parentThread);
             });
@@ -90,7 +89,6 @@ function PostView(){
         });
 
         if (response.ok){
-            console.log("Succesfully deleted post");
             window.location.reload();
         } else {
             toast.error("Unable to delete post");

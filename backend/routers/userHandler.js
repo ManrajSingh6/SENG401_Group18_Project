@@ -94,8 +94,6 @@ router.get('/find/:id', async (req,res)=> {
 
     const {id} = req.params;
     //get user from database
-
-    console.log("Finding: " + id);
     
     const User = await user.findOne({_id: id});
     if(User){
@@ -170,7 +168,6 @@ router.post('/remove',async (req,res)=>{
      
      const User = await user.findOne({username:username});
     if(!User){
-        console.log("Error cant find user");
         res.status(400).json("could not find user to delete");
     }
     else{
@@ -272,7 +269,6 @@ router.post('/remove',async (req,res)=>{
                     res.status(200).json("User successfully deleted");
                 }
                 else{
-                    console.log("Error cant delete user here");
                     res.status(400).json("User could not be deleted");
                 }
                 
@@ -282,12 +278,10 @@ router.post('/remove',async (req,res)=>{
             }
         }
             else{
-                console.log("User posts cant be delete");
                 res.status(400).json("Posts of User could not be deleted");
             }
         }
         else{
-            console.log("User comments could not be deleted");
             res.status(400).json("Comments of User could not be deleted");
         }
     }

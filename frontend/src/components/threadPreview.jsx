@@ -49,7 +49,6 @@ function ThreadPreview(props){
             const choice = event.currentTarget.id;
             let response = null;
             if (choice === "like-btn" && userID !== null){
-                console.log(choice);
                 response = await fetch(`${process.env.REACT_APP_API_URL}/threads/likethread`, {
                     method: 'PUT',
                     body: JSON.stringify({threadID, userID}),

@@ -34,7 +34,6 @@ function LoginPage(){
                 window.localStorage.setItem('isLoggedIn', true);                
             });
         } else {
-            console.log(response.json());
             setError(true);
         }
     }

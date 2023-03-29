@@ -91,7 +91,6 @@ function ProfilePage(){
         });
 
         if (response.ok){
-            console.log("Succesfully deleted user");
             window.localStorage.clear();
             window.location.assign('/');
         } else {

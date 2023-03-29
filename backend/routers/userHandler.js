@@ -175,11 +175,15 @@ router.post('/remove',async (req,res)=>{
     }
     else{
         if(User.profilePicture && User.profilePicture!=="defaultUserProPic.png"){
+            const parts = User.profilePicture.split('/');
+            const key= parts[parts.length - 1];
+            
             await client.send(new DeleteObjectCommand({
                 Bucket:"seng401project",
-                Key: User.profilePicture
+                Key: key
             }));
         }
+        
         commentStatus = true;
         postStatus = true;
         for(comment_id of User.comments){

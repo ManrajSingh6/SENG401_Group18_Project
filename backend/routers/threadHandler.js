@@ -245,9 +245,11 @@ router.post('/remove',async (req,res)=>{
        await user.updateMany({subscribed:{$in:[Thread._id]}},{$pull:{"subscribed": Thread._id}});
       
        if(Thread.threadImgUrl){
+        const parts = Thread.threadImgUrl.split('/');
+        const key= parts[parts.length - 1];
         await client.send(new DeleteObjectCommand({
             Bucket:"seng401project",
-            Key: Thread.threadImgUrl
+            Key: key
         }));
     }
         for(k of Thread.votes){
@@ -257,13 +259,14 @@ router.post('/remove',async (req,res)=>{
         postsdeleted = 0;
         for(i of Thread.posts){
             Post = await post.findOne({"_id": i});
-             if(Post.postImgUrl){
-                await client.send(new DeleteObjectCommand({
-                     Bucket:"seng401project",
-                    Key: Post.postImgUrl
-                }));
-                
-            }
+            if(Post.postImgUrl){
+                const parts = Post.postImgUrl.split('/');
+                const key= parts[parts.length - 1];
+                    await client.send(new DeleteObjectCommand({
+                        Bucket:"seng401project",
+                        Key: key
+                    }));
+                }
             for(const j of Post.votes){
                 await vote.deleteOne({"_id":j});
             }

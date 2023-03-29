@@ -135,7 +135,7 @@ router.post('/login',async (req,res)=>{
 
     const{username,password} = req.body;
     //check for user in database
-    const userDoc = await user.findOne({username});
+    const userDoc = await user.findOne({username:username});
     if(userDoc){
         if(bcrypt.compareSync(password, userDoc.password)){
             jwt.sign({username, id: userDoc._id},process.env.JWT_SECRET,{},(error,auth)=>{

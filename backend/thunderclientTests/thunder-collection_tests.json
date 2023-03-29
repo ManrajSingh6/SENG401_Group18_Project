@@ -1,0 +1,868 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "tests",
+    "dateExported": "2023-03-29T01:33:27.354Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "920834ee-1637-44dc-aac1-cdc7daa9bce9",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "register",
+            "url": "{{URL}}/users/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2023-03-17T23:48:07.569Z",
+            "modified": "2023-03-29T01:18:20.888Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\",\n  \"email\": \"{{email}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "isjson",
+                    "value": ""
+                },
+                {
+                    "type": "Content-Type",
+                    "custom": "",
+                    "action": "contains",
+                    "value": "application/json"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.username",
+                    "action": "equal",
+                    "value": "{{username}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.email",
+                    "action": "equal",
+                    "value": "{{email}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.posts",
+                    "action": "equal",
+                    "value": "[]"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.subscribed",
+                    "action": "equal",
+                    "value": "[]"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.comments",
+                    "action": "equal",
+                    "value": "[]"
+                },
+                {
+                    "type": "set-env-var",
+                    "custom": "json._id",
+                    "action": "setto",
+                    "value": "{{uid}}"
+                }
+            ]
+        },
+        {
+            "_id": "3f505c8c-0147-4636-87c7-81712fa9abc3",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "finduserbyid",
+            "url": "{{URL}}/users/find/{{uid}}",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2023-03-29T00:42:07.478Z",
+            "modified": "2023-03-29T01:20:47.755Z",
+            "headers": [],
+            "params": [],
+            "tests": [
+                {
+                    "type": "json-query",
+                    "custom": "json._id",
+                    "action": "equal",
+                    "value": "{{uid}}"
+                },
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                }
+            ]
+        },
+        {
+            "_id": "31280ee8-bfd7-4417-a4b2-448b3580a3cb",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "finduserbyusername",
+            "url": "{{URL}}/users/find?username={{username}}",
+            "method": "GET",
+            "sortNum": 25000,
+            "created": "2023-03-29T00:42:46.943Z",
+            "modified": "2023-03-29T01:21:05.882Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "username",
+                    "value": "{{username}}",
+                    "isPath": false
+                }
+            ],
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.User.username",
+                    "action": "equal",
+                    "value": "{{username}}"
+                }
+            ]
+        },
+        {
+            "_id": "88ec8ec6-ee99-43e9-9c53-c2ce5d9536d5",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "login",
+            "url": "{{URL}}/users/login",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-03-17T23:57:22.400Z",
+            "modified": "2023-03-29T01:21:23.786Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\",\n  \"password\": \"{{password}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "Content-Type",
+                    "custom": "",
+                    "action": "istype",
+                    "value": "string"
+                }
+            ]
+        },
+        {
+            "_id": "2491a60c-62b5-4941-a7d7-ba7b153f77fc",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "createThread",
+            "url": "{{URL}}/threads/create",
+            "method": "POST",
+            "sortNum": 57500,
+            "created": "2023-03-25T01:12:08.286Z",
+            "modified": "2023-03-29T01:21:35.350Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"thread_name\": \"{{threadname}}\",\n  \"thread_description\": \"no image\",\n  \"username\": \"{{username}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.threadname",
+                    "action": "equal",
+                    "value": "{{threadname}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.description",
+                    "action": "equal",
+                    "value": "no image"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.userCreated",
+                    "action": "equal",
+                    "value": "{{uid}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.votes",
+                    "action": "equal",
+                    "value": "[]"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.posts",
+                    "action": "equal",
+                    "value": "[]"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.allSubscribers",
+                    "action": "equal",
+                    "value": "[]"
+                },
+                {
+                    "type": "set-env-var",
+                    "custom": "json._id",
+                    "action": "setto",
+                    "value": "{{tid}}"
+                },
+                {
+                    "type": "set-env-var",
+                    "custom": "json.votes",
+                    "action": "setto",
+                    "value": "{{tvotes}}"
+                }
+            ]
+        },
+        {
+            "_id": "a4bc3a1f-f526-41e0-ac23-ad0976c581e8",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "findThread",
+            "url": "{{URL}}/threads/find?thread_name={{threadname}}",
+            "method": "GET",
+            "sortNum": 63750,
+            "created": "2023-03-29T00:49:13.720Z",
+            "modified": "2023-03-29T00:50:11.650Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "thread_name",
+                    "value": "{{threadname}}",
+                    "isPath": false
+                }
+            ],
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.threadname",
+                    "action": "equal",
+                    "value": "{{threadname}}"
+                }
+            ]
+        },
+        {
+            "_id": "d6dd7b9a-b819-4036-b586-58e4f64a7cb1",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "subscribe",
+            "url": "{{URL}}/threads/subscribe",
+            "method": "POST",
+            "sortNum": 66875,
+            "created": "2023-03-29T00:51:17.602Z",
+            "modified": "2023-03-29T00:54:44.413Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"thread_name\": \"{{threadname}}\",\n  \"username\": \"{{username}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.username",
+                    "action": "equal",
+                    "value": "{{username}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json._id",
+                    "action": "equal",
+                    "value": "{{uid}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.subscribed",
+                    "action": "notequal",
+                    "value": "[]"
+                },
+                {
+                    "type": "set-env-var",
+                    "custom": "json.subscribed",
+                    "action": "setto",
+                    "value": "{{Usubscribed}}"
+                }
+            ]
+        },
+        {
+            "_id": "2cfe8e6e-2580-4700-8635-41cde44f109f",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "unsubscribe",
+            "url": "{{URL}}/threads/unsubscribe",
+            "method": "POST",
+            "sortNum": 68437.5,
+            "created": "2023-03-29T00:51:25.855Z",
+            "modified": "2023-03-29T01:22:08.700Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"thread_name\": \"{{threadname}}\",\n  \"username\": \"{{username}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.username",
+                    "action": "equal",
+                    "value": "{{username}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.subscribed",
+                    "action": "notequal",
+                    "value": "{{Usubscribed}}"
+                },
+                {
+                    "type": "set-env-var",
+                    "custom": "json.subscribed",
+                    "action": "setto",
+                    "value": "{{Usubscribed}}"
+                }
+            ]
+        },
+        {
+            "_id": "d8c4ad28-67b0-426f-8a55-f11437b28d77",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "likeThread",
+            "url": "{{URL}}/threads/likethread",
+            "method": "PUT",
+            "sortNum": 70000,
+            "created": "2023-03-18T00:32:28.872Z",
+            "modified": "2023-03-29T01:22:55.102Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"threadID\": \"{{tid}}\",\n  \"userID\": \"{{uid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                }
+            ]
+        },
+        {
+            "_id": "c2073900-ea1f-4957-af9a-7c6e5ecdb108",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "dislikeThread",
+            "url": "{{URL}}/threads/dislikethread",
+            "method": "PUT",
+            "sortNum": 75000,
+            "created": "2023-03-18T00:56:15.547Z",
+            "modified": "2023-03-29T01:23:36.557Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"threadID\": \"{{tid}}\",\n  \"userID\": \"{{uid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "[]"
+                }
+            ]
+        },
+        {
+            "_id": "e6171aa9-8b8d-4e91-bded-0ee21b08ecdf",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "createPost",
+            "url": "{{URL}}/posts/create",
+            "method": "POST",
+            "sortNum": 130000,
+            "created": "2023-03-25T00:54:11.078Z",
+            "modified": "2023-03-29T01:10:12.793Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\",\n  \"title\": \"no image\",\n  \"summary\": \"s\",\n  \"body\": \"b\",\n  \"parentThread\": \"{{threadname}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.title",
+                    "action": "equal",
+                    "value": "no image"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.summary",
+                    "action": "equal",
+                    "value": "s"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.body",
+                    "action": "equal",
+                    "value": "b"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.thread",
+                    "action": "equal",
+                    "value": "{{tid}}"
+                },
+                {
+                    "type": "set-env-var",
+                    "custom": "json._id",
+                    "action": "setto",
+                    "value": "{{pid}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.author",
+                    "action": "equal",
+                    "value": "{{uid}}"
+                }
+            ]
+        },
+        {
+            "_id": "54b48c22-e212-4d2b-bb72-fe3bb66aced7",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "findPost",
+            "url": "{{URL}}/posts/find?post_id={{pid}}",
+            "method": "GET",
+            "sortNum": 132500,
+            "created": "2023-03-29T01:03:07.443Z",
+            "modified": "2023-03-29T01:24:00.526Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "post_id",
+                    "value": "{{pid}}",
+                    "isPath": false
+                }
+            ],
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.Post._id",
+                    "action": "equal",
+                    "value": "{{pid}}"
+                }
+            ]
+        },
+        {
+            "_id": "d7e4e521-f656-440d-8a28-bcb417fe49e3",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "likePost",
+            "url": "{{URL}}/votes/post",
+            "method": "POST",
+            "sortNum": 135000,
+            "created": "2023-03-25T00:54:39.692Z",
+            "modified": "2023-03-29T01:24:09.016Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\",\n  \"postID\": \"{{pid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.postId",
+                    "action": "equal",
+                    "value": "{{pid}}"
+                }
+            ]
+        },
+        {
+            "_id": "a374c51b-72ac-4f7d-bce2-fe74f8f3b5ab",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "dislikePost",
+            "url": "{{URL}}/votes/post/remove",
+            "method": "POST",
+            "sortNum": 137500,
+            "created": "2023-03-29T01:06:37.035Z",
+            "modified": "2023-03-29T01:17:36.468Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\",\n  \"postID\": \"{{pid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "\"Vote succesfully deleted\""
+                }
+            ]
+        },
+        {
+            "_id": "28d0d732-b7eb-424a-8e20-7dc66d3aabd3",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "createComment",
+            "url": "{{URL}}/comments/create",
+            "method": "POST",
+            "sortNum": 140000,
+            "created": "2023-03-25T00:54:31.199Z",
+            "modified": "2023-03-29T01:10:39.447Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\",\n  \"body\": \"test\",\n  \"post_id\": \"{{pid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "set-env-var",
+                    "custom": "json._id",
+                    "action": "setto",
+                    "value": "{{cid}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.postId",
+                    "action": "equal",
+                    "value": "{{pid}}"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.body",
+                    "action": "equal",
+                    "value": "test"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.author",
+                    "action": "equal",
+                    "value": "{{uid}}"
+                }
+            ]
+        },
+        {
+            "_id": "59387c2b-1194-420d-b510-f80d06f03eff",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "findComment",
+            "url": "{{URL}}/comments/find?comment_id={{cid}}",
+            "method": "GET",
+            "sortNum": 150000,
+            "created": "2023-03-29T01:14:02.014Z",
+            "modified": "2023-03-29T01:24:46.992Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "comment_id",
+                    "value": "{{cid}}",
+                    "isPath": false
+                }
+            ],
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json._id",
+                    "action": "equal",
+                    "value": "{{cid}}"
+                }
+            ]
+        },
+        {
+            "_id": "3694ff11-a3d0-44c2-b397-07c03f5c07a2",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "likeComment",
+            "url": "{{URL}}/votes/comment",
+            "method": "POST",
+            "sortNum": 160000,
+            "created": "2023-03-25T00:54:45.396Z",
+            "modified": "2023-03-29T01:12:35.806Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\",\n  \"commentID\": \"{{cid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "json-query",
+                    "custom": "json.commentId",
+                    "action": "equal",
+                    "value": "{{cid}}"
+                }
+            ]
+        },
+        {
+            "_id": "14eb4dc8-315a-4169-93a7-686432ae5f0d",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "dislikeComment",
+            "url": "{{URL}}/votes/comment/remove",
+            "method": "POST",
+            "sortNum": 165000,
+            "created": "2023-03-29T01:06:49.100Z",
+            "modified": "2023-03-29T01:27:53.308Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\",\n  \"commentID\": \"{{cid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "\"Vote succesfully deleted\""
+                }
+            ]
+        },
+        {
+            "_id": "e1b1d192-b873-47fa-b3b3-f083b62f9428",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "deleteComment",
+            "url": "{{URL}}/comments/remove",
+            "method": "POST",
+            "sortNum": 170000,
+            "created": "2023-03-25T00:54:53.596Z",
+            "modified": "2023-03-29T01:17:20.773Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"comment_id\": \"{{cid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "\"Comment succesfully deleted\""
+                }
+            ]
+        },
+        {
+            "_id": "5b53b7de-f357-4980-9298-0582eb79f10a",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "deletePost",
+            "url": "{{URL}}/posts/remove",
+            "method": "POST",
+            "sortNum": 171250,
+            "created": "2023-03-19T20:09:10.573Z",
+            "modified": "2023-03-29T01:17:15.898Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"post_id\":\"{{pid}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "\"Post succesfully deleted\""
+                }
+            ]
+        },
+        {
+            "_id": "3802e3f2-8da8-47d8-852e-b41979942792",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "deleteThread",
+            "url": "{{URL}}/threads/remove",
+            "method": "POST",
+            "sortNum": 172500,
+            "created": "2023-03-18T00:33:36.992Z",
+            "modified": "2023-03-29T01:17:01.318Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"thread_name\": \"{{threadname}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "\"Thread successfully deleted\""
+                }
+            ]
+        },
+        {
+            "_id": "20e3f394-3298-47a7-9609-39a0265c6305",
+            "colId": "bfd53988-e305-4ef4-9631-ad2dd0f10094",
+            "containerId": "",
+            "name": "deleteUser",
+            "url": "{{URL}}/users/remove",
+            "method": "POST",
+            "sortNum": 180000,
+            "created": "2023-03-17T23:53:37.526Z",
+            "modified": "2023-03-29T01:29:21.532Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"{{username}}\"\n}",
+                "form": []
+            },
+            "tests": [
+                {
+                    "type": "res-code",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "200"
+                },
+                {
+                    "type": "res-body",
+                    "custom": "",
+                    "action": "equal",
+                    "value": "\"User successfully deleted\""
+                }
+            ]
+        }
+    ]
+}

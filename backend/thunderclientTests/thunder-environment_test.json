@@ -1,0 +1,52 @@
+{
+    "client": "Thunder Client",
+    "environmentName": "test",
+    "dateExported": "2023-03-29T01:32:35.166Z",
+    "version": "1.0",
+    "variables": [
+        {
+            "name": "URL",
+            "value": "http://localhost:5000"
+        },
+        {
+            "name": "uid",
+            "value": ""
+        },
+        {
+            "name": "username",
+            "value": "Eric"
+        },
+        {
+            "name": "password",
+            "value": "pass_1"
+        },
+        {
+            "name": "email",
+            "value": "ericw30331@gmail.com"
+        },
+        {
+            "name": "Usubscribed",
+            "value": ""
+        },
+        {
+            "name": "tid",
+            "value": ""
+        },
+        {
+            "name": "threadname",
+            "value": "no image thread"
+        },
+        {
+            "name": "tvotes",
+            "value": "[]"
+        },
+        {
+            "name": "pid",
+            "value": ""
+        },
+        {
+            "name": "cid",
+            "value": ""
+        }
+    ]
+}

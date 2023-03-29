@@ -204,6 +204,7 @@ router.get('/find', async (req,res)=> {
 
 router.post('/remove',async (req,res)=> {
     mongoose.connect(process.env.MONGO_URL);
+
     const client = new S3Client({
         region: 'us-east-2',
         credentials: {
@@ -221,9 +222,11 @@ router.post('/remove',async (req,res)=> {
     }
     else{
        if(Post.postImgUrl){
+        const parts = Post.postImgUrl.split('/');
+        const key= parts[parts.length - 1];
             await client.send(new DeleteObjectCommand({
                 Bucket:"seng401project",
-                Key: Post.postImgUrl
+                Key: key
             }));
         }
      

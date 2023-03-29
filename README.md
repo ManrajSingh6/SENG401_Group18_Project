@@ -7,6 +7,7 @@ This web application is similar to Reddit, where users can create general discus
 Completed by: Eric Wong, Manraj Singh, Aarushi Roy Choudhury, Farica Mago, Shanelle Li Chit Khim, Sajan Hayer, Jacob Adeyemo
 
 View the deployed app here: https://seng401-the-loop.onrender.com/
+**Important note when viewing the deployed version linked above:** For first time users or on initial load, the application may take 30-40 seconds to load the data from the backend (unfortunately this is not due to our code, but due to the Render.com deployment service and the free-tier deployment)
 
 ### Configuring the project:
 

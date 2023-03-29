@@ -8,16 +8,28 @@ Completed by: Eric Wong, Manraj Singh, Aarushi Roy Choudhury, Farica Mago, Shane
 
 View the deployed app here: https://seng401-the-loop.onrender.com/
 
-### Installing the project:
+### Configuring the project:
+
+In the root directory, create a folder called ``configs`` and inside the newly created folder, create a ``.env`` file with the **backend .env template** provided in the file ``environmentVariablesTemplate.txt``.
+
+Inside the ``frontend`` directory, create another ``.env`` file with the **frontend .env template** provided in the file ``environmentVariablesTemplate.txt``.
+
+Now you are finished configuring the environment variables for the application. Let's move onto installing the packages required.
+
+### Installing the required dependencies:
 In the root directory, enter:
 ``` npm install concurrently ```
 
-Then in the ``` backend ``` directory, enter:
+Then in the ``backend`` directory, enter:
+
 ``` npm install ```
 
 After the packages are done being installed, go to the ``frontend`` directory and enter the following:
+
 ``` npm i react-elastic-carousel --legacy-peer-deps ```
 
-Then go to the root directory of the project and run:
+### Running the application:
+In the root directory of the project, run:
+
 ``` npm run dev ```
 

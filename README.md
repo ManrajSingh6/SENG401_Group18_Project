@@ -1,5 +1,5 @@
 # SENG401_Group18_Project
-SENG401 Group 18 Final Project - The Loop.
+### SENG401 Group 18 Final Project - The Loop.
 
 This web application is similar to Reddit, where users can create general discussion topics (threads) and create nested posts in such threads. Users can also interact with threads and posts along with a multitude of other functionalities. Explore the application to view more!
 
